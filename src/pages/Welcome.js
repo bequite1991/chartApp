@@ -9,19 +9,28 @@
 // );
 
 import React, {PureComponent} from 'react';
+import { Button, Radio, Icon,Input,Table, Divider, Tag,Progress } from 'antd';
 require ('../services/utils/mqttws31');
+
+
+
+
+
+
 
 export default class TodaySpec extends PureComponent {
   client = null;
 
-  defaultServer = '121.43.165.110'; //'222.73.204.54';
-  defaultPort = 3991; //9001;
+  defaultServer = '121.43.165.110';
+  // defaultServer = '222.73.204.54';
+  defaultPort = 3994; //9001;
+  // defaultPort = 9001;
   defaultSubTopic = '#';
   defaultPubTopic = 'alert';
   defaultPubMessage = '';
 
   server = ''; //getUrlVars ()['ip'] == null ? defaultServer : getUrlVars ()['ip'];
-  port = 9001;
+  port = 3994;
   subTopics = [];
   moreTopics = true;
   baseUrlVar = 'subTopic';
@@ -31,23 +40,67 @@ export default class TodaySpec extends PureComponent {
 
   username = '15051841028';
   password = 'huibao1841028';
+  useSSL = false;
 
+
+  constructor(props){
+    super(props)
+    this.state = {
+      newTopic:"",
+      newMessage:"",
+      connectStatus:0,
+      columns:[{
+        title: '订阅主题',
+        dataIndex: 'name',
+        key: 'name',
+        render: text => <a href="javascript:;">{text}</a>,
+      }, {
+        title: '发送消息',
+        dataIndex: 'age',
+        key: 'age',
+      }, {
+        title: '返回数据',
+        dataIndex: 'address',
+        key: 'address',
+      }],
+      tableData:[{
+        key: '1',
+        name: 'John Brown',
+        age: 32,
+        address: 'New York No. 1 Lake Park',
+        tags: ['nice', 'developer'],
+      }, {
+        key: '2',
+        name: 'Jim Green',
+        age: 42,
+        address: 'London No. 1 Lake Park',
+        tags: ['loser'],
+      }, {
+        key: '3',
+        name: 'Joe Black',
+        age: 32,
+        address: 'Sidney No. 1 Lake Park',
+        tags: ['cool', 'teacher'],
+      }]
+    }
+  }
+  
   componentDidMount () {
     const t = this;
     //this.getInfo ();
     this.client = null;
-    this.username = '';
-    this.password = '';
+    //this.username = '';
+    //this.password = '';
 
     this.clientId = 'MQTTHelper-' + Math.floor (10000 + Math.random () * 90000);
 
     this.server = this.defaultServer;
     this.port = this.defaultPort;
+    //this.useSSL = true;
   }
 
   connect () {
     const t = this;
-    debugger;
     try {
       t.client = new Paho.MQTT.Client (
         t.server,
@@ -103,20 +156,21 @@ export default class TodaySpec extends PureComponent {
     connectOptions.timeout = 5;
 
     connectOptions.onSuccess = function () {
-      console.info ('Connected to ' + this.server + ':' + this.port);
-      if (this.autoSubscribe) {
+      console.info ('Connected to ' + t.server + ':' + t.port);
+      t.setState({connectStatus:100});
+      if (t.autoSubscribe) {
         var time = 500;
-        for (var i in this.subTopics) {
+        for (var i in t.subTopics) {
           setTimeout (
             (function (topic) {
               return function () {};
-            }) (this.subTopics[i]),
+            }) (t.subTopics[i]),
             time
           );
           time += 100;
         }
       }
-      if (this.autoPublish) {
+      if (t.autoPublish) {
         setTimeout (function () {}, 500);
       }
     };
@@ -124,19 +178,17 @@ export default class TodaySpec extends PureComponent {
     connectOptions.onFailure = function (error) {
       console.info (
         'Failed to connect to ' +
-          this.server +
+          t.server +
           ':' +
-          this.port +
+          t.port +
           '.  Code: ' +
           error.errorCode +
           ', Message: ' +
           error.errorMessage
       );
     };
-
-    connectOptions.onSuccess.bind (this);
-    connectOptions.onFailure.bind (this);
-
+    connectOptions.onSuccess.bind (t);
+    connectOptions.onFailure.bind (t);
     t.client.connect (connectOptions);
   }
 
@@ -237,6 +289,7 @@ export default class TodaySpec extends PureComponent {
   }
 
   subscribe (topic, qos) {
+    debugger
     this.client.subscribe (topic, {
       qos: qos,
       onSuccess: function () {
@@ -251,157 +304,36 @@ export default class TodaySpec extends PureComponent {
           this.subsList[topic] = true;
         }
       },
-      onFailure: function () {
+      onFailure: function (err) {
+        debugger
         console.info ('Subscription failed: [' + topic + '][qos ' + qos + ']');
       },
     });
   }
 
-  getInfo () {
-    // var Paho = require("paho-mqtt/paho-mqtt.js");
-    // var client  = mqtt.connect('mqtt://127.0.0.1:1883');
 
-    // client.on('connect', function () {
-    //   client.subscribe('/inshn_dtimao/huibao/dev_info/user')
-    //   client.publish('/inshn_dtimao/huibao/dev_info/user');
-    // })
 
-    // client.on('message', function (topic, message) {
-    //   // message is Buffer
-    //   console.log(message.toString())
-    //   client.end()
-    // })
-
-    // var client  = mqtt.connect('mqtt://127.0.0.1:1883');
-
-    // client.on('connect', function () {
-    // 	debugger
-    //   client.subscribe('presence')
-    //   client.publish('presence', 'Hello mqtt')
-    // })
-
-    // client.on('message', function (topic, message) {
-    //   // message is Buffer
-    //   console.log(message.toString())
-    //   client.end()
-    // })
-
-    // 连接选项
-    // const options = {
-    // 	connectTimeout: 4000, // 超时时间
-    // 	// 认证信息
-    // 	clientId: 'emqx-connect-via-websocket',
-    // 	username: 'emqx-connect-via-websocket',
-    // 	password: 'emqx-connect-via-websocket',
-    // }
-
-    // 	const client = mqtt.connect("mqtt://test.mosquitto.org");
-
-    // 	client.on('reconnect', (error) => {
-    // 	    console.log('正在重连:', error);
-    // 	});
-
-    // 	client.on('error', (error) => {
-    // 	    console.log('连接失败:', error);
-    // 	});
-    // 	client.on('connect', function () {
-    // 		client.subscribe('presence');
-    // 		client.publish('presence', 'Hello mqtt');
-    // 	});
-
-    // 	client.on('message', function (topic, message) {
-    // 		// message is Buffer
-    // 		console.log(message.toString());
-    // 		client.end();
-    // 	});
-
-    // var client  = mqtt.connect('mqtt://127.0.0.1')
-
-    // client.on('connect', function () {
-    //   client.subscribe('presence')
-    //   client.publish('presence', 'Hello mqtt')
-    // })
-
-    // client.on('message', function (topic, message) {
-    //   // message is Buffer
-    //   console.log(message.toString())
-    //   client.end()
-    // })
-
-    // Create a client instance
-    // var client = new Paho.Client("127.0.0.1", 1883, "clientId");
-
-    // // set callback handlers
-    // client.onConnectionLost = onConnectionLost;
-    // client.onMessageArrived = onMessageArrived;
-
-    // // connect the client
-    // client.connect({onSuccess:onConnect});
-
-    // // called when the client connects
-    // function onConnect() {
-    // 	debugger
-    //   // Once a connection has been made, make a subscription and send a message.
-    //   console.log("onConnect");
-    //   client.subscribe("World");
-    //   message = new Paho.MQTT.Message("Hello");
-    //   message.destinationName = "World";
-    //   client.send(message);
-    // }
-
-    // // called when the client loses its connection
-    // function onConnectionLost(responseObject) {
-    //   if (responseObject.errorCode !== 0) {
-    //     console.log("onConnectionLost:"+responseObject.errorMessage);
-    //   }
-    // }
-
-    // // called when a message arrives
-    // function onMessageArrived(message) {
-    //   console.log("onMessageArrived:"+message.payloadString);
-    // }
-
-    // var client = new Paho.MQTT.Client("test.mosquitto.org", Number(80), "");//建立客户端实例
-    // client.connect({onSuccess:onConnect});//连接服务器并注册连接成功处理事件
-    // function onConnect() {
-    //     console.log("onConnected");
-
-    //     topic = 'v1/devices/me/telemetry';
-
-    //     client.subscribe(topic);//订阅主题
-    //     console.log("subscribed");
-    // }
-    // client.onConnectionLost = onConnectionLost;//注册连接断开处理事件
-    // client.onMessageArrived = onMessageArrived;//注册消息接收处理事件
-    // function onConnectionLost(responseObject) {
-    //     if (responseObject.errorCode !== 0) {
-    //         console.log("onConnectionLost:"+responseObject.errorMessage);
-    //         console.log("连接已断开");
-    //      }
-    // }
-    // function onMessageArrived(message) {
-
-    //     console.log("收到消息:"+message.payloadString);
-    //     console.log("主题："+message.destinationName);
-
-    // }
-
-    //var mqtt = require ('mqtt');
-    var client = mqtt.connect ('mqtt://test.mosquitto.org');
-
-    client.on ('connect', function () {
-      console.log ('connect');
-      client.subscribe ('presence');
-      client.publish ('presence', 'Hello mqtt');
-    });
-
-    client.on ('message', function (topic, message) {
-      // message is Buffer
-      console.log (message.toString ());
-      client.end ();
-    });
+  topicChange = (value) => {
+    this.setState({ newTopic:value.target.value });
   }
+
+  messageChange = (value) => {
+    this.setState({ newMessage:value.target.value });
+  }
+
+
   render () {
-    return <div onClick={this.connect.bind (this)}>123</div>;
+    const {newTopic,newMessage,tableData,columns,connectStatus} = this.state
+    return (
+		<div>
+      <Progress type="circle" percent={connectStatus} />
+      <Button onClick={this.connect.bind(this)} type="primary" size="default">链接服务器</Button>
+			<Input placeholder="填写主题" value={newTopic} onChange={this.topicChange}/>
+			<Button onClick={this.subscribe.bind(this,newTopic,0)} type="primary" size="default">订阅主题</Button>
+			<Input placeholder="填写消息内容" value={newMessage} onChange={this.messageChange}/>
+			<Button onClick={this.publish.bind(this,newTopic,newMessage,0)} type="primary" size="default">发送消息</Button>
+      <Table columns={columns} dataSource={tableData} />
+		</div>
+    )
   }
 }
