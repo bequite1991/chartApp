@@ -21,10 +21,12 @@ require ('../services/utils/mqttws31');
 export default class TodaySpec extends PureComponent {
   client = null;
 
-  defaultServer = '121.43.165.110';
+  // defaultServer = '121.43.165.110';
   // defaultServer = '222.73.204.54';
-  defaultPort = 3994; //9001;
+  defaultServer = '127.0.0.1';
+  // defaultPort = 3994; //9001;
   // defaultPort = 9001;
+  defaultPort = 7410;
   defaultSubTopic = '#';
   defaultPubTopic = 'alert';
   defaultPubMessage = '';
@@ -101,6 +103,7 @@ export default class TodaySpec extends PureComponent {
 
   connect () {
     const t = this;
+    debugger
     try {
       t.client = new Paho.MQTT.Client (
         t.server,
@@ -131,7 +134,7 @@ export default class TodaySpec extends PureComponent {
       );
     };
 
-    t.client.onConnectionLost = function () {};
+    t.client.onConnectionLost = t.onConnectionLost;
 
     var connectOptions = new Object ();
     connectOptions.useSSL = false;
@@ -187,8 +190,10 @@ export default class TodaySpec extends PureComponent {
           error.errorMessage
       );
     };
-    connectOptions.onSuccess.bind (t);
-    connectOptions.onFailure.bind (t);
+    // connectOptions.onSuccess.bind (t);
+    // connectOptions.onFailure.bind (t);
+    // debugger
+    t.connectOptions = connectOptions;
     t.client.connect (connectOptions);
   }
 
@@ -243,6 +248,7 @@ export default class TodaySpec extends PureComponent {
   }
 
   publish (topic, message, qos, retained) {
+    debugger
     const t = this;
     var msgObj = new Paho.MQTT.Message (message);
     msgObj.destinationName = topic;
@@ -271,6 +277,7 @@ export default class TodaySpec extends PureComponent {
   onConnectionLost (error) {
     const t = this;
     console.log (error);
+    debugger
     console.info (
       'Disconnected from ' +
         t.server +
@@ -281,7 +288,8 @@ export default class TodaySpec extends PureComponent {
         ', Message: ' +
         error.errorMessage
     );
-    subsList = {};
+    t.subsList = {};
+    t.client.connect (connectOptions);
   }
 
   closeConnect () {
@@ -289,10 +297,11 @@ export default class TodaySpec extends PureComponent {
   }
 
   subscribe (topic, qos) {
-    debugger
+    const t = this;
     this.client.subscribe (topic, {
       qos: qos,
       onSuccess: function () {
+        debugger
         console.info (
           "Subscribed to [<span class='logTopic'>" +
             topic +
@@ -305,7 +314,6 @@ export default class TodaySpec extends PureComponent {
         }
       },
       onFailure: function (err) {
-        debugger
         console.info ('Subscription failed: [' + topic + '][qos ' + qos + ']');
       },
     });
@@ -329,9 +337,9 @@ export default class TodaySpec extends PureComponent {
       <Progress type="circle" percent={connectStatus} />
       <Button onClick={this.connect.bind(this)} type="primary" size="default">链接服务器</Button>
 			<Input placeholder="填写主题" value={newTopic} onChange={this.topicChange}/>
-			<Button onClick={this.subscribe.bind(this,newTopic,0)} type="primary" size="default">订阅主题</Button>
+			<Button onClick={this.subscribe.bind(this,newTopic,1)} type="primary" size="default">订阅主题</Button>
 			<Input placeholder="填写消息内容" value={newMessage} onChange={this.messageChange}/>
-			<Button onClick={this.publish.bind(this,newTopic,newMessage,0)} type="primary" size="default">发送消息</Button>
+			<Button onClick={this.publish.bind(this,newTopic,newMessage,1,false)} type="primary" size="default">发送消息</Button>
       <Table columns={columns} dataSource={tableData} />
 		</div>
     )
