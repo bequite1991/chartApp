@@ -50,44 +50,22 @@ export default class TodaySpec extends PureComponent {
       columns: [
         {
           title: '订阅主题',
-          dataIndex: 'name',
-          key: 'name',
+          dataIndex: 'topic',
+          key: 'topic',
           render: text => <a href="javascript:;">{text}</a>,
         },
         {
           title: '发送消息',
-          dataIndex: 'age',
-          key: 'age',
+          dataIndex: 'req',
+          key: 'req',
         },
         {
           title: '返回数据',
-          dataIndex: 'address',
-          key: 'address',
+          dataIndex: 'res',
+          key: 'res',
         },
       ],
-      tableData: [
-        {
-          key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-          tags: ['nice', 'developer'],
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-          tags: ['loser'],
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-          tags: ['cool', 'teacher'],
-        },
-      ],
+      tableData: [],
     };
   }
 
@@ -107,7 +85,6 @@ export default class TodaySpec extends PureComponent {
 
   connect () {
     const t = this;
-    debugger;
     try {
       t.client = new Paho.MQTT.Client (
         t.server,
@@ -194,8 +171,8 @@ export default class TodaySpec extends PureComponent {
           error.errorMessage
       );
     };
-    // connectOptions.onSuccess.bind (t);
-    // connectOptions.onFailure.bind (t);
+    connectOptions.onSuccess.bind (t);
+    connectOptions.onFailure.bind (t);
     // debugger
     t.connectOptions = connectOptions;
     t.client.connect (connectOptions);
@@ -213,6 +190,9 @@ export default class TodaySpec extends PureComponent {
   }
 
   onMessage (msg) {
+    const {tableData} = this.state;
+    const newTableData = [].concat(tableData);
+
     var topic = msg.destinationName;
     var payload = msg.payloadString;
     var qos = msg._getQos ();
@@ -220,6 +200,17 @@ export default class TodaySpec extends PureComponent {
 
     var qosStr = qos > 0 ? '[qos ' + qos + ']' : '';
     var retainedStr = retained ? '[retained]' : '';
+
+    newTableData.forEach((ele,key)=>{
+      if(ele.key == topic){
+        ele.res = retainedStr + ":" + retained
+      }
+    })
+    this.setState({
+      tableData:newTableData
+    })
+    debugger
+
     console.info (
       "<span class='logRCV'>RCV [<span class='logTopic'>" +
         topic +
@@ -252,8 +243,10 @@ export default class TodaySpec extends PureComponent {
   }
 
   publish (topic, message, qos, retained) {
-    debugger;
     const t = this;
+    const {tableData} = this.state;
+    const newTableData = [].concat(tableData);
+
     var msgObj = new Paho.MQTT.Message (message);
     msgObj.destinationName = topic;
     if (qos) {
@@ -262,10 +255,23 @@ export default class TodaySpec extends PureComponent {
     if (retained) {
       msgObj.retained = retained;
     }
+
+    newTableData.forEach((ele,key)=>{
+      if(ele.key == topic){
+        ele.req = msgObj
+      }
+    })
+    t.setState({
+      tableData:newTableData
+    })
+
+
     t.client.send (msgObj);
 
     var qosStr = qos > 0 ? '[qos ' + qos + ']' : '';
     var retainedStr = retained ? '[retained]' : '';
+
+    
     console.info (
       "<span class='logPUB'>PUB [<span class='logTopic'>" +
         topic +
@@ -281,7 +287,6 @@ export default class TodaySpec extends PureComponent {
   onConnectionLost (error) {
     const t = this;
     console.log (error);
-    debugger;
     console.info (
       'Disconnected from ' +
         t.server +
@@ -301,10 +306,21 @@ export default class TodaySpec extends PureComponent {
 
   subscribe (topic, qos) {
     const t = this;
+    const {tableData} = this.state;
+    const newTableData = [].concat(tableData);
+    newTableData.push({
+      key: topic,
+      topic: topic,
+      req: '',
+      res: ""
+    })
+    this.setState({
+      tableData:newTableData
+    })
+    this.subTopics.push(topic);
     this.client.subscribe (topic, {
       qos: qos,
       onSuccess: function () {
-        debugger;
         console.info (
           "Subscribed to [<span class='logTopic'>" +
             topic +
@@ -322,22 +338,29 @@ export default class TodaySpec extends PureComponent {
     });
   }
 
-  topicChange = value => {
+  topicChange = function(value){
     this.setState ({newTopic: value.target.value});
   };
 
-  messageChange = value => {
+  messageChange = function(value){
     this.setState ({newMessage: value.target.value});
   };
 
   render () {
     const {
+      subTopics,
       newTopic,
       newMessage,
       tableData,
       columns,
       connectStatus,
     } = this.state;
+    let newtableData = [];
+    if(tableData.length > 30){
+      newtableData = tableData.slice(1);
+    }else{
+      newtableData = tableData
+    }
     return (
       <div>
         <Progress type="circle" percent={connectStatus} />
@@ -351,7 +374,7 @@ export default class TodaySpec extends PureComponent {
         <Input
           placeholder="填写主题"
           value={newTopic}
-          onChange={this.topicChange}
+          onChange={this.topicChange.bind (this)}
         />
         <Button
           onClick={this.subscribe.bind (this, newTopic, 1)}
@@ -360,10 +383,11 @@ export default class TodaySpec extends PureComponent {
         >
           订阅主题
         </Button>
+        <span>{subTopics}</span>
         <Input
           placeholder="填写消息内容"
           value={newMessage}
-          onChange={this.messageChange}
+          onChange={this.messageChange.bind (this)}
         />
         <Button
           onClick={this.publish.bind (this, newTopic, newMessage, 1, false)}
@@ -372,7 +396,7 @@ export default class TodaySpec extends PureComponent {
         >
           发送消息
         </Button>
-        <Table columns={columns} dataSource={tableData} />
+        <Table columns={columns} dataSource={newtableData} />
       </div>
     );
   }
