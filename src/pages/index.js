@@ -1,5 +1,5 @@
 import React from "react";
-
+import {Button, Radio, Icon, Input, Table, Divider, Tag, Progress} from 'antd';
 // import "antd/dist/antd.less";
 // import "../../asset/style.less";
 
@@ -11,7 +11,31 @@ class Main extends React.Component {
             connect: undefined,
             subscribe: undefined,
             unSubscribe: undefined,
-            hasSubscribe: ["/inshn_dtimao/huibao/dev_info/15051841028"]
+            hasSubscribe: ["/inshn_dtimao/huibao/dev_info/15051841028"],
+
+            //界面展示state
+            newTopic: '',
+            newMessage: '',
+            connectStatus: 0,
+            columns: [
+                {
+                    title: '订阅主题',
+                    dataIndex: 'topic',
+                    key: 'topic',
+                    render: text => <a href="javascript:;">{text}</a>,
+                },
+                {
+                    title: '发送消息',
+                    dataIndex: 'req',
+                    key: 'req',
+                },
+                {
+                    title: '返回数据',
+                    dataIndex: 'res',
+                    key: 'res',
+                },
+            ],
+            tableData: [],
         };
 
         this.initSubscribe = this.initSubscribe.bind(this);
@@ -20,6 +44,34 @@ class Main extends React.Component {
     }
 
     componentWillMount() {
+        
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.subscribe !== this.state.subscribe) {
+            this.subscribe(nextProps.subscribe);
+        }
+        if (nextProps.unSubscribe !== this.state.unSubscribe) {
+            this.unSubscribe(nextProps.unSubscribe);
+        }
+    }
+    topicChange = function (value) {
+        this.setState ({newTopic: value.target.value});
+    };
+
+    messageChange = function (value) {
+        this.setState ({newMessage: value.target.value});
+    };
+
+
+
+
+
+
+
+
+    connect(){
+        //链接服务器
         // const { setConnect, setMessage } = this.props;
         var setConnect = function(){}
         var setMessage = function(){}
@@ -37,6 +89,7 @@ class Main extends React.Component {
                 setConnect(true);
                 this.initSubscribe();
                 console.log("mqtt connect success");
+                this.setState ({connectStatus: 100});
             },
             onFailure: () => (setConnect(false), console.log("mqtt connect failure"))
         };
@@ -61,22 +114,24 @@ class Main extends React.Component {
         });
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.subscribe !== this.state.subscribe) {
-            this.subscribe(nextProps.subscribe);
-        }
-        if (nextProps.unSubscribe !== this.state.unSubscribe) {
-            this.unSubscribe(nextProps.unSubscribe);
-        }
-    }
-
     initSubscribe() {
-        const {client, hasSubscribe} = this.state;
+        const {client, hasSubscribe,tableData} = this.state;
         if (!client.isConnected()) {
             return;
         }
         for (let i = 0, l = hasSubscribe.length; i < l; i++) {
             hasSubscribe[i] && client.subscribe(hasSubscribe[i]);
+            // 维护数据界面
+            const newTableData = [].concat (tableData);
+            newTableData.push ({
+                key: (new Date()).getTime(),
+                topic: hasSubscribe[i],
+                req: '',
+                res: '',
+            });
+            this.setState({
+                tableData: newTableData,
+            });
         }
     }
 
@@ -84,17 +139,57 @@ class Main extends React.Component {
         if(!filter) {
             return;
         }
-        const {client, hasSubscribe} = this.state;
+        const {client, hasSubscribe,tableData} = this.state;
+        // 维护数据界面
+        const newTableData = [].concat (tableData);
+        newTableData.push ({
+            key: (new Date()).getTime(),
+            topic: filter,
+            req: '',
+            res: '',
+        });
+
         client.isConnected() && client.subscribe(filter);
         hasSubscribe.push(filter);
         this.setState({
             subscribe: filter,
-            hasSubscribe
+            hasSubscribe,
+            tableData: newTableData,
         });
         console.log("mqtt subscribe", filter);
     }
 
+    publish (topic, message, qos, retained) {
+    //发送消息
+        //界面展示相关  维护表格
+        const {tableData} = this.state;
+        const newTableData = [].concat (tableData);
+
+        newTableData.forEach ((ele, key) => {
+            if (ele.key == topic) {
+                ele.req = message;
+            }
+        });
+        t.setState ({
+            tableData: newTableData,
+        });
+
+
+        //mqtt数据相关
+        const t = this;
+        var msgObj = new Paho.MQTT.Message (message);
+        msgObj.destinationName = topic;
+        if (qos) {
+            msgObj.qos = qos;
+        }
+        if (retained) {
+            msgObj.retained = retained;
+        }
+        t.client.send (msgObj);
+    }
+
     unSubscribe(filter) {
+    //取消订阅
         const {client, hasSubscribe} = this.state;
         client.isConnected() && client.unsubscribe(filter);
         for (let i = 0, l = hasSubscribe.length; i < l; i++) {
@@ -110,12 +205,58 @@ class Main extends React.Component {
     }
 
     render() {
-
+        const {
+            subTopics,
+            newTopic,
+            newMessage,
+            tableData,
+            columns,
+            connectStatus,
+        } = this.state;
+        let newtableData = [];
+        if (tableData.length > 30) {
+            newtableData = tableData.slice (1);
+        } else {
+            newtableData = tableData;
+        }
         return (
             <div>
-                { this.props.children }
+                <Progress type="circle" percent={connectStatus} />
+                <Button
+                    onClick={this.connect.bind (this)}
+                    type="primary"
+                    size="default"
+                >
+                  链接服务器
+                </Button>
+                <Input
+                  placeholder="填写主题"
+                  value={newTopic}
+                  onChange={this.topicChange.bind (this)}
+                />
+                <Button
+                  onClick={this.subscribe.bind (this, newTopic, 1)}
+                  type="primary"
+                  size="default"
+                >
+                  订阅主题
+                </Button>
+                <span>{subTopics}</span>
+                <Input
+                  placeholder="填写消息内容"
+                  value={newMessage}
+                  onChange={this.messageChange.bind (this)}
+                />
+                <Button
+                  onClick={this.publish.bind (this, newTopic, newMessage, 1, false)}
+                  type="primary"
+                  size="default"
+                >
+                  发送消息
+                </Button>
+                <Table columns={columns} dataSource={newtableData} />
             </div>
-            );
+        )
     }
 }
 
