@@ -289,7 +289,6 @@ export default class TodaySpec extends PureComponent {
         error.errorMessage
     );
     t.subsList = {};
-    t.client.connect (connectOptions);
   }
 
   closeConnect () {
