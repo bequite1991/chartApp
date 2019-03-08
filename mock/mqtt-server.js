@@ -39,14 +39,16 @@ server.on ('published', function (packet, client) {
       }
       break;
   }
+
+  console.log ('published:'+topic, packet.payload.toString ());
 });
 
 server.on ('subscribed', function (topic, client) {
   console.log ('subscribed: ', topic);
-  // server.publish (
-  //   {topic: topic, payload: topic + ' published ok!', qos: 1},
-  //   client
-  // );
+  server.publish (
+    {topic: topic, payload: topic + ' published ok!', qos: 1},
+    client
+  );
 });
 
 server.on ('unSubscribed', function (topic, client) {

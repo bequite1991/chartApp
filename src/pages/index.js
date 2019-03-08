@@ -1,7 +1,18 @@
 import React from "react";
 import {Button, Radio, Icon, Input, Table, Divider, Tag, Progress} from 'antd';
+import md5 from 'js-md5';
+
+let Base64 = require('js-base64').Base64;
+
 // import "antd/dist/antd.less";
 // import "../../asset/style.less";
+
+let key = md5("15051841028"+"inshn_gwapi");
+let time = (new Date()).getTime();
+let token = Base64.encode(
+{"cmd":"9001","key":key,"timestamp":time});
+let  messageIndex = 0
+
 
 class Main extends React.Component {
     constructor(props) {
@@ -15,7 +26,7 @@ class Main extends React.Component {
 
             //界面展示state
             newTopic: '',
-            newMessage: '',
+            // newMessage: '',
             connectStatus: 0,
             columns: [
                 {
@@ -36,6 +47,16 @@ class Main extends React.Component {
                 },
             ],
             tableData: [],
+            newMessage:JSON.stringify({"cmd":"9001",
+                "num_id":time+''+messageIndex,
+                "timestap":time,
+                "src":".inshn_dtimao.huibao.dev_info",
+                resp:200,
+                token:token,
+                filter:"00000000000000001048,00000000000000001049",
+                rows:{
+                }
+            })
         };
 
         this.initSubscribe = this.initSubscribe.bind(this);
@@ -65,11 +86,6 @@ class Main extends React.Component {
 
 
 
-
-
-
-
-
     connect(){
         //链接服务器
         // const { setConnect, setMessage } = this.props;
@@ -77,6 +93,7 @@ class Main extends React.Component {
         var setMessage = function(){}
         let i = 0;
 
+        // const client = new Paho.MQTT.Client('127.0.0.1', 7410, "JSClient-Demo-" + new Date().toLocaleTimeString());
         const client = new Paho.MQTT.Client('121.43.165.110', 3994, "JSClient-Demo-" + new Date().toLocaleTimeString());
         // const client = new Paho.MQTT.Client('iot.wokooyun.com', 8083, "JSClient-Demo-" + new Date().toLocaleTimeString());
         const connectOpt = {
@@ -101,8 +118,22 @@ class Main extends React.Component {
         };
 
         client.onMessageArrived = (message) => {
+            const {tableData} = this.state;
             message._index = ++i;
             setMessage(message);
+            console.log(message)
+            //message.destinationName
+            // 维护数据界面
+            // const newTableData = [].concat (tableData);
+
+            // newTableData.forEach ((ele, key) => {
+            //     if (ele.topic == message.destinationName) {
+            //         ele.res = message.payloadString;
+            //     }
+            // });
+            // this.setState ({
+            //     tableData: newTableData,
+            // });
         };
 
         client.connect(connectOpt);
@@ -120,19 +151,24 @@ class Main extends React.Component {
             return;
         }
         for (let i = 0, l = hasSubscribe.length; i < l; i++) {
-            hasSubscribe[i] && client.subscribe(hasSubscribe[i]);
-            // 维护数据界面
-            const newTableData = [].concat (tableData);
-            newTableData.push ({
-                key: (new Date()).getTime(),
-                topic: hasSubscribe[i],
-                req: '',
-                res: '',
-            });
-            this.setState({
-                tableData: newTableData,
-            });
+            console.log("即将订阅的主题："+hasSubscribe[i]);
+            hasSubscribe[i] && client.subscribe(hasSubscribe[i],{onSuccess:function(){
+                    console.log("subscribe success")
+                 // 维护数据界面
+                    // const newTableData = [].concat (tableData);
+                    // newTableData.push ({
+                    //     key: (new Date()).getTime(),
+                    //     topic: hasSubscribe[i],
+                    //     req: '',
+                    //     res: '',
+                    // });
+                    // this.setState({
+                    //     tableData: newTableData,
+                    // });
+                
+            }});
         }
+           
     }
 
     subscribe(filter) {
@@ -162,21 +198,20 @@ class Main extends React.Component {
     publish (topic, message, qos, retained) {
     //发送消息
         //界面展示相关  维护表格
-        const {tableData} = this.state;
+        const {tableData,client} = this.state;
         const newTableData = [].concat (tableData);
 
         newTableData.forEach ((ele, key) => {
-            if (ele.key == topic) {
+            if (ele.topic == topic) {
                 ele.req = message;
             }
         });
-        t.setState ({
+        this.setState ({
             tableData: newTableData,
         });
 
 
         //mqtt数据相关
-        const t = this;
         var msgObj = new Paho.MQTT.Message (message);
         msgObj.destinationName = topic;
         if (qos) {
@@ -185,7 +220,9 @@ class Main extends React.Component {
         if (retained) {
             msgObj.retained = retained;
         }
-        t.client.send (msgObj);
+        debugger
+        console.log(msgObj.payloadString);
+        client.send(msgObj);
     }
 
     unSubscribe(filter) {
