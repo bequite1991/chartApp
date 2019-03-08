@@ -41,6 +41,8 @@ export default class TodaySpec extends PureComponent {
   autoSubscribe = false;
   autoPublish = false;
 
+  toClose = false;
+
   constructor (props) {
     super (props);
     this.state = {
@@ -84,6 +86,7 @@ export default class TodaySpec extends PureComponent {
   }
 
   connect () {
+    debugger;
     const t = this;
     try {
       t.client = new Paho.MQTT.Client (
@@ -103,16 +106,8 @@ export default class TodaySpec extends PureComponent {
 
       var qosStr = qos > 0 ? '[qos ' + qos + ']' : '';
       var retainedStr = retained ? '[retained]' : '';
-      console.info (
-        "<span class='logRCV'>RCV [<span class='logTopic'>" +
-          topic +
-          '</span>]' +
-          qosStr +
-          retainedStr +
-          " <span class='logPayload'>" +
-          payload +
-          '</span></span>'
-      );
+
+      t.showMessage (topic, payload, qosStr);
     };
 
     t.client.onConnectionLost = t.onConnectionLost;
@@ -170,6 +165,12 @@ export default class TodaySpec extends PureComponent {
           ', Message: ' +
           error.errorMessage
       );
+
+      if (!t.toClose) {
+        setTimeout (function () {
+          t.connect ();
+        }, 2000);
+      }
     };
     connectOptions.onSuccess.bind (t);
     connectOptions.onFailure.bind (t);
@@ -189,10 +190,21 @@ export default class TodaySpec extends PureComponent {
     return vars;
   }
 
-  onMessage (msg) {
+  showMessage (topic, message, qos) {
     const {tableData} = this.state;
-    const newTableData = [].concat(tableData);
+    const newTableData = [].concat (tableData);
 
+    newTableData.forEach ((ele, key) => {
+      if (ele.key == topic) {
+        ele.res = message + ':' + qos;
+      }
+    });
+    this.setState ({
+      tableData: newTableData,
+    });
+  }
+
+  onMessage (msg) {
     var topic = msg.destinationName;
     var payload = msg.payloadString;
     var qos = msg._getQos ();
@@ -200,16 +212,6 @@ export default class TodaySpec extends PureComponent {
 
     var qosStr = qos > 0 ? '[qos ' + qos + ']' : '';
     var retainedStr = retained ? '[retained]' : '';
-
-    newTableData.forEach((ele,key)=>{
-      if(ele.key == topic){
-        ele.res = retainedStr + ":" + retained
-      }
-    })
-    this.setState({
-      tableData:newTableData
-    })
-    debugger
 
     console.info (
       "<span class='logRCV'>RCV [<span class='logTopic'>" +
@@ -245,7 +247,7 @@ export default class TodaySpec extends PureComponent {
   publish (topic, message, qos, retained) {
     const t = this;
     const {tableData} = this.state;
-    const newTableData = [].concat(tableData);
+    const newTableData = [].concat (tableData);
 
     var msgObj = new Paho.MQTT.Message (message);
     msgObj.destinationName = topic;
@@ -256,22 +258,20 @@ export default class TodaySpec extends PureComponent {
       msgObj.retained = retained;
     }
 
-    newTableData.forEach((ele,key)=>{
-      if(ele.key == topic){
-        ele.req = msgObj
+    newTableData.forEach ((ele, key) => {
+      if (ele.key == topic) {
+        ele.req = msgObj;
       }
-    })
-    t.setState({
-      tableData:newTableData
-    })
-
+    });
+    t.setState ({
+      tableData: newTableData,
+    });
 
     t.client.send (msgObj);
 
     var qosStr = qos > 0 ? '[qos ' + qos + ']' : '';
     var retainedStr = retained ? '[retained]' : '';
 
-    
     console.info (
       "<span class='logPUB'>PUB [<span class='logTopic'>" +
         topic +
@@ -298,26 +298,33 @@ export default class TodaySpec extends PureComponent {
         error.errorMessage
     );
     t.subsList = {};
+
+    if (!t.toClose) {
+      setTimeout (function () {
+        t.connect ();
+      }, 2000);
+    }
   }
 
   closeConnect () {
+    this.toClose = true;
     this.client.disconnect ();
   }
 
   subscribe (topic, qos) {
     const t = this;
     const {tableData} = this.state;
-    const newTableData = [].concat(tableData);
-    newTableData.push({
+    const newTableData = [].concat (tableData);
+    newTableData.push ({
       key: topic,
       topic: topic,
       req: '',
-      res: ""
-    })
-    this.setState({
-      tableData:newTableData
-    })
-    this.subTopics.push(topic);
+      res: '',
+    });
+    this.setState ({
+      tableData: newTableData,
+    });
+    this.subTopics.push (topic);
     this.client.subscribe (topic, {
       qos: qos,
       onSuccess: function () {
@@ -338,11 +345,11 @@ export default class TodaySpec extends PureComponent {
     });
   }
 
-  topicChange = function(value){
+  topicChange = function (value) {
     this.setState ({newTopic: value.target.value});
   };
 
-  messageChange = function(value){
+  messageChange = function (value) {
     this.setState ({newMessage: value.target.value});
   };
 
@@ -356,10 +363,10 @@ export default class TodaySpec extends PureComponent {
       connectStatus,
     } = this.state;
     let newtableData = [];
-    if(tableData.length > 30){
-      newtableData = tableData.slice(1);
-    }else{
-      newtableData = tableData
+    if (tableData.length > 30) {
+      newtableData = tableData.slice (1);
+    } else {
+      newtableData = tableData;
     }
     return (
       <div>
