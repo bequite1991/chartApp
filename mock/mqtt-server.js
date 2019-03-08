@@ -43,10 +43,10 @@ server.on ('published', function (packet, client) {
 
 server.on ('subscribed', function (topic, client) {
   console.log ('subscribed: ', topic);
-  server.publish (
-    {topic: topic, payload: topic + ' published ok!', qos: 1},
-    client
-  );
+  // server.publish (
+  //   {topic: topic, payload: topic + ' published ok!', qos: 1},
+  //   client
+  // );
 });
 
 server.on ('unSubscribed', function (topic, client) {

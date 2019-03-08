@@ -47,6 +47,23 @@ export default {
       routes: [{ path: '/user', component: './Welcome' }],
     },
     {
+      path: '/index',
+      component: '../layouts/BasicLayout',
+      routes: [
+        // dashboard
+        {
+          path: '/index',
+          name: 'index',
+          icon: 'smile',
+          component: './index',
+        },
+        {
+          path: 'https://github.com/umijs/umi-blocks/tree/master/ant-design-pro',
+          name: 'more-blocks',
+          icon: 'block',
+        },
+      ],
+    },{
       path: '/',
       component: '../layouts/BasicLayout',
       routes: [

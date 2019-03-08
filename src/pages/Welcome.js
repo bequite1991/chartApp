@@ -86,7 +86,6 @@ export default class TodaySpec extends PureComponent {
   }
 
   connect () {
-    debugger;
     const t = this;
     try {
       t.client = new Paho.MQTT.Client (
@@ -110,7 +109,7 @@ export default class TodaySpec extends PureComponent {
       t.showMessage (topic, payload, qosStr);
     };
 
-    t.client.onConnectionLost = t.onConnectionLost;
+    t.client.onConnectionLost = t.onConnectionLost.bind(this);
 
     var connectOptions = new Object ();
     connectOptions.useSSL = false;
@@ -121,9 +120,9 @@ export default class TodaySpec extends PureComponent {
     if (t.password) {
       connectOptions.password = t.password;
     }
-    if (t.noCleanSession) {
+    //if (t.noCleanSession) {
       connectOptions.cleanSession = false;
-    }
+    //}
     if (t.useSSL) {
       connectOptions.useSSL = true;
     }
@@ -260,7 +259,7 @@ export default class TodaySpec extends PureComponent {
 
     newTableData.forEach ((ele, key) => {
       if (ele.key == topic) {
-        ele.req = msgObj;
+        ele.req = message;
       }
     });
     t.setState ({
