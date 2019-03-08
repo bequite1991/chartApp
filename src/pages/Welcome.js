@@ -9,14 +9,8 @@
 // );
 
 import React, {PureComponent} from 'react';
-import { Button, Radio, Icon,Input,Table, Divider, Tag,Progress } from 'antd';
+import {Button, Radio, Icon, Input, Table, Divider, Tag, Progress} from 'antd';
 require ('../services/utils/mqttws31');
-
-
-
-
-
-
 
 export default class TodaySpec extends PureComponent {
   client = null;
@@ -43,50 +37,60 @@ export default class TodaySpec extends PureComponent {
   username = '15051841028';
   password = 'huibao1841028';
   useSSL = false;
+  qos = 1;
+  autoSubscribe = false;
+  autoPublish = false;
 
-
-  constructor(props){
-    super(props)
+  constructor (props) {
+    super (props);
     this.state = {
-      newTopic:"",
-      newMessage:"",
-      connectStatus:0,
-      columns:[{
-        title: '订阅主题',
-        dataIndex: 'name',
-        key: 'name',
-        render: text => <a href="javascript:;">{text}</a>,
-      }, {
-        title: '发送消息',
-        dataIndex: 'age',
-        key: 'age',
-      }, {
-        title: '返回数据',
-        dataIndex: 'address',
-        key: 'address',
-      }],
-      tableData:[{
-        key: '1',
-        name: 'John Brown',
-        age: 32,
-        address: 'New York No. 1 Lake Park',
-        tags: ['nice', 'developer'],
-      }, {
-        key: '2',
-        name: 'Jim Green',
-        age: 42,
-        address: 'London No. 1 Lake Park',
-        tags: ['loser'],
-      }, {
-        key: '3',
-        name: 'Joe Black',
-        age: 32,
-        address: 'Sidney No. 1 Lake Park',
-        tags: ['cool', 'teacher'],
-      }]
-    }
+      newTopic: '',
+      newMessage: '',
+      connectStatus: 0,
+      columns: [
+        {
+          title: '订阅主题',
+          dataIndex: 'name',
+          key: 'name',
+          render: text => <a href="javascript:;">{text}</a>,
+        },
+        {
+          title: '发送消息',
+          dataIndex: 'age',
+          key: 'age',
+        },
+        {
+          title: '返回数据',
+          dataIndex: 'address',
+          key: 'address',
+        },
+      ],
+      tableData: [
+        {
+          key: '1',
+          name: 'John Brown',
+          age: 32,
+          address: 'New York No. 1 Lake Park',
+          tags: ['nice', 'developer'],
+        },
+        {
+          key: '2',
+          name: 'Jim Green',
+          age: 42,
+          address: 'London No. 1 Lake Park',
+          tags: ['loser'],
+        },
+        {
+          key: '3',
+          name: 'Joe Black',
+          age: 32,
+          address: 'Sidney No. 1 Lake Park',
+          tags: ['cool', 'teacher'],
+        },
+      ],
+    };
   }
-  
+
   componentDidMount () {
     const t = this;
     //this.getInfo ();
@@ -103,7 +107,7 @@ export default class TodaySpec extends PureComponent {
 
   connect () {
     const t = this;
-    debugger
+    debugger;
     try {
       t.client = new Paho.MQTT.Client (
         t.server,
@@ -160,7 +164,7 @@ export default class TodaySpec extends PureComponent {
 
     connectOptions.onSuccess = function () {
       console.info ('Connected to ' + t.server + ':' + t.port);
-      t.setState({connectStatus:100});
+      t.setState ({connectStatus: 100});
       if (t.autoSubscribe) {
         var time = 500;
         for (var i in t.subTopics) {
@@ -248,7 +252,7 @@ export default class TodaySpec extends PureComponent {
   }
 
   publish (topic, message, qos, retained) {
-    debugger
+    debugger;
     const t = this;
     var msgObj = new Paho.MQTT.Message (message);
     msgObj.destinationName = topic;
@@ -277,7 +281,7 @@ export default class TodaySpec extends PureComponent {
   onConnectionLost (error) {
     const t = this;
     console.log (error);
-    debugger
+    debugger;
     console.info (
       'Disconnected from ' +
         t.server +
@@ -300,7 +304,7 @@ export default class TodaySpec extends PureComponent {
     this.client.subscribe (topic, {
       qos: qos,
       onSuccess: function () {
-        debugger
+        debugger;
         console.info (
           "Subscribed to [<span class='logTopic'>" +
             topic +
@@ -318,29 +322,58 @@ export default class TodaySpec extends PureComponent {
     });
   }
 
+  topicChange = value => {
+    this.setState ({newTopic: value.target.value});
+  };
 
-
-  topicChange = (value) => {
-    this.setState({ newTopic:value.target.value });
-  }
-
-  messageChange = (value) => {
-    this.setState({ newMessage:value.target.value });
-  }
-
+  messageChange = value => {
+    this.setState ({newMessage: value.target.value});
+  };
 
   render () {
-    const {newTopic,newMessage,tableData,columns,connectStatus} = this.state
+    const {
+      newTopic,
+      newMessage,
+      tableData,
+      columns,
+      connectStatus,
+    } = this.state;
     return (
-		<div>
-      <Progress type="circle" percent={connectStatus} />
-      <Button onClick={this.connect.bind(this)} type="primary" size="default">链接服务器</Button>
-			<Input placeholder="填写主题" value={newTopic} onChange={this.topicChange}/>
-			<Button onClick={this.subscribe.bind(this,newTopic,1)} type="primary" size="default">订阅主题</Button>
-			<Input placeholder="填写消息内容" value={newMessage} onChange={this.messageChange}/>
-			<Button onClick={this.publish.bind(this,newTopic,newMessage,1,false)} type="primary" size="default">发送消息</Button>
-      <Table columns={columns} dataSource={tableData} />
-		</div>
-    )
+      <div>
+        <Progress type="circle" percent={connectStatus} />
+        <Button
+          onClick={this.connect.bind (this)}
+          type="primary"
+          size="default"
+        >
+          链接服务器
+        </Button>
+        <Input
+          placeholder="填写主题"
+          value={newTopic}
+          onChange={this.topicChange}
+        />
+        <Button
+          onClick={this.subscribe.bind (this, newTopic, 1)}
+          type="primary"
+          size="default"
+        >
+          订阅主题
+        </Button>
+        <Input
+          placeholder="填写消息内容"
+          value={newMessage}
+          onChange={this.messageChange}
+        />
+        <Button
+          onClick={this.publish.bind (this, newTopic, newMessage, 1, false)}
+          type="primary"
+          size="default"
+        >
+          发送消息
+        </Button>
+        <Table columns={columns} dataSource={tableData} />
+      </div>
+    );
   }
 }
