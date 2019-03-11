@@ -25,6 +25,8 @@
     "antd": "^3.10.9",
     "classnames": "^2.2.6",
     "dva": "^2.4.0",
+    "echarts": "^4.1.0",
+    "echarts-for-react": "^2.0.15-beta.0",
     "js-base64": "^2.5.1",
     "js-md5": "^0.7.3",
     "lodash": "^4.17.10",

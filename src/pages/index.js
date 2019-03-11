@@ -20,7 +20,8 @@ class Main extends React.Component {
       connect: undefined,
       subscribe: undefined,
       unSubscribe: undefined,
-      hasSubscribe: ['/inshn_dtimao/huibao/dev_info/15051841028'],
+      // hasSubscribe: ['inshn_dtimao/huibao/req/dev_info/15051841028'],
+      hasSubscribe: ['inshn_dtimao/huibao/req/dev_info.xiaoye'],
 
       //界面展示state
       newTopic: '',
@@ -48,12 +49,14 @@ class Main extends React.Component {
       newMessage: JSON.stringify ({
         cmd: '9001',
         num_id: time + '' + messageIndex,
+        // num_id: 201803031010250202,
         timestap: time,
-        src: '.inshn_dtimao.huibao.dev_info',
+        // src: 'inshn_dtimao.huibao.resp.dev_info',
+        src: 'inshn_dtimao.huibao.resp.dev_info.xiaoye',
         resp: 200,
         token: token,
-        filter: '00000000000000001048,00000000000000001049',
-        rows: {},
+        // filter: ,
+        // rows: {},
       }),
     };
 
@@ -87,12 +90,12 @@ class Main extends React.Component {
     var setMessage = function () {};
     let i = 0;
 
-    const client = new Paho.MQTT.Client (
-      '127.0.0.1',
-      7410,
-      'JSClient-Demo-' + new Date ().toLocaleTimeString ()
-    );
-    //const client = new Paho.MQTT.Client('121.43.165.110', 3994, "JSClient-Demo-" + new Date().toLocaleTimeString());
+    // const client = new Paho.MQTT.Client (
+    //   '127.0.0.1',
+    //   7410,
+    //   'JSClient-Demo-' + new Date ().toLocaleTimeString ()
+    // );
+    const client = new Paho.MQTT.Client('121.43.165.110', 3994, "JSClient-Demo-" + new Date().toLocaleTimeString());
     // const client = new Paho.MQTT.Client('iot.wokooyun.com', 8083, "JSClient-Demo-" + new Date().toLocaleTimeString());
     const connectOpt = {
       userName: '15051841028',
@@ -153,7 +156,8 @@ class Main extends React.Component {
       console.log ('即将订阅的主题：' + hasSubscribe[i]);
       hasSubscribe[i] &&
         client.subscribe (hasSubscribe[i], {
-          onSuccess: function () {
+          onSuccess: function (res) {
+            debugger
             console.log ('subscribe success');
             // 维护数据界面
             // const newTableData = [].concat (tableData);

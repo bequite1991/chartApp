@@ -67,13 +67,13 @@ export default {
       path: '/',
       component: '../layouts/BasicLayout',
       routes: [
-        { path: '/', redirect: '/welcome' },
+        { path: '/', redirect: '/home' },
         // dashboard
         {
-          path: '/welcome',
-          name: 'welcome',
+          path: '/home',
+          name: 'home',
           icon: 'smile',
-          component: './Welcome',
+          component: './home',
         },
         {
           path: 'https://github.com/umijs/umi-blocks/tree/master/ant-design-pro',
