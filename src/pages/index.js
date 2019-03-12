@@ -95,7 +95,11 @@ class Main extends React.Component {
     //   7410,
     //   'JSClient-Demo-' + new Date ().toLocaleTimeString ()
     // );
-    const client = new Paho.MQTT.Client('121.43.165.110', 3994, "JSClient-Demo-" + new Date().toLocaleTimeString());
+    const client = new Paho.MQTT.Client (
+      '121.43.165.110',
+      3994,
+      'JSClient-Demo-' + new Date ().toLocaleTimeString ()
+    );
     // const client = new Paho.MQTT.Client('iot.wokooyun.com', 8083, "JSClient-Demo-" + new Date().toLocaleTimeString());
     const connectOpt = {
       userName: '15051841028',
@@ -157,7 +161,7 @@ class Main extends React.Component {
       hasSubscribe[i] &&
         client.subscribe (hasSubscribe[i], {
           onSuccess: function (res) {
-            debugger
+            debugger;
             console.log ('subscribe success');
             // 维护数据界面
             // const newTableData = [].concat (tableData);
