@@ -1,5 +1,5 @@
 const PROTOCAL_REQUEST = {
-  '/inshn_dtimao/huibao/req/dev_info': '9001', //消息推送接口
+  '/inshn_dtimao/huibao/req/dev_info': '9001', //电梯设备信息接口
   '/inshn_dtimao/huibao/req/dev_onoff_info': '9002', // 每月设备离线信息获取接口
   '/inshn_dtimao/huibao/req/dev_onoff_num': '9003', // 每月设备离线数量获取接口
   '/inshn_dtimao/huibao/req/dev_alarm_repeat': '9004', // 故障接警未处理接口

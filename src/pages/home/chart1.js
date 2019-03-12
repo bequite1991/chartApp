@@ -50,11 +50,11 @@ export default class GlobalHeader extends PureComponent {
         },
       ],
       series: [
-        // {
-        //     name:'2019年',
-        //     type:'bar',
-        //     data:[200, 1000, 800]
-        // },
+        {
+          name: '2019年',
+          type: 'bar',
+          data: [200, 1000, 800],
+        },
         // {
         //     name:'2012年',
         //     type:'bar',
@@ -71,9 +71,11 @@ export default class GlobalHeader extends PureComponent {
     let onEvents = {
       click: this.onChartClick.bind (this),
     };
+    debugger;
+    let options = this.props.options;
     return (
       <ReactEcharts
-        option={this.getOption ()}
+        option={options}
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}

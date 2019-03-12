@@ -72,9 +72,11 @@ export default class GlobalHeader extends PureComponent {
     let onEvents = {
       click: this.onChartClick.bind (this),
     };
+
+    let options = this.props.options;
     return (
       <ReactEcharts
-        option={this.getOption ()}
+        option={options}
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}

@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 
-let instance = null;
+let clientInstance = null;
 
 const CHANNEL_INIT = 'session:init';
 const CHANNEL_CONNECT = 'session:connect'; // subscribe
@@ -12,20 +12,31 @@ const CHANNEL_EXIT = 'session:exit';
 
 class MqttWorker extends EventEmitter {
   toClose = false;
+  hasSubscribe = [];
 
   constructor () {
     super ();
     let _this = this;
+    this.state = {};
+
     if (clientInstance) {
       return clientInstance;
     }
 
-    _this.on (CHANNEL_CONNECT, (event, data) => {
-      console.info (data);
+    _this.on (CHANNEL_INIT, list => {
+      console.info (list);
       debugger;
-      let options = {};
-      this.connect (data);
+      _this.hasSubscribe = list;
+      _this.toClose = true;
     });
+
+    _this.on (CHANNEL_CONNECT, options => {
+      console.info (options);
+      debugger;
+      this.connect (options);
+    });
+
+    clientInstance = _this;
   }
 
   init () {
@@ -44,6 +55,8 @@ class MqttWorker extends EventEmitter {
     var setMessage = function () {};
     let i = 0;
 
+    debugger;
+
     const client = new Paho.MQTT.Client (
       options.ip,
       options.port,
@@ -52,7 +65,7 @@ class MqttWorker extends EventEmitter {
 
     const connectOpt = {
       userName: options.userName,
-      password: options.password,
+      password: options.passWord,
       cleanSession: options.cleanSession,
       timeout: options.timeout,
       keepAliveInterval: options.keepAliveInterval,
