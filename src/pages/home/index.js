@@ -31,7 +31,7 @@ import mqttWorker from '../../stores/mqttWorker';
 
 // @inject ('runningData')
 // @observer
-export default class GlobalHeader extends PureComponent {
+export default class Home extends PureComponent {
   init = false;
   constructor (props) {
     super (props);
@@ -41,11 +41,11 @@ export default class GlobalHeader extends PureComponent {
       return;
     }
 
-    let runningData2 = Elevator_Running_Data_Chart_Options;
-    let runningSumDay = '200';
-    runningData2.series.unshift (runningSumDay);
+    // let runningData2 = Elevator_Running_Data_Chart_Options;
+    // let runningSumDay = '200';
+    // runningData2.series.unshift (runningSumDay);
 
-    console.info ('runningData:' + runningData);
+    // console.info ('runningData:' + runningData);
 
     let options = {
       ip: '121.43.165.110',
@@ -64,6 +64,7 @@ export default class GlobalHeader extends PureComponent {
     ];
 
     debugger;
+
     //mqttWorker.emit ('session:init', subscribe);
     //mqttWorker.emit ('session:connect', options);
 
@@ -83,25 +84,26 @@ export default class GlobalHeader extends PureComponent {
   @Debounce (600)
   triggerResizeEvent () {
     // eslint-disable-line
+    debugger;
     const event = document.createEvent ('HTMLEvents');
     event.initEvent ('resize', true, false);
     window.dispatchEvent (event);
   }
 
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   if (this.props.option === nextProps.option) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
+  shouldComponentUpdate (nextProps, nextState) {
+    if (this.props.option === nextProps.option) {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   render () {
     //const {collapsed, isMobile, logo} = this.props;
     return (
       <Provider runningData={runningData}>
         <div>
-          <RunningDataChart options={Elevator_Running_Data_Chart_Options} />
+          <RunningDataChart />
           <Elevator_System_Count_Chart
             options={Elevator_System_Count_Chart_Options}
           />

@@ -1,4 +1,4 @@
-import {observable, computed, toJS} from 'mobx';
+import {observable, computed, toJS, autorun} from 'mobx';
 
 import {Elevator_Running_Data_Chart_Options} from '../datacenter/chartConfig';
 /**
@@ -6,11 +6,11 @@ import {Elevator_Running_Data_Chart_Options} from '../datacenter/chartConfig';
  */
 class RunningData {
   @observable optionValue = Elevator_Running_Data_Chart_Options;
-  sumDay = '200'; // 运行天数
+  sumDay = '50'; // 运行天数
 
   //runningDataOption = null;
 
-  RunningData () {
+  constructor () {
     let row = {
       name: '2019年',
       type: 'bar',
@@ -18,6 +18,15 @@ class RunningData {
     };
     let series = [row];
     this.optionValue.series = series;
+
+    // const optionValueWatcher = computed (() => {
+    //   return this.optionValue;
+    // });
+
+    // autorun (() => {
+    //   let option = optionValueWatcher;
+    //   console.info ('autorun:' + option);
+    // });
   }
 
   @computed get runningDataOption () {
