@@ -63,10 +63,8 @@ export default class Home extends PureComponent {
       '/inshn_dtimao/huibao/req/month_dev_num' + options.userName,
     ];
 
-    debugger;
-
-    mqttWorker.emit ('session:init', subscribe);
-    mqttWorker.emit ('session:connect', options);
+    // mqttWorker.emit ('session:init', subscribe);
+    // mqttWorker.emit ('session:connect', options);
 
     this.init = true;
 
