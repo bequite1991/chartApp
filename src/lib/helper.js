@@ -20,7 +20,7 @@ export const getToken = (cmd, key, timestamp) => {
         token: token,
         // filter: ,
  */
-export const encode = (cmd, num_id, timestap, src, resp, token) => {
+export const encode = (cmd, num_id, timestap, src, resp, token, filter) => {
   return JSON.stringify ({
     cmd: cmd,
     num_id: num_id,
@@ -28,5 +28,6 @@ export const encode = (cmd, num_id, timestap, src, resp, token) => {
     src: src,
     resp: resp,
     token: token,
+    filter: filter,
   });
 };

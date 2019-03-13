@@ -1,11 +1,16 @@
 import React, {PureComponent} from 'react';
+import {inject, observer} from 'mobx-react';
 import {Icon} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 
+import {Provider} from 'mobx-react';
+
+import runningData from '../../stores/runningData';
+
 // 电梯运行数据(Elevator Running Data)
-import Elevator_Running_Data_Chart from './chart1';
+import RunningDataChart from './runningDataChart';
 // 电梯系统安装数量(Elevator System Count)
 import Elevator_System_Count_Chart from './chart2';
 // 每月电梯运行距离(Elevator Running Distance Every Month)
@@ -24,6 +29,8 @@ import {
 
 import mqttWorker from '../../stores/mqttWorker';
 
+// @inject ('runningData')
+// @observer
 export default class GlobalHeader extends PureComponent {
   init = false;
   constructor (props) {
@@ -33,6 +40,12 @@ export default class GlobalHeader extends PureComponent {
     if (this.init == true) {
       return;
     }
+
+    let runningData2 = Elevator_Running_Data_Chart_Options;
+    let runningSumDay = '200';
+    runningData2.series.unshift (runningSumDay);
+
+    console.info ('runningData:' + runningData);
 
     let options = {
       ip: '121.43.165.110',
@@ -51,10 +64,17 @@ export default class GlobalHeader extends PureComponent {
     ];
 
     debugger;
-    mqttWorker.emit ('session:init', subscribe);
-    mqttWorker.emit ('session:connect', options);
+    //mqttWorker.emit ('session:init', subscribe);
+    //mqttWorker.emit ('session:connect', options);
 
     this.init = true;
+
+    // setInterval (() => {
+    //   //cleanup();
+    //   let runningData = this.props.runningData;
+    //   //debugger;
+    //   runningData.runningDataOption = Math.ceil (Math.random () * 100) + '';
+    // }, 5000);
   }
 
   componentWillUnmount () {}
@@ -68,21 +88,29 @@ export default class GlobalHeader extends PureComponent {
     window.dispatchEvent (event);
   }
 
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   if (this.props.option === nextProps.option) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
+
   render () {
-    const {collapsed, isMobile, logo} = this.props;
+    //const {collapsed, isMobile, logo} = this.props;
     return (
-      <div>
-        <Elevator_Running_Data_Chart
-          options={Elevator_Running_Data_Chart_Options}
-        />
-        <Elevator_System_Count_Chart
-          options={Elevator_System_Count_Chart_Options}
-        />
-        <Elevator_Running_Distance_Every_Month_Chart
-          options={Elevator_Running_Distance_Every_Month_Chart_Option}
-        />
-        <Map />
-      </div>
+      <Provider runningData={runningData}>
+        <div>
+          <RunningDataChart options={Elevator_Running_Data_Chart_Options} />
+          <Elevator_System_Count_Chart
+            options={Elevator_System_Count_Chart_Options}
+          />
+          <Elevator_Running_Distance_Every_Month_Chart
+            options={Elevator_Running_Distance_Every_Month_Chart_Option}
+          />
+          <Map />
+        </div>
+      </Provider>
     );
   }
 }

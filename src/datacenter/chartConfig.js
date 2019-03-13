@@ -29,7 +29,7 @@ const Elevator_Running_Data_Chart_Options = {
   yAxis: [
     {
       type: 'category',
-      data: ['自运行总天数（天）', '运行总距离（KM）', '运行总时长（小时）'],
+      data: ['总运行天数（天）'],
     },
   ],
   series: [

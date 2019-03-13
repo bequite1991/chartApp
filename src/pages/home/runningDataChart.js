@@ -6,10 +6,22 @@ import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
-export default class GlobalHeader extends PureComponent {
+import {inject, observer} from 'mobx-react';
+import {debug} from 'util';
+
+@inject ('runningData')
+@observer
+export default class RunningDataChart extends PureComponent {
   constructor (props) {
     super (props);
     this.state = {};
+
+    // setInterval (() => {
+    //   //cleanup();
+    //   let runningData = this.props.runningData;
+    //   //debugger;
+    //   runningData.runningDataOption = Math.ceil (Math.random () * 100) + '';
+    // }, 5000);
   }
   componentWillUnmount () {}
   /* eslint-disable*/
@@ -64,18 +76,20 @@ export default class GlobalHeader extends PureComponent {
     };
     return option;
   }
+
   onChartClick (param, echarts) {
     console.log (param);
   }
+
   render () {
     let onEvents = {
       click: this.onChartClick.bind (this),
     };
-    debugger;
-    let options = this.props.options;
+    const {runningData} = this.props;
+    const option = runningData.runningDataOption;
     return (
       <ReactEcharts
-        option={options}
+        option={option}
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}

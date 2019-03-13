@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>websocket</title>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript">
+$(function() {
+	 doInitSocket();
+});
+
+var webSocket = null;
+
+var doInitSocket = function() {
+	 if (!window.WebSocket) {
+		$.messager.alert('title', 'no supper', 'error');
+		return;
+	} 
+	
+	//ye
+	var sign = 'eyJpZCI6InllIiwia2V5IjoiNDZDQzQ1QTcyN0JFQzdERTk3RjlFNzM4QUQ0MjgxNTMiLCJwcm9qZWN0Q29kZSI6Imh1aWJhbyIsInRpbWVzdGFtcCI6IjIwMTcxMTA2MTgxNDA2In0=';
+	webSocket = new WebSocket('ws://www.dtimao.com:8088/dtimao/webSocket/' + sign);
+	webSocket.onopen = function(event) {
+		webSocket.send('{\"cmd\":\"1001\",\"strAgent\":[\"'  + '900000000000001447\",' + '\"\",' +'\"\"' +'],\"transactionId\":\"123456\",\"projectCode\":\"huibao\"}');
+	};
+	webSocket.onmessage = function(event) {
+		onMessage(event);
+	};
+	webSocket.onclose = function (event) {
+		console.log('connect to websocket');
+		 setTimeout(function () {
+			if(null != webSocket) {
+ 				webSocket = null;
+			}
+ 			doInitSocket();
+ 		}, 1500);
+	};
+	webSocket.onerror = function(event) {
+		console.log(event);
+		/*
+		
+		setTimeout(function () {
+			if(null != webSocket) {
+				webSocket.close();
+ 				webSocket = null;
+			}
+ 			doInitSocket(inshnId);
+ 		}, 500);
+ 		*/
+	};
+    window.onbeforeunload = function() {
+        if(null != webSocket)
+    		webSocket.close();
+    }
+}
+
+var onMessage = function(event) {
+	var data = event.data;
+	
+	if (null == data || data.length == 0)
+		return;
+	
+	console.log("[" + getDatetime() + "]onMessage:" + data);
+}
+
+ function getDatetime(){
+	var now=new Date();
+	return now.getFullYear()+"-"+now.getMonth()+"-"+now.getDate()+" " 
+	+ (now.getHours() < 10 ? '0' + now.getHours(): now.getHours())+":"+(now.getMinutes() < 10 ? '0' + now.getMinutes(): now.getMinutes())
+	+ ":" + (now.getSeconds() < 10 ? '0' + now.getSeconds(): now.getSeconds());    
+}
+  
+</script>
+<body>
+	webSocket test client
+</body>
+</head>
+</html>
