@@ -62,7 +62,6 @@ export default class GlobalHeader extends PureComponent {
         },
       ],
     };
-
     return option;
   }
   onChartClick (param, echarts) {

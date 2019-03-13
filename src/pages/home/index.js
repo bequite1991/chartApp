@@ -65,8 +65,8 @@ export default class Home extends PureComponent {
 
     debugger;
 
-    //mqttWorker.emit ('session:init', subscribe);
-    //mqttWorker.emit ('session:connect', options);
+    mqttWorker.emit ('session:init', subscribe);
+    mqttWorker.emit ('session:connect', options);
 
     this.init = true;
 
@@ -90,13 +90,13 @@ export default class Home extends PureComponent {
     window.dispatchEvent (event);
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    if (this.props.option === nextProps.option) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   if (this.props.option === nextProps.option) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 
   render () {
     //const {collapsed, isMobile, logo} = this.props;

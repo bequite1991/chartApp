@@ -95,9 +95,9 @@ class MqttWorker extends EventEmitter {
 
     console.log ('mqtt connect ...');
 
-    this.setState ({
-      client,
-    });
+    // this.setState ({
+    //   client,
+    // });
   }
 
   initSubscribe () {
@@ -136,10 +136,10 @@ class MqttWorker extends EventEmitter {
 
     client.isConnected () && client.subscribe (filter);
     hasSubscribe.push (filter);
-    this.setState ({
-      subscribe: filter,
-      hasSubscribe,
-    });
+    // this.setState ({
+    //   subscribe: filter,
+    //   hasSubscribe,
+    // });
     console.log ('mqtt subscribe', filter);
   }
 

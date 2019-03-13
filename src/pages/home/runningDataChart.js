@@ -11,7 +11,7 @@ import {debug} from 'util';
 
 @inject ('runningData')
 @observer
-export default class RunningDataChart extends PureComponent {
+export default class RunningDataChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};
