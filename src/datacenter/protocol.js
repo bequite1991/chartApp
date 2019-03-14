@@ -11,4 +11,6 @@ const PROTOCAL_REQUEST = {
   '/inshn_dtimao/huibao/req/mai_dev_info': '9010', // 维保记录查询接口
 };
 
+const PROTOCAL_MAP = [];
+
 export {PROTOCAL_REQUEST};

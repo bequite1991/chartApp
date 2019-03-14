@@ -33,11 +33,11 @@ const Elevator_Running_Data_Chart_Options = {
     },
   ],
   series: [
-    // {
-    //     name:'2019年',
-    //     type:'bar',
-    //     data:[200, 1000, 800]
-    // },
+    {
+      name: '2019年',
+      type: 'bar',
+      data: [],
+    },
     // {
     //     name:'2012年',
     //     type:'bar',
@@ -71,7 +71,7 @@ const Elevator_System_Count_Chart_Options = {
   xAxis: [
     {
       type: 'category',
-      data: ['2014年', '2015年', '2016年', '2017年', '2018年'],
+      data: ['2019年'],
     },
   ],
   yAxis: [
@@ -80,17 +80,17 @@ const Elevator_System_Count_Chart_Options = {
     },
   ],
   series: [
-    // {
-    //   name: '总数',
-    //   type: 'bar',
-    //   data: [1000, 1500, 2000, 2500, 3000],
-    //   markPoint: {
-    //     data: [{type: 'max', name: '最大值'}, {type: 'min', name: '最小值'}],
-    //   },
-    //   markLine: {
-    //     data: [{type: 'average', name: '平均值'}],
-    //   },
-    // },
+    {
+      name: '总数',
+      type: 'bar',
+      data: [],
+      markPoint: {
+        data: [{type: 'max', name: '最大值'}, {type: 'min', name: '最小值'}],
+      },
+      markLine: {
+        data: [{type: 'average', name: '平均值'}],
+      },
+    },
   ],
 };
 

@@ -7,12 +7,12 @@ import styles from './index.less';
 
 import {Provider} from 'mobx-react';
 
-import runningData from '../../stores/runningData';
+import sharedData from '../../stores/sharedData';
 
 // 电梯运行数据(Elevator Running Data)
 import RunningDataChart from './runningDataChart';
 // 电梯系统安装数量(Elevator System Count)
-import Elevator_System_Count_Chart from './chart2';
+import SystemCountChart from './systemCountChart';
 // 每月电梯运行距离(Elevator Running Distance Every Month)
 import Elevator_Running_Distance_Every_Month_Chart from './chart3';
 //
@@ -99,12 +99,10 @@ export default class Home extends PureComponent {
   render () {
     //const {collapsed, isMobile, logo} = this.props;
     return (
-      <Provider runningData={runningData}>
+      <Provider sharedData={sharedData}>
         <div>
           <RunningDataChart />
-          <Elevator_System_Count_Chart
-            options={Elevator_System_Count_Chart_Options}
-          />
+          <SystemCountChart />
           <Elevator_Running_Distance_Every_Month_Chart
             options={Elevator_Running_Distance_Every_Month_Chart_Option}
           />
