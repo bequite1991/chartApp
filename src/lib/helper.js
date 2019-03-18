@@ -31,3 +31,7 @@ export const encode = (cmd, num_id, timestap, src, resp, token, filter) => {
     filter: filter,
   });
 };
+
+export const randomData = function() {
+    return Math.round(Math.random()*10000);
+  };

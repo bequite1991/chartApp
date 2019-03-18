@@ -162,8 +162,75 @@ const Elevator_Running_Distance_Every_Month_Chart_Option = {
   ],
 };
 
+const Elevator_Map_China_Options = {
+  title: {
+    text: '设备分布',
+    subtext: '慧保电梯设备分布图',
+    left: 'center'
+  },
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    orient: 'vertical',
+    left: 'left',
+    data:['全部型号']
+  },
+  visualMap: {
+    min: 0,
+    max: 10000,
+    left: 'left',
+    top: 'bottom',
+    text: ['设备分布多','设备分布少'],       // 文本，默认为数值文本
+    calculable: true
+  },
+  toolbox: {
+    show: true,
+    orient: 'vertical',
+    left: 'right',
+    top: 'center',
+    feature: {
+      dataView: {readOnly: false},
+      restore: {},
+      saveAsImage: {}
+    }
+  },
+  bmap:{
+    zoom:100
+  },
+  series: [
+    {
+        name: '全部型号',
+        type: 'map',
+        mapType: 'china',
+        label: {
+            normal: {
+            show: true,
+            // shadowBlur: 10,
+            // shadowColor: '#333'
+            },
+            emphasis: {
+                show: true
+            }
+        },
+        zlevel: 1,
+        data:[
+            // {name: '北京',value: randomData() },
+            // {name: '天津',value: randomData() },
+            // {name: '上海',value: randomData() },
+            // {name: '广东',value: randomData() },
+            // {name: '台湾',value: randomData() },
+            // {name: '香港',value: randomData() },
+            // {name: '澳门',value: randomData() }
+        ]
+    }
+  ]
+}
+
+
 export {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
   Elevator_Running_Distance_Every_Month_Chart_Option,
+  Elevator_Map_China_Options
 };

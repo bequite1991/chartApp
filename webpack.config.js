@@ -7,11 +7,8 @@ module.exports = {
   resolve: {
     alias: {
       '@': require('path').resolve(__dirname, 'src'), // eslint-disable-line
-    },
-  },
-  externals: {
-    AMap: 'AMap',
-    AMapUI: 'AMapUI',
-    ECharts: 'echarts',
-  },
-};
+      // "helper":require('path').join(__dirname, 'src/lib/','helper')
+     },
+     extensions: ['', '.js', '.jsx']
+  }
+}
