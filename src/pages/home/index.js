@@ -20,6 +20,7 @@ import Chart4 from './chart4';
 import Chart5 from './chart5';
 //
 import Map from './map';
+import Map2 from './map2';
 
 import {
   Elevator_Running_Data_Chart_Options,
@@ -107,6 +108,7 @@ export default class Home extends PureComponent {
             options={Elevator_Running_Distance_Every_Month_Chart_Option}
           />
           <Map />
+          <Map2 />
         </div>
       </Provider>
     );

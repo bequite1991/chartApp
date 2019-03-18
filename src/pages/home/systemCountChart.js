@@ -11,7 +11,7 @@ import {debug} from 'util';
 
 @inject ('sharedData')
 @observer
-export default class SystemCountChart extends PureComponent {
+export default class SystemCountChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};
@@ -29,7 +29,6 @@ export default class SystemCountChart extends PureComponent {
 
     const {sharedData} = this.props;
     const option = sharedData.systemCountOption;
-    debugger;
     return (
       <ReactEcharts
         option={option}

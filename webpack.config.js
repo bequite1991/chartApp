@@ -9,4 +9,9 @@ module.exports = {
       '@': require('path').resolve(__dirname, 'src'), // eslint-disable-line
     },
   },
+  externals: {
+    AMap: 'AMap',
+    AMapUI: 'AMapUI',
+    ECharts: 'echarts',
+  },
 };
