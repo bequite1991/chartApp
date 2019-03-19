@@ -15,12 +15,12 @@ require ('../services/utils/mqttws31');
 export default class TodaySpec extends PureComponent {
   client = null;
 
-  // defaultServer = '121.43.165.110';
+  defaultServer = '121.43.165.110';
   // defaultServer = '222.73.204.54';
-  defaultServer = '127.0.0.1';
-  // defaultPort = 3994; //9001;
+  // defaultServer = '127.0.0.1';
+  defaultPort = 3994; //9001;
   // defaultPort = 9001;
-  defaultPort = 7410;
+  // defaultPort = 7410;
   defaultSubTopic = '#';
   defaultPubTopic = 'alert';
   defaultPubMessage = '';

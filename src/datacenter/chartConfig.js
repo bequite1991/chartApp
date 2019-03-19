@@ -177,12 +177,12 @@ const Elevator_Map_China_Options = {
     data:['全部型号']
   },
   visualMap: {
-    min: 0,
+    min: 100,
     max: 10000,
     left: 'left',
-    top: 'bottom',
+    top: 'center',
     text: ['设备分布多','设备分布少'],       // 文本，默认为数值文本
-    calculable: true
+    calculable: false,
   },
   toolbox: {
     show: true,
@@ -194,9 +194,6 @@ const Elevator_Map_China_Options = {
       restore: {},
       saveAsImage: {}
     }
-  },
-  bmap:{
-    zoom:100
   },
   series: [
     {
@@ -307,19 +304,64 @@ const Elevator_Error_Ratio_Chart_Options = {
         // }
     ]
 };
+// const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
+//     title : {
+//         text: '',
+//         subtext: '维保人员派单量和完成量',
+//     },
+//     tooltip: {
+//         trigger: 'axis',
+//         axisPointer: {
+//             type: 'shadow'
+//         }
+//     },
+//     legend: {
+//         data: ['派单量', '完成量']
+//     },
+//     grid: {
+//         left: '3%',
+//         right: '4%',
+//         bottom: '3%',
+//         containLabel: true
+//     },
+//     xAxis: {
+//         type: 'value',
+//         boundaryGap: [0, 0.01]
+//     },
+//     yAxis: {
+//         type: 'category',
+//         data: ['H级','B级','K级','E级','F级']
+//     },
+//     series: [
+//         // {
+//         //     name: '2011年',
+//         //     type: 'bar',
+//         //     data: [18203, 23489, 29034, 104970, 131744, 630230]
+//         // },
+//         // {
+//         //     name: '2012年',
+//         //     type: 'bar',
+//         //     data: [19325, 23438, 31000, 121594, 134141, 681807]
+//         // }
+//     ]
+// };
 const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
     title : {
-        text: '',
-        subtext: '维保人员派单量和完成量',
+        text: '维保人员派单量和完成量',
+        subtext: '',
+        x:'center'
+
     },
-    tooltip: {
+    tooltip : {
         trigger: 'axis',
-        axisPointer: {
-            type: 'shadow'
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
         }
     },
     legend: {
-        data: ['派单量', '完成量']
+        left: 'left',
+        orient: 'vertical',
+        data: ['完成量', '未完成量']
     },
     grid: {
         left: '3%',
@@ -327,27 +369,40 @@ const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
         bottom: '3%',
         containLabel: true
     },
-    xAxis: {
-        type: 'value',
-        boundaryGap: [0, 0.01]
+    xAxis:  {
+        type: 'value'
     },
     yAxis: {
         type: 'category',
-        data: ['H级','B级','K级','E级','F级']
+        data: ['周一','周二','周三','周四','周五','周六','周日']
     },
     series: [
         // {
-        //     name: '2011年',
+        //     name: '直接访问',
         //     type: 'bar',
-        //     data: [18203, 23489, 29034, 104970, 131744, 630230]
+        //     stack: '总量',
+        //     label: {
+        //         normal: {
+        //             show: true,
+        //             position: 'insideRight'
+        //         }
+        //     },
+        //     data: [320, 302, 301, 334, 390, 330, 320]
         // },
         // {
-        //     name: '2012年',
+        //     name: '邮件营销',
         //     type: 'bar',
-        //     data: [19325, 23438, 31000, 121594, 134141, 681807]
+        //     stack: '总量',
+        //     label: {
+        //         normal: {
+        //             show: true,
+        //             position: 'insideRight'
+        //         }
+        //     },
+        //     data: [120, 132, 101, 134, 90, 230, 210]
         // }
     ]
-};
+};;
 
 
 const Elevator_maintenance_Orders_Month_Chart_Options = {

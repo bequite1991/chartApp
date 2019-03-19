@@ -87,7 +87,6 @@ export default class Home extends PureComponent {
   @Debounce (600)
   triggerResizeEvent () {
     // eslint-disable-line
-    debugger;
     const event = document.createEvent ('HTMLEvents');
     event.initEvent ('resize', true, false);
     window.dispatchEvent (event);
@@ -102,7 +101,6 @@ export default class Home extends PureComponent {
   // }
 
   render () {
-    //const {collapsed, isMobile, logo} = this.props;
     return (
       <Provider sharedData={sharedData}>
         <Row>

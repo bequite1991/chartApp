@@ -79,16 +79,30 @@ class sharedData {
     ]
 
     this.maintenanceOrdersAndFinishOptionValue.series = [
-        {
-            name: '派单量',
-            type: 'bar',
-            data: [18203, 23489, 29034, 104970, 131744]
-        },
-        {
+         {
             name: '完成量',
             type: 'bar',
-            data: [16325, 23438, 29000, 91594, 114141]
-        }
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data: [320, 302, 301, 334, 390, 330, 320]
+        },
+        {
+            name: '未成量',
+            type: 'bar',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'insideRight'
+                }
+            },
+            data: [120, 132, 101, 134, 90, 230, 210]
+        },
     ]
 
     this.maintenanceOrdersMonthOptionValue.series = [

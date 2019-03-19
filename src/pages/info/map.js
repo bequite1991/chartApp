@@ -5,7 +5,7 @@ import Debounce from 'lodash-decorators/debounce';
 import styles from './map.less';
 import ReactEcharts from 'echarts-for-react';
 import {inject, observer} from 'mobx-react';
-require('echarts/map/js/china.js');
+require('echarts/map/js/province/zhejiang.js');
 
 
 @inject ('sharedData')
@@ -31,7 +31,7 @@ export default class Map extends Component {
   }
   render() {
     const {sharedData} = this.props;
-    const option = sharedData.mapChinaOptionValue;
+    const option = sharedData.mapOptionValue;
     let onEvents = {
         'click': this.onChartClick,
         'legendselectchanged': this.onChartLegendselectchanged
