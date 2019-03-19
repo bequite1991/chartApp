@@ -307,6 +307,47 @@ const Elevator_Error_Ratio_Chart_Options = {
         // }
     ]
 };
+const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
+    title : {
+        text: '维保人员派单量和完成量',
+        subtext: '',
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+    legend: {
+        data: ['派单量', '完成量']
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01]
+    },
+    yAxis: {
+        type: 'category',
+        data: ['H级','B级','K级','E级','F级']
+    },
+    series: [
+        // {
+        //     name: '2011年',
+        //     type: 'bar',
+        //     data: [18203, 23489, 29034, 104970, 131744, 630230]
+        // },
+        // {
+        //     name: '2012年',
+        //     type: 'bar',
+        //     data: [19325, 23438, 31000, 121594, 134141, 681807]
+        // }
+    ]
+};
 
 
 
@@ -316,5 +357,6 @@ export {
   Elevator_Running_Distance_Every_Month_Chart_Option,
   Elevator_Map_China_Options,
   Elevator_Error_Every_Month_Chart_Options,
-  Elevator_Error_Ratio_Chart_Options
+  Elevator_Error_Ratio_Chart_Options,
+  Elevator_Maintenance_OrdersAndFinish_Chart_Options
 };

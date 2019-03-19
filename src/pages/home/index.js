@@ -19,6 +19,8 @@ import Elevator_Running_Distance_Every_Month_Chart from './chart3';
 import Elevator_Error_Every_Month_Chart from './errorMonthChart.js';
 // 每月电梯故障比例(Elevator Error Ratio)
 import Elevator_Error_Ratio_Chart from './errorRatioChart.js';
+// 维保人员每月派单量和完成量(maintenance Orders And Finish)
+import Maintenance_Orders_And_Finish_Chart from './maintenanceOrdersAndFinishChart.js';
 //
 import Chart4 from './chart4';
 import Chart5 from './chart5';
@@ -114,6 +116,7 @@ export default class Home extends PureComponent {
           <Map />
           <Elevator_Error_Every_Month_Chart />
           <Elevator_Error_Ratio_Chart />
+          <Maintenance_Orders_And_Finish_Chart />
         </div>
       </Provider>
     );

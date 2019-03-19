@@ -28,7 +28,7 @@ export default class SystemCountChart extends React.Component {
     };
 
     const {sharedData} = this.props;
-    const option = sharedData.elevatorErrorEveryMonthOption;
+    const option = sharedData.maintenanceOrdersAndFinishOption;
     return (
       <ReactEcharts
         option={option}
