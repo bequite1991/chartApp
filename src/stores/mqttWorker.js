@@ -29,19 +29,17 @@ class MqttWorker extends EventEmitter{
 
     this.on (CHANNEL_INIT, list => {
       console.info (list);
-      debugger;
       this.hasSubscribe = list;
       this.toClose = true;
     });
 
     this.on (CHANNEL_CONNECT, options => {
       console.info (options);
-      debugger;
       this.connect (options);
     });
 
     this.on (CHANNEL_PUBLISH, options => {
-      debugger;
+      //debugger;
       this.publish(options.topic,options.message , 1, false);
     });
 
@@ -76,7 +74,6 @@ class MqttWorker extends EventEmitter{
     var setMessage = function () {};
     let i = 0;
 
-    debugger;
 
     this.client = new Paho.MQTT.Client (
       options.ip,

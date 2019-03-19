@@ -31,7 +31,7 @@ export default class Map extends Component {
   }
   render() {
     const {sharedData} = this.props;
-    const option = sharedData.mapChinaOptionValue;
+    const option = sharedData.mapChinaOption;
     let onEvents = {
         'click': this.onChartClick,
         'legendselectchanged': this.onChartLegendselectchanged

@@ -43,13 +43,13 @@ class sharedData extends EventEmitter{
     this.systemCountOptionValue.series[0].data = ['150'];
 
     this.mapChinaOptionValue.series[0].data = [
-      {name: '北京',value: randomData() },
-      {name: '天津',value: randomData() },
-      {name: '上海',value: randomData() },
-      {name: '广东',value: randomData() },
-      {name: '台湾',value: randomData() },
-      {name: '香港',value: randomData() },
-      {name: '澳门',value: randomData() }
+      {name: '北京',value: randomData(),pingyin:"beijing"},
+      {name: '天津',value: randomData(),pingyin:"beijing" },
+      {name: '上海',value: randomData(),pingyin:"beijing" },
+      {name: '浙江',value: randomData(),pingyin:"zhejiang" },
+      {name: '台湾',value: randomData(),pingyin:"beijing" },
+      {name: '香港',value: randomData(),pingyin:"beijing" },
+      {name: '澳门',value: randomData(),pingyin:"beijing" }
     ];
     this.elevatorErrorEveryMonthOptionValue.series = [
         {
@@ -127,6 +127,7 @@ class sharedData extends EventEmitter{
     //   console.info ('autorun:' + option);
     // });
   }
+
 
   @computed get runningDataOption () {
     return toJS (this.runningDataOptionValue);
@@ -219,8 +220,33 @@ class sharedData extends EventEmitter{
     this.maintenanceOrdersMonthOptionValue = option;
   }
 
+
+  // async computeMapData (val){
+  //   await ()=>{
+  //     try{
+  //       let data1 = require(`echarts/map/js/province/${val.pingyin}`);
+  //       return true;
+  //     }catch(ex){
+  //       console.log("error:",ex);
+  //     }
+  //   }
+  // }
   @computed get mapInfo () {
+    const t = this;
+    const load = function(val){
+      let data1 = require(`echarts/map/js/province/${val.pingyin}`);
+      console.log("1")
+    }
+    async function computeMapData (val){
+      await load(val);
+      console.log("2")
+      return toJS (t.mapInfoValue);
+    }
+    computeMapData (toJS (t.mapInfoValue))
+    // const mapData =  computeMapData(this.mapInfoValue);
+    console.log("3")
     return toJS (this.mapInfoValue);
+
   }
   set mapInfo (value) {
     this.mapInfoValue = value;

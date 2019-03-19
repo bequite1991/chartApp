@@ -41,13 +41,13 @@ class sharedDataInfo extends EventEmitter{
     this.systemCountOptionValue.series[0].data = ['150'];
 
     this.mapChinaOptionValue.series[0].data = [
-      {name: '北京',value: randomData() },
-      {name: '天津',value: randomData() },
-      {name: '上海',value: randomData() },
-      {name: '广东',value: randomData() },
-      {name: '台湾',value: randomData() },
-      {name: '香港',value: randomData() },
-      {name: '澳门',value: randomData() }
+      {name: '金华市',value: randomData() },
+      {name: '杭州市',value: randomData() },
+      {name: '台州市',value: randomData() },
+      {name: '温州市',value: randomData() },
+      {name: '嘉兴市',value: randomData() },
+      {name: '湖州市',value: randomData() },
+      {name: '丽水市',value: randomData() }
     ];
     this.elevatorErrorEveryMonthOptionValue.series = [
         {

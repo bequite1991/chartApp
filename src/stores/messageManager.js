@@ -30,8 +30,6 @@ class MessageManager extends EventEmitter{
     
     constructor() {
         super();
-
-        debugger;
         // let options = {
         //     ip: '121.43.165.110',
         //     port: 3994,
@@ -51,18 +49,15 @@ class MessageManager extends EventEmitter{
         this.subscribe.push(item + "/"+options.userName);
         });
 
-          debugger;
           mqttWorker.emit ('session:init', this.subscribe);
           mqttWorker.emit ('session:connect', options);
 
           this.on ("register", (args) => {
-            debugger;
             console.info ("注册消息:"+args.cmd);
             this.addCommand(args.cmd);
           });
 
           this.on ("unregister", (args) => {
-            debugger;
             console.info ("取消注册消息:"+args.cmd);
             this.removeCommand(args.cmd)
           });
@@ -143,10 +138,10 @@ class MessageManager extends EventEmitter{
     }
 
     removeCommand(cmd){
-        let index = this.hasCommand(cmd);
-        if(index > -1){
-            this.cmdList.remove(index);
-        }
+        // let index = this.hasCommand(cmd);
+        // if(index > -1){
+        //     this.cmdList.remove(index);
+        // }
     }
 }
 

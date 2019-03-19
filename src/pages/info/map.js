@@ -5,7 +5,9 @@ import Debounce from 'lodash-decorators/debounce';
 import styles from './map.less';
 import ReactEcharts from 'echarts-for-react';
 import {inject, observer} from 'mobx-react';
-require('echarts/map/js/province/zhejiang.js');
+
+// require('echarts/map/js/china.js');
+
 
 
 @inject ('sharedDataInfo')
@@ -36,9 +38,9 @@ export default class Map extends Component {
   }
   render() {
     const {sharedDataInfo,sharedData} = this.props;
-    const option = sharedDataInfo.mapChinaOptionValue;
-    const mapInfo = sharedData.mapInfoValue;
-    debugger
+    const option = sharedDataInfo.mapChinaOption;
+    const mapInfo = sharedData.mapInfo;
+    option.series[0].mapType = mapInfo.name;
 
     const arr = [
         {name:"维保一",phone:"1777777777",area:"上海市晒暖干海带额",location:"上海市晒暖干海"},

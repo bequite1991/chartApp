@@ -16,7 +16,7 @@ export default class SystemCountChart extends React.Component {
     super (props);
     this.state = {};
     const {messageManager} = this.props;
-    messageManager.emit("register",{cmd:"9001"})
+    //messageManager.emit("register",{cmd:"9001"})
   }
 
   componentWillUnmount () {

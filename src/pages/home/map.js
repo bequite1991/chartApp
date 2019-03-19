@@ -39,7 +39,7 @@ export default class Map extends Component {
   }
   render() {
     const {sharedData} = this.props;
-    const option = sharedData.mapChinaOptionValue;
+    const option = sharedData.mapChinaOption;
 
     const arr = [
         {name:"维保一",phone:"1777777777",area:"上海市晒暖干海带额",location:"上海市晒暖干海"},

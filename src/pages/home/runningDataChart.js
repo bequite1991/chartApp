@@ -18,7 +18,7 @@ export default class RunningDataChart extends React.Component {
     this.state = {};
     this.flagReceive = false;
     const {messageManager} = this.props;
-    messageManager.emit("register",{cmd:"9001"})
+    //messageManager.emit("register",{cmd:"9001"})
   }
   
   componentWillUnmount () {
