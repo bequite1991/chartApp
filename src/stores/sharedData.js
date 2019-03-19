@@ -33,6 +33,7 @@ class sharedData extends EventEmitter{
   //runningDataOption = null;
 
   constructor () {
+    super();
     //var runningDataOptionValue = this.runningDataOptionValue;
     //var runningDataOptionValue_series = runningDataOptionValue.series[0];
     //let series = [row];
