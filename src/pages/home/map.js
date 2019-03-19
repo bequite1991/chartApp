@@ -5,6 +5,9 @@ import Debounce from 'lodash-decorators/debounce';
 import styles from './map.less';
 import ReactEcharts from 'echarts-for-react';
 import {inject, observer} from 'mobx-react';
+import router from 'umi/router';
+
+
 require('echarts/map/js/china.js');
 
 
@@ -13,6 +16,10 @@ require('echarts/map/js/china.js');
 export default class Map extends Component {
   constructor(props) {
     super(props);
+    this.onEvents = {
+        'click': this.onChartClick.bind(this),
+        'legendselectchanged': this.onChartLegendselectchanged.bind(this)
+    };
   }
 
   componentDidMount() {
@@ -23,19 +30,16 @@ export default class Map extends Component {
   randomData() {
     return Math.round(Math.random()*10000);
   };
-  onChartClick(){
-    debugger
+  onChartClick(val){
+    const {sharedData} = this.props;
+    sharedData.mapInfo = val.data;
+    router.push('/info');
   }
   onChartLegendselectchanged(){
-    debugger
   }
   render() {
     const {sharedData} = this.props;
     const option = sharedData.mapChinaOptionValue;
-    let onEvents = {
-        'click': this.onChartClick,
-        'legendselectchanged': this.onChartLegendselectchanged
-    };
 
     const arr = [
         {name:"维保一",phone:"1777777777",area:"上海市晒暖干海带额",location:"上海市晒暖干海"},
@@ -53,7 +57,7 @@ export default class Map extends Component {
             <p className="title">慧保电梯管理平台</p>
             <div className="subtitle"><span>电梯在线数量：</span><span className="detail">25213</span><span>总安装数量：</span><span className="detail">41982</span></div>
             <ReactEcharts
-                onEvents={onEvents}
+                onEvents={this.onEvents}
                 option={option}
                 style={{height: '70vh', width: '100%'}}
                 className='react_for_echarts' />

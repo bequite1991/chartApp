@@ -9,7 +9,7 @@ import echarts from 'echarts';
 import {inject, observer} from 'mobx-react';
 import {debug} from 'util';
 
-@inject ('sharedData')
+@inject ('sharedDataInfo')
 @observer
 export default class SystemCountChart extends React.Component {
   constructor (props) {
@@ -27,8 +27,8 @@ export default class SystemCountChart extends React.Component {
       click: this.onChartClick.bind (this),
     };
 
-    const {sharedData} = this.props;
-    const option = sharedData.systemCountOption;
+    const {sharedDataInfo} = this.props;
+    const option = sharedDataInfo.systemCountOption;
     return (
       <ReactEcharts
         option={option}

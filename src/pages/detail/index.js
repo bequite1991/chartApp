@@ -7,7 +7,7 @@ import styles from './index.less';
 
 import {Provider} from 'mobx-react';
 
-import sharedData from '../../stores/sharedData';
+import sharedData from '../../stores/sharedDataDetail';
 
 // 电梯运行数据(Elevator Running Data)
 import RunningDataChart from './runningDataChart';
@@ -30,7 +30,7 @@ import {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
   Elevator_Running_Distance_Every_Month_Chart_Option,
-} from '../../datacenter/chartConfig';
+} from '../../datacenter/chartConfigInfo';
 
 import mqttWorker from '../../stores/mqttWorker';
 

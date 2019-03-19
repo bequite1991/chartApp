@@ -12,12 +12,11 @@ import {
   Elevator_Error_Ratio_Chart_Options,
   Elevator_Maintenance_OrdersAndFinish_Chart_Options,
   Elevator_maintenance_Orders_Month_Chart_Options,
-  Map_Info_Value
-} from '../datacenter/chartConfig';
+} from '../datacenter/chartConfigInfo';
 /**
  * 电梯运行数据
  */
-class sharedData extends EventEmitter{
+class sharedDataInfo extends EventEmitter{
   @observable runningDataOptionValue = Elevator_Running_Data_Chart_Options;
   @observable systemCountOptionValue = Elevator_System_Count_Chart_Options;
   @observable runningDistanceEveryMonthOptionValue = Elevator_Running_Distance_Every_Month_Chart_Option;
@@ -26,7 +25,6 @@ class sharedData extends EventEmitter{
   @observable elevatorErrorRatioOptionValue = Elevator_Error_Ratio_Chart_Options;
   @observable maintenanceOrdersAndFinishOptionValue = Elevator_Maintenance_OrdersAndFinish_Chart_Options;
   @observable maintenanceOrdersMonthOptionValue = Elevator_maintenance_Orders_Month_Chart_Options;
-  @observable mapInfoValue = Map_Info_Value;
 
 
 
@@ -218,16 +216,9 @@ class sharedData extends EventEmitter{
     }
     this.maintenanceOrdersMonthOptionValue = option;
   }
-
-  @computed get mapInfo () {
-    return toJS (this.mapInfoValue);
-  }
-  set mapInfo (value) {
-    this.mapInfoValue = value;
-  }
 }
 
-export default new sharedData ();
+export default new sharedDataInfo ();
 
 //console.log (runningData.runningDataOption);
 //recompute fullname

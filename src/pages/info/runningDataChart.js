@@ -9,7 +9,7 @@ import echarts from 'echarts';
 import {inject, observer} from 'mobx-react';
 import {debug} from 'util';
 
-@inject ('sharedData')
+@inject ('sharedDataInfo')
 @observer
 export default class RunningDataChart extends React.Component {
   constructor (props) {
@@ -17,9 +17,9 @@ export default class RunningDataChart extends React.Component {
     this.state = {};
 
     // setInterval (() => {
-    //   const {sharedData} = this.props;
+    //   const {sharedDataInfo} = this.props;
     //   //debugger;
-    //   sharedData.runningDataOption = Math.ceil (Math.random () * 100) + '';
+    //   sharedDataInfo.runningDataOption = Math.ceil (Math.random () * 100) + '';
     // }, 5000);
   }
   componentWillUnmount () {}
@@ -32,8 +32,8 @@ export default class RunningDataChart extends React.Component {
     let onEvents = {
       click: this.onChartClick.bind (this),
     };
-    const {sharedData} = this.props;
-    const option = sharedData.runningDataOption;
+    const {sharedDataInfo} = this.props;
+    const option = sharedDataInfo.runningDataOption;
     return (
       <ReactEcharts
         option={option}

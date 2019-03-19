@@ -447,7 +447,6 @@ const Elevator_maintenance_Orders_Month_Chart_Options = {
         // }
     ]
 }
-const Map_Info_Value = {}
 
 
 
@@ -459,6 +458,5 @@ export {
   Elevator_Error_Every_Month_Chart_Options,
   Elevator_Error_Ratio_Chart_Options,
   Elevator_Maintenance_OrdersAndFinish_Chart_Options,
-  Elevator_maintenance_Orders_Month_Chart_Options,
-  Map_Info_Value
+  Elevator_maintenance_Orders_Month_Chart_Options
 };

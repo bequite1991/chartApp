@@ -7,6 +7,7 @@ import styles from './index.less';
 
 import {Provider} from 'mobx-react';
 
+import sharedDataInfo from '../../stores/sharedDataInfo';
 import sharedData from '../../stores/sharedData';
 
 // 电梯运行数据(Elevator Running Data)
@@ -102,7 +103,7 @@ export default class Home extends PureComponent {
 
   render () {
     return (
-      <Provider sharedData={sharedData}>
+      <Provider sharedDataInfo={sharedDataInfo} sharedData={sharedData}>
         <Row>
           <Col span={6}>
             <RunningDataChart />

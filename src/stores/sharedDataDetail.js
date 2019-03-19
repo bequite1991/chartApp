@@ -12,8 +12,7 @@ import {
   Elevator_Error_Ratio_Chart_Options,
   Elevator_Maintenance_OrdersAndFinish_Chart_Options,
   Elevator_maintenance_Orders_Month_Chart_Options,
-  Map_Info_Value
-} from '../datacenter/chartConfig';
+} from '../datacenter/chartConfigDetail';
 /**
  * 电梯运行数据
  */
@@ -26,7 +25,6 @@ class sharedData extends EventEmitter{
   @observable elevatorErrorRatioOptionValue = Elevator_Error_Ratio_Chart_Options;
   @observable maintenanceOrdersAndFinishOptionValue = Elevator_Maintenance_OrdersAndFinish_Chart_Options;
   @observable maintenanceOrdersMonthOptionValue = Elevator_maintenance_Orders_Month_Chart_Options;
-  @observable mapInfoValue = Map_Info_Value;
 
 
 
@@ -217,13 +215,6 @@ class sharedData extends EventEmitter{
       option.series[0].data = [this.sumDay];
     }
     this.maintenanceOrdersMonthOptionValue = option;
-  }
-
-  @computed get mapInfo () {
-    return toJS (this.mapInfoValue);
-  }
-  set mapInfo (value) {
-    this.mapInfoValue = value;
   }
 }
 
