@@ -9,10 +9,12 @@ import mqttWorker from './mqttWorker';
 import {PROTOCAL_REQUEST} from '../datacenter/protocol'
 
 class MessageManager extends EventEmitter{
+    cmdList =[];
+    subscribe =[];
 
-    constructor({}) {
+    constructor() {
         super();
-        
+
         debugger;
         let options = {
             ip: '121.43.165.110',
@@ -25,18 +27,45 @@ class MessageManager extends EventEmitter{
             keepAliveInterval: 30,
           };
       
-          let subscribe = [
-            //'/inshn_dtimao/huibao/req/dev_info/' + options.userName,
-          ];
-
           let protocal_value = Object.values(PROTOCAL_REQUEST);
           protocal_value.forEach(item => {
-            subscribe.push(item + options.userName);
+            this.subscribe.push(item + "/"+options.userName);
           });
 
           debugger;
-          mqttWorker.emit ('session:init', subscribe);
+          mqttWorker.emit ('session:init', this.subscribe);
           mqttWorker.emit ('session:connect', options);
+
+          this.on ("register", (args) => {
+            debugger;
+            console.info ("注册消息:"+args.cmd);
+            let index = -1;
+
+
+            this.cmdList.push(args.cmd);
+          });
+
+          this.on ("unregister", (args) => {
+
+            
+            debugger;
+            console.info ("取消注册消息:"+args.cmd);
+          });
+
+    }
+
+    reset(){
+        this.cmdList=[];
+        this.subscribe =[];
+    }
+
+    addCommand(cmd){
+       let index = -1;
+        
+    }
+
+    removeCommand(cmd){
+
     }
 }
 

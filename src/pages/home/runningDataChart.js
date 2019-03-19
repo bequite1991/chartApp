@@ -9,7 +9,7 @@ import echarts from 'echarts';
 import {inject, observer} from 'mobx-react';
 import {debug} from 'util';
 
-@inject ('sharedData')
+@inject ('sharedData','messageManager')
 @observer
 export default class RunningDataChart extends React.Component {
   flagReceive = false;
@@ -17,16 +17,23 @@ export default class RunningDataChart extends React.Component {
     super (props);
     this.state = {};
     this.flagReceive = false;
-    const {sharedData} = this.props;
-    sharedData.on ('runningDataOption', this.onRunningDataOptionChange);
+    const {messageManager} = this.props;
+
+    messageManager.emit("register",{cmd:"9001"})
+    //messageManager.on ('runningData', this.onRunningDataOptionChange);
   }
   
   componentWillUnmount () {
-    const {sharedData} = this.props;
-    sharedData.removeListener (
-      'runningDataOption',
-      this.onRunningDataOptionChange
-    );
+    const {messageManager} = this.props;
+    messageManager.emit("unregister",{cmd:"9001"})
+    // messageManager.removeListener (
+    //   'runningDataOption',
+    //   this.onRunningDataOptionChange
+    // );
+  }
+
+  onRunningDataOptionChange = () => {
+
   }
 
   onChartClick (param, echarts) {
