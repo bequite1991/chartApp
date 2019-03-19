@@ -309,8 +309,8 @@ const Elevator_Error_Ratio_Chart_Options = {
 };
 const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
     title : {
-        text: '维保人员派单量和完成量',
-        subtext: '',
+        text: '',
+        subtext: '维保人员派单量和完成量',
     },
     tooltip: {
         trigger: 'axis',
@@ -350,6 +350,50 @@ const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
 };
 
 
+const Elevator_maintenance_Orders_Month_Chart_Options = {
+    title: {
+      text: '每月电梯故障数',
+      subtext: '',
+      left: 'center'
+    },
+    color: ['#3398DB'],
+    tooltip : {
+        trigger: 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis : [
+        {
+            type : 'category',
+            data : ['1', '2', '3', '4', '5', '6', '7','8','9','10','11','12'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value'
+        }
+    ],
+    series : [
+        // {
+        //     name:'直接访问',
+        //     type:'bar',
+        //     barWidth: '60%',
+        //     data:[10, 52, 200, 334, 390, 330, 220]
+        // }
+    ]
+}
+
+
 
 export {
   Elevator_Running_Data_Chart_Options,
@@ -358,5 +402,6 @@ export {
   Elevator_Map_China_Options,
   Elevator_Error_Every_Month_Chart_Options,
   Elevator_Error_Ratio_Chart_Options,
-  Elevator_Maintenance_OrdersAndFinish_Chart_Options
+  Elevator_Maintenance_OrdersAndFinish_Chart_Options,
+  Elevator_maintenance_Orders_Month_Chart_Options
 };

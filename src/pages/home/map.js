@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Icon } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import styles from './index.less';
+import styles from './map.less';
 import ReactEcharts from 'echarts-for-react';
 import {inject, observer} from 'mobx-react';
 require('echarts/map/js/china.js');

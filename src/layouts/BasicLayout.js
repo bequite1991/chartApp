@@ -50,6 +50,9 @@ class BasicLayout extends React.PureComponent {
     super(props);
     this.getPageTitle = memoizeOne(this.getPageTitle);
     this.matchParamsPath = memoizeOne(this.matchParamsPath, isEqual);
+    this.state = {
+      collapsed:true
+    }
   }
 
   componentDidMount() {
@@ -164,6 +167,7 @@ class BasicLayout extends React.PureComponent {
             onCollapse={this.handleMenuCollapse}
             menuData={menuData}
             isMobile={isMobile}
+            collapsed={this.state.collapsed}
             {...this.props}
           />
         )}

@@ -40,7 +40,7 @@ export default class RunningDataChart extends React.Component {
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}
-        style={{width: '1200px', height: '200px'}}
+        style={{width: '100%', height: '200px'}}
       />
     );
   }

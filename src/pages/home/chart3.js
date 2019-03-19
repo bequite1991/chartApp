@@ -116,7 +116,7 @@ export default class GlobalHeader extends PureComponent {
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}
-        style={{width: '600px', height: '200px'}}
+        style={{width: '100%', height: '200px'}}
       />
     );
   }

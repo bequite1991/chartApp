@@ -10,6 +10,7 @@ import {
   Elevator_Error_Every_Month_Chart_Options,
   Elevator_Error_Ratio_Chart_Options,
   Elevator_Maintenance_OrdersAndFinish_Chart_Options,
+  Elevator_maintenance_Orders_Month_Chart_Options,
 } from '../datacenter/chartConfig';
 /**
  * 电梯运行数据
@@ -22,6 +23,7 @@ class sharedData {
   @observable elevatorErrorEveryMonthOptionValue = Elevator_Error_Every_Month_Chart_Options;
   @observable elevatorErrorRatioOptionValue = Elevator_Error_Ratio_Chart_Options;
   @observable maintenanceOrdersAndFinishOptionValue = Elevator_Maintenance_OrdersAndFinish_Chart_Options;
+  @observable maintenanceOrdersMonthOptionValue = Elevator_maintenance_Orders_Month_Chart_Options;
 
 
 
@@ -86,6 +88,15 @@ class sharedData {
             name: '完成量',
             type: 'bar',
             data: [16325, 23438, 29000, 91594, 114141]
+        }
+    ]
+
+    this.maintenanceOrdersMonthOptionValue.series = [
+        {
+            name:'维保数',
+            type:'bar',
+            barWidth: '60%',
+            data:[10, 20, 20, 50, 60, 70, 60,50,40,30,10,20]
         }
     ]
 
@@ -175,6 +186,19 @@ class sharedData {
       option.series[0].data = [this.sumDay];
     }
     this.maintenanceOrdersAndFinishOptionValue = option;
+  }
+
+  @computed get maintenanceOrdersMonthOption () {
+    return toJS (this.maintenanceOrdersMonthOptionValue);
+  }
+
+  set maintenanceOrdersMonthOption (value) {
+    var option = this.maintenanceOrdersMonthOptionValue;
+    this.sumDay = value;
+    if (this.sumDay && this.sumDay.length > 0) {
+      option.series[0].data = [this.sumDay];
+    }
+    this.maintenanceOrdersMonthOptionValue = option;
   }
 }
 

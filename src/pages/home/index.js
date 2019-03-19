@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {inject, observer} from 'mobx-react';
-import {Icon} from 'antd';
+import {Icon,Row, Col} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
@@ -21,12 +21,10 @@ import Elevator_Error_Every_Month_Chart from './errorMonthChart.js';
 import Elevator_Error_Ratio_Chart from './errorRatioChart.js';
 // 维保人员每月派单量和完成量(maintenance Orders And Finish)
 import Maintenance_Orders_And_Finish_Chart from './maintenanceOrdersAndFinishChart.js';
-//
-import Chart4 from './chart4';
-import Chart5 from './chart5';
+// 维保人员每月派单量和完成量(maintenance Orders And Finish)
+import Maintenance_Orders_Month_Chart from './maintenanceOrdersMonthChart.js';
 //首页全国地图
-import Map from './map';
-// import Map2 from './map2';
+import Map_China from './map';
 
 import {
   Elevator_Running_Data_Chart_Options,
@@ -107,17 +105,22 @@ export default class Home extends PureComponent {
     //const {collapsed, isMobile, logo} = this.props;
     return (
       <Provider sharedData={sharedData}>
-        <div>
-          <RunningDataChart />
-          <SystemCountChart />
-          <Elevator_Running_Distance_Every_Month_Chart
-            options={Elevator_Running_Distance_Every_Month_Chart_Option}
-          />
-          <Map />
-          <Elevator_Error_Every_Month_Chart />
-          <Elevator_Error_Ratio_Chart />
-          <Maintenance_Orders_And_Finish_Chart />
-        </div>
+        <Row>
+          <Col span={6}>
+            <RunningDataChart />
+            <SystemCountChart />
+            <Elevator_Running_Distance_Every_Month_Chart
+              options={Elevator_Running_Distance_Every_Month_Chart_Option}
+            />
+          </Col>
+          <Col span={12}><Map_China /></Col>
+          <Col span={6}>
+            <Elevator_Error_Every_Month_Chart />
+            <Elevator_Error_Ratio_Chart />
+            <Maintenance_Orders_And_Finish_Chart />
+            <Maintenance_Orders_Month_Chart />
+          </Col>
+        </Row>
       </Provider>
     );
   }
