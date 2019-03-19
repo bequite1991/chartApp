@@ -32,7 +32,7 @@ import {
   Elevator_Running_Distance_Every_Month_Chart_Option,
 } from '../../datacenter/chartConfig';
 
-import mqttWorker from '../../stores/mqttWorker';
+import messageManager from '../../stores/messageManager';
 
 // @inject ('runningData')
 // @observer
@@ -41,37 +41,6 @@ export default class Home extends PureComponent {
   constructor (props) {
     super (props);
     this.state = {};
-
-    if (this.init == true) {
-      return;
-    }
-
-    // let runningData2 = Elevator_Running_Data_Chart_Options;
-    // let runningSumDay = '200';
-    // runningData2.series.unshift (runningSumDay);
-
-    // console.info ('runningData:' + runningData);
-
-    let options = {
-      ip: '121.43.165.110',
-      port: 3994,
-      userName: '15051841028',
-      passWord: 'huibao1841028',
-      clientName: 'JSClient-Demo-' + new Date ().toLocaleTimeString (),
-      cleanSession: true,
-      timeout: 30,
-      keepAliveInterval: 30,
-    };
-
-    let subscribe = [
-      '/inshn_dtimao/huibao/req/dev_info/' + options.userName,
-      '/inshn_dtimao/huibao/req/month_dev_num' + options.userName,
-    ];
-
-    // mqttWorker.emit ('session:init', subscribe);
-    // mqttWorker.emit ('session:connect', options);
-
-    this.init = true;
 
     // setInterval (() => {
     //   //cleanup();
@@ -102,7 +71,7 @@ export default class Home extends PureComponent {
 
   render () {
     return (
-      <Provider sharedData={sharedData}>
+      <Provider sharedData={sharedData} messageManager={messageManager}>
         <Row>
           <Col span={6}>
             <RunningDataChart />

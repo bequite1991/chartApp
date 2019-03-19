@@ -11,7 +11,7 @@ import {debug} from 'util';
 
 @inject ('sharedData')
 @observer
-export default class SystemCountChart extends React.Component {
+export default class MaintenanceOrdersMonthChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};

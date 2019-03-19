@@ -12,17 +12,22 @@ import {debug} from 'util';
 @inject ('sharedData')
 @observer
 export default class RunningDataChart extends React.Component {
+  flagReceive = false;
   constructor (props) {
     super (props);
     this.state = {};
-
-    // setInterval (() => {
-    //   const {sharedData} = this.props;
-    //   //debugger;
-    //   sharedData.runningDataOption = Math.ceil (Math.random () * 100) + '';
-    // }, 5000);
+    this.flagReceive = false;
+    const {sharedData} = this.props;
+    sharedData.on ('runningDataOption', this.onRunningDataOptionChange);
   }
-  componentWillUnmount () {}
+  
+  componentWillUnmount () {
+    const {sharedData} = this.props;
+    sharedData.removeListener (
+      'runningDataOption',
+      this.onRunningDataOptionChange
+    );
+  }
 
   onChartClick (param, echarts) {
     console.log (param);

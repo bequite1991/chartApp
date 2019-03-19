@@ -1,4 +1,5 @@
 import {observable, computed, toJS, autorun} from 'mobx';
+import EventEmitter from 'events';
 import {randomData} from "../lib/helper.js";
 
 
@@ -15,7 +16,7 @@ import {
 /**
  * 电梯运行数据
  */
-class sharedData {
+class sharedData extends EventEmitter{
   @observable runningDataOptionValue = Elevator_Running_Data_Chart_Options;
   @observable systemCountOptionValue = Elevator_System_Count_Chart_Options;
   @observable runningDistanceEveryMonthOptionValue = Elevator_Running_Distance_Every_Month_Chart_Option;
