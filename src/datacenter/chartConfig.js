@@ -227,10 +227,94 @@ const Elevator_Map_China_Options = {
   ]
 }
 
+const Elevator_Error_Every_Month_Chart_Options = {
+    title: {
+      text: '每月电梯故障数',
+      subtext: '',
+      left: 'center'
+    },
+    color: ['#3398DB'],
+    tooltip : {
+        trigger: 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis : [
+        {
+            type : 'category',
+            data : ['1', '2', '3', '4', '5', '6', '7','8','9','10','11','12'],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value'
+        }
+    ],
+    series : [
+        // {
+        //     name:'直接访问',
+        //     type:'bar',
+        //     barWidth: '60%',
+        //     data:[10, 52, 200, 334, 390, 330, 220]
+        // }
+    ]
+}
+const Elevator_Error_Ratio_Chart_Options = {
+    title : {
+        text: '故障问题比例',
+        subtext: '',
+        x:'center'
+    },
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend: {
+        orient: 'vertical',
+        left: 'left',
+        data: ['电气强度降低','磨损与污损','整体故障','贯穿','其他故障']
+    },
+    series : [
+        // {
+        //     name: '访问来源',
+        //     type: 'pie',
+        //     radius : '55%',
+        //     center: ['50%', '60%'],
+        //     data:[
+        //         {value:335, name:'直接访问'},
+        //         {value:310, name:'邮件营销'},
+        //         {value:234, name:'联盟广告'},
+        //         {value:135, name:'视频广告'},
+        //         {value:1548, name:'搜索引擎'}
+        //     ],
+        //     itemStyle: {
+        //         emphasis: {
+        //             shadowBlur: 10,
+        //             shadowOffsetX: 0,
+        //             shadowColor: 'rgba(0, 0, 0, 0.5)'
+        //         }
+        //     }
+        // }
+    ]
+};
+
+
 
 export {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
   Elevator_Running_Distance_Every_Month_Chart_Option,
-  Elevator_Map_China_Options
+  Elevator_Map_China_Options,
+  Elevator_Error_Every_Month_Chart_Options,
+  Elevator_Error_Ratio_Chart_Options
 };

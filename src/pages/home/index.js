@@ -15,10 +15,14 @@ import RunningDataChart from './runningDataChart';
 import SystemCountChart from './systemCountChart';
 // 每月电梯运行距离(Elevator Running Distance Every Month)
 import Elevator_Running_Distance_Every_Month_Chart from './chart3';
+// 每月电梯故障数(Elevator Error Every Month)
+import Elevator_Error_Every_Month_Chart from './errorMonthChart.js';
+// 每月电梯故障比例(Elevator Error Ratio)
+import Elevator_Error_Ratio_Chart from './errorRatioChart.js';
 //
 import Chart4 from './chart4';
 import Chart5 from './chart5';
-//
+//首页全国地图
 import Map from './map';
 // import Map2 from './map2';
 
@@ -108,6 +112,8 @@ export default class Home extends PureComponent {
             options={Elevator_Running_Distance_Every_Month_Chart_Option}
           />
           <Map />
+          <Elevator_Error_Every_Month_Chart />
+          <Elevator_Error_Ratio_Chart />
         </div>
       </Provider>
     );

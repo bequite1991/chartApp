@@ -7,6 +7,8 @@ import {
   Elevator_System_Count_Chart_Options,
   Elevator_Running_Distance_Every_Month_Chart_Option,
   Elevator_Map_China_Options,
+  Elevator_Error_Every_Month_Chart_Options,
+  Elevator_Error_Ratio_Chart_Options,
 } from '../datacenter/chartConfig';
 /**
  * 电梯运行数据
@@ -16,6 +18,8 @@ class sharedData {
   @observable systemCountOptionValue = Elevator_System_Count_Chart_Options;
   @observable runningDistanceEveryMonthOptionValue = Elevator_Running_Distance_Every_Month_Chart_Option;
   @observable mapChinaOptionValue = Elevator_Map_China_Options;
+  @observable elevatorErrorEveryMonthOptionValue = Elevator_Error_Every_Month_Chart_Options;
+  @observable elevatorErrorRatioOptionValue = Elevator_Error_Ratio_Chart_Options;
 
 
 
@@ -39,7 +43,36 @@ class sharedData {
       {name: '香港',value: randomData() },
       {name: '澳门',value: randomData() }
     ];
-    debugger
+    this.elevatorErrorEveryMonthOptionValue.series = [
+        {
+            name:'故障数',
+            type:'bar',
+            barWidth: '60%',
+            data:[100, 2, 2, 5, 6, 7, 6,5,4,3,1,2]
+        }
+    ];
+    this.elevatorErrorRatioOptionValue.series = [
+        {
+            name: '访问来源',
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+                {value:335, name:'电气强度降低'},
+                {value:310, name:'磨损与污损'},
+                {value:234, name:'整体故障'},
+                {value:135, name:'贯穿'},
+                {value:1548, name:'其他故障'}
+            ],
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }
+    ]
 
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
@@ -88,6 +121,32 @@ class sharedData {
       option.series[0].data = [this.sumDay];
     }
     this.mapChinaOptionValue = option;
+  }
+
+  @computed get elevatorErrorEveryMonthOption () {
+    return toJS (this.elevatorErrorEveryMonthOptionValue);
+  }
+
+  set elevatorErrorEveryMonthOption (value) {
+    var option = this.elevatorErrorEveryMonthOptionValue;
+    this.sumDay = value;
+    if (this.sumDay && this.sumDay.length > 0) {
+      option.series[0].data = [this.sumDay];
+    }
+    this.elevatorErrorEveryMonthOptionValue = option;
+  }
+
+  @computed get elevatorErrorRatioOption () {
+    return toJS (this.elevatorErrorRatioOptionValue);
+  }
+
+  set elevatorErrorRatioOption (value) {
+    var option = this.elevatorErrorRatioOptionValue;
+    this.sumDay = value;
+    if (this.sumDay && this.sumDay.length > 0) {
+      option.series[0].data = [this.sumDay];
+    }
+    this.elevatorErrorRatioOptionValue = option;
   }
 }
 
