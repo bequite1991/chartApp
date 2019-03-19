@@ -6,9 +6,14 @@ import EventEmitter from 'events';
 
 import mqttWorker from './mqttWorker';
 
+import {PROTOCAL_REQUEST} from '../datacenter/protocol'
+
 class MessageManager extends EventEmitter{
 
     constructor({}) {
+        super();
+        
+        debugger;
         let options = {
             ip: '121.43.165.110',
             port: 3994,
@@ -21,11 +26,17 @@ class MessageManager extends EventEmitter{
           };
       
           let subscribe = [
-            '/inshn_dtimao/huibao/req/dev_info/' + options.userName,
+            //'/inshn_dtimao/huibao/req/dev_info/' + options.userName,
           ];
-      
-          //mqttWorker.emit ('session:init', subscribe);
-          //mqttWorker.emit ('session:connect', options);
+
+          let protocal_value = Object.values(PROTOCAL_REQUEST);
+          protocal_value.forEach(item => {
+            subscribe.push(item + options.userName);
+          });
+
+          debugger;
+          mqttWorker.emit ('session:init', subscribe);
+          mqttWorker.emit ('session:connect', options);
     }
 }
 
