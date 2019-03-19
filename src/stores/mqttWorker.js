@@ -1,3 +1,5 @@
+import {observable, computed, toJS, autorun} from 'mobx';
+
 import EventEmitter from 'events';
 
 let clientInstance = null;
@@ -10,33 +12,49 @@ const CHANNEL_PUBLISH = 'session:publish';
 const CHANNEL_CMD = 'session:data';
 const CHANNEL_EXIT = 'session:exit';
 
-class MqttWorker extends EventEmitter {
+class MqttWorker extends EventEmitter{
+  messageList = []; // 消息列表
   toClose = false;
   hasSubscribe = [];
+  client = null;
 
   constructor () {
     super ();
-    let _this = this;
-    this.state = {};
+
+    this.client = null;
 
     if (clientInstance) {
       return clientInstance;
     }
 
-    _this.on (CHANNEL_INIT, list => {
+    this.on (CHANNEL_INIT, list => {
       console.info (list);
       debugger;
-      _this.hasSubscribe = list;
-      _this.toClose = true;
+      this.hasSubscribe = list;
+      this.toClose = true;
     });
 
-    _this.on (CHANNEL_CONNECT, options => {
+    this.on (CHANNEL_CONNECT, options => {
       console.info (options);
       debugger;
       this.connect (options);
     });
 
-    clientInstance = _this;
+    this.on (CHANNEL_PUBLISH, options => {
+      debugger;
+      this.publish(options.topic,options.message , 1, false);
+    });
+
+    clientInstance = this;
+  }
+
+  /**
+   * 新增订阅,将订阅和消息命令绑定在一起
+   * @param {*} subscribe 
+   * @param {*} cmd 
+   */
+  addSubscribe (subscribe, cmd) {
+    this.hasSubscribe.push (subscribe);
   }
 
   init () {
@@ -50,6 +68,9 @@ class MqttWorker extends EventEmitter {
     if (this.toClose == false) {
       return;
     }
+
+    this.toClose = false;
+
     //连接服务器
     var setConnect = function () {};
     var setMessage = function () {};
@@ -57,7 +78,7 @@ class MqttWorker extends EventEmitter {
 
     debugger;
 
-    const client = new Paho.MQTT.Client (
+    this.client = new Paho.MQTT.Client (
       options.ip,
       options.port,
       options.clientName
@@ -73,28 +94,31 @@ class MqttWorker extends EventEmitter {
         setConnect (true);
         this.initSubscribe ();
         console.log ('mqtt connect success');
-        this.setState ({connectStatus: 100});
+        //this.setState ({connectStatus: 100});
       },
       onFailure: () =>
         (setConnect (false), console.log ('mqtt connect failure')),
     };
 
-    client.onConnectionLost = () => {
+    this.client.onConnectionLost = () => {
+      debugger;
       setConnect (true);
-      client.connect (connectOpt);
+      clientInstance.client.connect (connectOpt);
       console.log ('mqtt reConnect ...');
     };
 
-    client.onMessageArrived = message => {
+    this.client.onMessageArrived = message => {
       message._index = ++i;
+      debugger;
       setMessage (message);
       console.log (message);
     };
 
-    client.connect (connectOpt);
+    this.client.connect (connectOpt);
 
     console.log ('mqtt connect ...');
 
+    //this.toClose = false;
     // this.setState ({
     //   client,
     // });
@@ -104,17 +128,15 @@ class MqttWorker extends EventEmitter {
     if (this.toClose) {
       return;
     }
-    const {client, hasSubscribe} = this.state;
-    if (!client.isConnected ()) {
+    if (!clientInstance.client.isConnected ()) {
       return;
     }
-    for (let i = 0, l = hasSubscribe.length; i < l; i++) {
-      console.log ('即将订阅的主题：' + hasSubscribe[i]);
-      hasSubscribe[i] &&
-        client.subscribe (hasSubscribe[i], {
+    for (let i = 0, l = clientInstance.hasSubscribe.length; i < l; i++) {
+      console.log ('即将订阅的主题：' + clientInstance.hasSubscribe[i]);
+      clientInstance.hasSubscribe[i] &&
+        clientInstance.client.subscribe (clientInstance.hasSubscribe[i], {
           onSuccess: function (res) {
-            debugger;
-            console.log ('subscribe success');
+            console.log ('subscribe success' + res);
           },
         });
     }
@@ -122,7 +144,7 @@ class MqttWorker extends EventEmitter {
 
   /**
    * 订阅
-   * @param {*} filter 
+   * @param {*} filter
    */
   subscribe (filter) {
     if (this.toClose) {
@@ -132,31 +154,25 @@ class MqttWorker extends EventEmitter {
     if (!filter) {
       return;
     }
-    const {client, hasSubscribe} = this.state;
 
-    client.isConnected () && client.subscribe (filter);
+    clientInstance.client.isConnected () &&
+      clientInstance.client.subscribe (filter);
     hasSubscribe.push (filter);
-    // this.setState ({
-    //   subscribe: filter,
-    //   hasSubscribe,
-    // });
     console.log ('mqtt subscribe', filter);
   }
 
   /**
    * 发送消息
-   * @param {*} topic 
-   * @param {*} message 
-   * @param {*} qos 
-   * @param {*} retained 
+   * @param {*} topic
+   * @param {*} message
+   * @param {*} qos
+   * @param {*} retained
    */
   publish (topic, message, qos, retained) {
     if (this.toClose) {
       return;
     }
     //发送消息
-    const {client} = this.state;
-
     //mqtt数据相关
     var msgObj = new Paho.MQTT.Message (message);
     msgObj.destinationName = topic;
@@ -167,29 +183,25 @@ class MqttWorker extends EventEmitter {
       msgObj.retained = retained;
     }
     console.log (msgObj.payloadString);
-    client.send (msgObj);
+    clientInstance.client.send (msgObj);
   }
 
   /**
    * 取消订阅
-   * @param {*} filter 
+   * @param {*} filter
    */
   unSubscribe (filter) {
     if (this.toClose) {
       return;
     }
     //取消订阅
-    const {client, hasSubscribe} = this.state;
-    client.isConnected () && client.unsubscribe (filter);
+    clientInstance.client.isConnected () &&
+      clientInstance.client.unsubscribe (filter);
     for (let i = 0, l = hasSubscribe.length; i < l; i++) {
       if (filter == hasSubscribe[i]) {
         hasSubscribe.splice (i, 1);
       }
     }
-    this.setState ({
-      unSubscribe: filter,
-      hasSubscribe,
-    });
     console.log ('mqtt unsubscribe', filter);
   }
 
@@ -197,9 +209,8 @@ class MqttWorker extends EventEmitter {
     if (this.toClose == true) {
       return;
     }
-    const {client} = this.state;
     this.toClose = true;
-    client.disconnect ();
+    clientInstance.client.disconnect ();
   }
 }
 
