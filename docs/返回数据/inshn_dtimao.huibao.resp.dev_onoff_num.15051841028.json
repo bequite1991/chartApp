@@ -1,0 +1,27 @@
+{
+    "cmd": "9003",
+    "filter": "",
+    "num_id": "2019-03-20 18:14:160",
+    "resp": "200",
+    "rows": [{
+            "month": "2018-12",
+            "total": "25"
+        },
+        {
+            "month": "2019-01",
+            "total": "152"
+        },
+        {
+            "month": "2019-02",
+            "total": "69"
+        },
+        {
+            "month": "2019-03",
+            "total": "102"
+        }
+    ],
+    "src": "inshn_dtimao.huibao.resp.dev_onoff_num.15051841028",
+    "timestap": "2019-03-20",
+    "token": "eyJjbWQiOiI5MDAzIiwia2V5IjoiN0QxM0I0N0NFQTJEQzU4MjhENjkxMEQzQzBGQTMxREQiLCJ0aW1lc3RhbXAiOjE1NTMwNzY4NTY4MTl9",
+    "user": "15051841028"
+}

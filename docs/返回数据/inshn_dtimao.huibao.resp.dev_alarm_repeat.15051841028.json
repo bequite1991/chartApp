@@ -1,0 +1,20 @@
+{
+    "cmd": "9004",
+    "filter": "",
+    "num_id": "2019-03-20 18:14:160",
+    "resp": "200",
+    "rows": [{
+        "alertname": "256",
+        "alerttype": "平层困人",
+        "btime": "2019-03-15 16:30:46.0",
+        "dev_cname": "自由感KTV",
+        "dev_id": "33483334833348333483",
+        "istrapped": "1",
+        "rtime": "2019-03-15 16:31:09.0",
+        "runStatus": "停车,3层"
+    }],
+    "src": "inshn_dtimao.huibao.resp.dev_alarm_repeat.15051841028",
+    "timestap": "2019-03-20",
+    "token": "eyJjbWQiOiI5MDA0Iiwia2V5IjoiN0QxM0I0N0NFQTJEQzU4MjhENjkxMEQzQzBGQTMxREQiLCJ0aW1lc3RhbXAiOjE1NTMwNzY4NTY4MjN9",
+    "user": "15051841028"
+}

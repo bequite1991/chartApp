@@ -1,0 +1,31 @@
+{
+    "cmd": "9007",
+    "filter": "",
+    "num_id": "2019-03-20 18:14:160",
+    "resp": "200",
+    "rows": [{
+            "on_total": "长时间遮挡门",
+            "total": "2"
+        },
+        {
+            "on_total": "断电",
+            "total": "526"
+        },
+        {
+            "on_total": "楼层未初始化",
+            "total": "110"
+        },
+        {
+            "on_total": "平层困人",
+            "total": "1"
+        },
+        {
+            "on_total": "摄像头故障",
+            "total": "1"
+        }
+    ],
+    "src": "inshn_dtimao.huibao.resp.dev_alarm_num.15051841028",
+    "timestap": "2019-03-20",
+    "token": "eyJjbWQiOiI5MDA3Iiwia2V5IjoiN0QxM0I0N0NFQTJEQzU4MjhENjkxMEQzQzBGQTMxREQiLCJ0aW1lc3RhbXAiOjE1NTMwNzY4NTY4MzV9",
+    "user": "15051841028"
+}

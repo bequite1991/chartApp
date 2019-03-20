@@ -1,0 +1,22 @@
+ //topic.publish(new MqttMessage("{\"cmd\":\"9001\",\"filter\":\"00000000000000011595\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"inshn_dtimao.huibao.resp.dev_info.13027703340\", \"token\":\"eyJjbWQiOiI5MDAxIiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+          
+// topic.publish(new MqttMessage("{\"cmd\":\"9002\",\"filter\":\"\",\"num_id\":\"11111111111111111111\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"repeat1\", \"token\":\"eyJjbWQiOiI5MDAyIiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+           
+//topic.publish(new MqttMessage("{\"cmd\":\"9003\",\"filter\":\"\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"repeat1\", \"token\":\"eyJjbWQiOiI5MDAzIiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+          
+ //topic.publish(new MqttMessage("{\"cmd\":\"9004\",\"filter\":\"\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"repeat1\", \"token\":\"\"}".getBytes("utf-8")));
+          
+ //topic.publish(new MqttMessage("{\"cmd\":\"9005\",\"filter\":\"\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"repeat1\", \"token\":\"eyJjbWQiOiI5MDA1Iiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+        
+ //topic.publish(new MqttMessage("{\"cmd\":\"9006\",\"filter\":\"\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"repeat1\", \"token\":\"eyJjbWQiOiI5MDA2Iiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+        
+ //topic.publish(new MqttMessage("{\"cmd\":\"9007\",\"filter\":\"2019-02\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"repeat1\", \"token\":\"eyJjbWQiOiI5MDA3Iiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+       
+ // topic.publish(new MqttMessage("{\"cmd\":\"9009\",\"filter\":\"\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"repeat1\", \"token\":\"eyJjbWQiOiI5MDA5Iiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+       
+ // topic.publish(new MqttMessage("{\"cmd\":\"9010\",\"filter\":\"\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"\\.inshn_dtimao\\.huibao\\.devi2\", \"token\":\"eyJjbWQiOiI5MDEwIiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+       
+ // topic.publish(new MqttMessage("{\"cmd\":\"9011\",\"filter\":\"\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"inshn_dtimao.huibao.resp.dev1\", \"token\":\"eyJjbWQiOiI5MDExIiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+          
+ topic.publish(new MqttMessage("{\"cmd\":\"9012\",\"filter\":\"\",\"num_id\":\"00000000000000011595\",\"user\":\"13027703340\",\"timestap\":\"13123123213\", \"src\":\"inshn_dtimao.huibao.resp.dev1\", \"token\":\"eyJjbWQiOiI5MDEyIiwia2V5IjoiM0FCQUU0NzE3RTc2RjA4N0FDREZBMzQ3MTdENjRGRkEiLCJ0aW1lc3RhcCI6IjEzMTIzMTIzMjEzIn0=\"}".getBytes("utf-8")));
+           

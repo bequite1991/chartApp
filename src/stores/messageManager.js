@@ -6,7 +6,7 @@ import mqttWorker from './mqttWorker';
 
 import mqttMessage from './mqttMessage';
 
-import {PROTOCAL_REQUEST} from '../datacenter/protocol';
+import {PROTOCAL_REQUEST, PROTOCAL_RESPONSE} from '../datacenter/protocol';
 
 import {SERVER_OPTIONS} from '../datacenter/serverConfig';
 
@@ -40,7 +40,7 @@ class MessageManager extends EventEmitter {
     options.clientName =
       options.clientName + '-' + new Date ().toLocaleTimeString ();
 
-    let protocal_value = Object.values (PROTOCAL_REQUEST);
+    let protocal_value = Object.values (PROTOCAL_RESPONSE);
     protocal_value.forEach (item => {
       this.subscribe.push (item + '/' + options.userName);
     });
@@ -70,12 +70,18 @@ class MessageManager extends EventEmitter {
         if (this.hasTopic (cmd)) {
           let topic =
             PROTOCAL_REQUEST[cmd] + '/' + this.serverOptionsValue.userName;
-          let topic_custom = PROTOCAL_REQUEST[cmd].split ('/')[3];
+          let src_topic = PROTOCAL_RESPONSE[cmd].replace (
+            new RegExp ('/', 'gm'),
+            '.'
+          ); //PROTOCAL_REQUEST[cmd].split ('/')[3];
+
+          src_topic = src_topic + '.' + this.serverOptionsValue.userName;
           let username = this.serverOptionsValue.userName;
           let message_num = '0001';
           let message = this.packetMessage (
             cmd,
-            topic_custom,
+            src_topic,
+            username,
             this.serverOptionsValue.passWord,
             new Date ().getTime (),
             message_num
@@ -84,7 +90,7 @@ class MessageManager extends EventEmitter {
           console.info ('packet message:' + message);
           mqttWorker.emit ('session:publish', {topic: topic, message: message});
 
-          //this.cmdList = [];
+          this.cmdList = [];
         }
       });
     }
@@ -94,9 +100,11 @@ class MessageManager extends EventEmitter {
     return PROTOCAL_REQUEST[cmd];
   }
 
-  packetMessage (cmd, topic_custom, salt, timestamp, message_num) {
-    let key = md5 (salt).toUpperCase ();
-    let token = Base64.encode (JSON.stringify({cmd: cmd, key: key, timestamp: timestamp}));
+  packetMessage (cmd, src, user, salt, timestamp, message_num) {
+    let key = '7D13B47CEA2DC5828D6910D3C0FA31DD'; //md5 (salt).toUpperCase ();
+    let token = Base64.encode (
+      JSON.stringify ({cmd: cmd, key: key, timestamp: timestamp})
+    );
     console.info (
       'cmd:' +
         cmd +
@@ -112,16 +120,7 @@ class MessageManager extends EventEmitter {
     let messageIndex = 0;
     let num_id = timestampToTime (timestamp) + message_num;
     num_id = num_id.substring (0, 20);
-    return encode (
-      cmd,
-      num_id,
-      timestamp,
-      'inshn_dtimao.huibao.resp.' + topic_custom,
-      200,
-      token,
-      '',
-      []
-    );
+    return encode (cmd, num_id, timestamp, src, user, 200, token, '', []);
   }
 
   reset () {

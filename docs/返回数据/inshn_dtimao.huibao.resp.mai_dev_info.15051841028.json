@@ -1,0 +1,142 @@
+{
+    "cmd": "9011",
+    "filter": "",
+    "num_id": "2019-03-20 18:38:290",
+    "resp": "200",
+    "rows": [{
+            "cname": "华盟电梯001",
+            "id": "123456789009876544322",
+            "mai_content": "0",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2019-02-21 10:34:02.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2019-02-21 10:31:17.0",
+            "status": ""
+        },
+        {
+            "cname": "华盟电梯001",
+            "id": "123456789009876544322",
+            "mai_content": "1",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2019-02-16 13:14:07.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2019-02-16 13:13:01.0",
+            "status": "一切正常"
+        },
+        {
+            "cname": "华盟电梯001",
+            "id": "123456789009876544322",
+            "mai_content": "1",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2019-02-16 09:47:25.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2019-02-16 09:45:49.0",
+            "status": "正常无大碍"
+        },
+        {
+            "cname": "华盟电梯002",
+            "id": "213232232332323232333",
+            "mai_content": "1",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2019-02-15 16:22:45.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2019-02-15 16:22:04.0",
+            "status": "无明显问题"
+        },
+        {
+            "cname": "华盟电梯001",
+            "id": "123456789009876544322",
+            "mai_content": "0",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2019-02-15 16:18:23.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2019-02-15 16:17:25.0",
+            "status": "老化较严重"
+        },
+        {
+            "cname": "自由感KTV",
+            "id": "33483334833348333483",
+            "mai_content": "0",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2018-12-21 14:04:51.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2018-12-21 14:03:44.0",
+            "status": "某些地方有问题"
+        },
+        {
+            "cname": "自由感KTV",
+            "id": "33483334833348333483",
+            "mai_content": "0",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2018-12-21 12:46:45.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2018-12-21 12:45:36.0",
+            "status": "可以"
+        },
+        {
+            "cname": "自由感KTV",
+            "id": "33483334833348333483",
+            "mai_content": "1",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2018-12-19 14:33:22.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2018-12-19 14:31:42.0",
+            "status": "有些地方有问题"
+        },
+        {
+            "cname": "自由感KTV",
+            "id": "33483334833348333483",
+            "mai_content": "1",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2018-12-19 11:59:56.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2018-12-19 11:20:23.0",
+            "status": "有问题"
+        },
+        {
+            "cname": "掌趣网咖生活馆",
+            "id": "12345678909876543212",
+            "mai_content": "9",
+            "mai_corp_name": "慧保公司",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2018-12-19 11:19:58.0",
+            "status": ""
+        },
+        {
+            "cname": "自由感KTV",
+            "id": "33483334833348333483",
+            "mai_content": "1",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2018-12-19 10:47:53.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2018-12-19 10:46:07.0",
+            "status": "有故障"
+        },
+        {
+            "cname": "自由感KTV",
+            "id": "33483334833348333483",
+            "mai_content": "0",
+            "mai_corp_name": "慧保公司",
+            "mai_etime": "2018-12-18 17:53:49.0",
+            "mai_oper": "15051841028",
+            "mai_oper_name": "慧保公司",
+            "mai_time": "2018-12-18 17:51:41.0",
+            "status": "完好"
+        }
+    ],
+    "src": "inshn_dtimao.huibao.resp.mai_dev_info.15051841028",
+    "timestap": "2019-03-20",
+    "token": "eyJjbWQiOiI5MDExIiwia2V5IjoiN0QxM0I0N0NFQTJEQzU4MjhENjkxMEQzQzBGQTMxREQiLCJ0aW1lc3RhbXAiOjE1NTMwNzgzMDk5MTJ9",
+    "user": "15051841028"
+}

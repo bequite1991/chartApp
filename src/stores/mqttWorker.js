@@ -106,8 +106,9 @@ class MqttWorker extends EventEmitter {
 
     this.client.onMessageArrived = message => {
       message._index = ++i;
-      setMessage (message);
-      console.log (message);
+      //setMessage (message);
+      //console.log (message);
+      console.log ('payloadString:' + message.payloadString);
     };
 
     this.client.connect (connectOpt);
@@ -132,7 +133,8 @@ class MqttWorker extends EventEmitter {
       clientInstance.hasSubscribe[i] &&
         clientInstance.client.subscribe (clientInstance.hasSubscribe[i], {
           onSuccess: function (res) {
-            console.log ('subscribe success' + res);
+            //debugger;
+            console.log ('subscribe success');
           },
         });
     }
@@ -178,7 +180,7 @@ class MqttWorker extends EventEmitter {
     if (retained) {
       msgObj.retained = retained;
     }
-    console.log (msgObj.payloadString);
+    //console.log (msgObj.payloadString);
     clientInstance.client.send (msgObj);
   }
 
