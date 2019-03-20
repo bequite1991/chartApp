@@ -20,33 +20,55 @@ export const getToken = (cmd, key, timestamp) => {
         token: token,
         // filter: ,
  */
-export const encode = (cmd, num_id, timestap, src, resp, token, filter) => {
+export const encode = (
+  cmd,
+  num_id,
+  timestap,
+  src,
+  user,
+  resp,
+  token,
+  filter,
+  rows
+) => {
   return JSON.stringify ({
     cmd: cmd,
     num_id: num_id,
     timestap: timestap,
     src: src,
+    user: user,
     resp: resp,
     token: token,
     filter: filter,
+    rows: rows,
   });
 };
 
-export const timestampToTime = (timestamp) =>{
+export const timestampToTime = timestamp => {
   if (timestamp) {
-      var date = new Date(timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-      var Y = date.getFullYear() + '-';
-      var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-      var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
-      var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-      var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
-      var s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
-      return Y + M + D + h + m + s;
+    var date = new Date (timestamp); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    var Y = date.getFullYear () + '-';
+    var M =
+      (date.getMonth () + 1 < 10
+        ? '0' + (date.getMonth () + 1)
+        : date.getMonth () + 1) + '-';
+    var D =
+      (date.getDate () < 10 ? '0' + date.getDate () : date.getDate ()) + ' ';
+    var h =
+      (date.getHours () < 10 ? '0' + date.getHours () : date.getHours ()) + ':';
+    var m =
+      (date.getMinutes () < 10
+        ? '0' + date.getMinutes ()
+        : date.getMinutes ()) + ':';
+    var s = date.getSeconds () < 10
+      ? '0' + date.getSeconds ()
+      : date.getSeconds ();
+    return Y + M + D + h + m + s;
   } else {
-      return '';
+    return '';
   }
 };
 
-export const randomData = function() {
-    return Math.round(Math.random()*10000);
-  };
+export const randomData = function () {
+  return Math.round (Math.random () * 10000);
+};
