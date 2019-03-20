@@ -43,7 +43,7 @@ const Elevator_Running_Data_Chart_Options = {
     //     type:'bar',
     //     data:[300, 1200, 900]
     // }
-  ]
+  ],
 };
 
 const Elevator_System_Count_Chart_Options = {
@@ -71,7 +71,7 @@ const Elevator_System_Count_Chart_Options = {
   xAxis: [
     {
       type: 'category',
-      data: ['2019年'],
+      data: ['2018-12'],
     },
   ],
   yAxis: [
@@ -166,22 +166,22 @@ const Elevator_Map_China_Options = {
   title: {
     text: '设备分布',
     subtext: '慧保电梯设备分布图',
-    left: 'center'
+    left: 'center',
   },
   tooltip: {
-    trigger: 'item'
+    trigger: 'item',
   },
   legend: {
     orient: 'vertical',
     left: 'left',
-    data:['全部型号']
+    data: ['全部型号'],
   },
   visualMap: {
     min: 100,
     max: 10000,
     left: 'left',
     top: 'center',
-    text: ['设备分布多','设备分布少'],       // 文本，默认为数值文本
+    text: ['设备分布多', '设备分布少'], // 文本，默认为数值文本
     calculable: false,
   },
   toolbox: {
@@ -192,117 +192,118 @@ const Elevator_Map_China_Options = {
     feature: {
       dataView: {readOnly: false},
       restore: {},
-      saveAsImage: {}
-    }
+      saveAsImage: {},
+    },
   },
   series: [
     {
-        name: '全部型号',
-        type: 'map',
-        mapType: 'china',
-        label: {
-            normal: {
-            show: true,
-            // shadowBlur: 10,
-            // shadowColor: '#333'
-            },
-            emphasis: {
-                show: true
-            }
+      name: '全部型号',
+      type: 'map',
+      mapType: 'china',
+      label: {
+        normal: {
+          show: true,
+          // shadowBlur: 10,
+          // shadowColor: '#333'
         },
-        zlevel: 1,
-        data:[
-            // {name: '北京',value: randomData() },
-            // {name: '天津',value: randomData() },
-            // {name: '上海',value: randomData() },
-            // {name: '广东',value: randomData() },
-            // {name: '台湾',value: randomData() },
-            // {name: '香港',value: randomData() },
-            // {name: '澳门',value: randomData() }
-        ]
-    }
-  ]
-}
+        emphasis: {
+          show: true,
+        },
+      },
+      zlevel: 1,
+      data: [
+        // {name: '北京',value: randomData() },
+        // {name: '天津',value: randomData() },
+        // {name: '上海',value: randomData() },
+        // {name: '广东',value: randomData() },
+        // {name: '台湾',value: randomData() },
+        // {name: '香港',value: randomData() },
+        // {name: '澳门',value: randomData() }
+      ],
+    },
+  ],
+};
 
 const Elevator_Error_Every_Month_Chart_Options = {
-    title: {
-      text: '每月电梯故障数',
-      subtext: '',
-      left: 'center'
+  title: {
+    text: '每月电梯故障数',
+    subtext: '',
+    left: 'center',
+  },
+  color: ['#3398DB'],
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      // 坐标轴指示器，坐标轴触发有效
+      type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
     },
-    color: ['#3398DB'],
-    tooltip : {
-        trigger: 'axis',
-        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-        }
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true,
+  },
+  xAxis: [
+    {
+      type: 'category',
+      data: ['电气强度降低', '磨损与污损', '整体故障', '贯穿', '其他故障'],
+      axisTick: {
+        alignWithLabel: true,
+      },
     },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
+  ],
+  yAxis: [
+    {
+      type: 'value',
     },
-    xAxis : [
-        {
-            type : 'category',
-            data : ['1', '2', '3', '4', '5', '6', '7','8','9','10','11','12'],
-            axisTick: {
-                alignWithLabel: true
-            }
-        }
-    ],
-    yAxis : [
-        {
-            type : 'value'
-        }
-    ],
-    series : [
-        // {
-        //     name:'直接访问',
-        //     type:'bar',
-        //     barWidth: '60%',
-        //     data:[10, 52, 200, 334, 390, 330, 220]
-        // }
-    ]
-}
+  ],
+  series: [
+    // {
+    //     name:'直接访问',
+    //     type:'bar',
+    //     barWidth: '60%',
+    //     data:[10, 52, 200, 334, 390, 330, 220]
+    // }
+  ],
+};
 const Elevator_Error_Ratio_Chart_Options = {
-    title : {
-        text: '故障问题比例',
-        subtext: '',
-        x:'center'
-    },
-    tooltip : {
-        trigger: 'item',
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
-    },
-    legend: {
-        orient: 'vertical',
-        left: 'left',
-        data: ['电气强度降低','磨损与污损','整体故障','贯穿','其他故障']
-    },
-    series : [
-        // {
-        //     name: '访问来源',
-        //     type: 'pie',
-        //     radius : '55%',
-        //     center: ['50%', '60%'],
-        //     data:[
-        //         {value:335, name:'直接访问'},
-        //         {value:310, name:'邮件营销'},
-        //         {value:234, name:'联盟广告'},
-        //         {value:135, name:'视频广告'},
-        //         {value:1548, name:'搜索引擎'}
-        //     ],
-        //     itemStyle: {
-        //         emphasis: {
-        //             shadowBlur: 10,
-        //             shadowOffsetX: 0,
-        //             shadowColor: 'rgba(0, 0, 0, 0.5)'
-        //         }
-        //     }
-        // }
-    ]
+  title: {
+    text: '故障问题比例',
+    subtext: '',
+    x: 'center',
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b} : {c} ({d}%)',
+  },
+  legend: {
+    orient: 'vertical',
+    left: 'left',
+    data: ['电气强度降低', '磨损与污损', '整体故障', '贯穿', '其他故障'],
+  },
+  series: [
+    // {
+    //     name: '访问来源',
+    //     type: 'pie',
+    //     radius : '55%',
+    //     center: ['50%', '60%'],
+    //     data:[
+    //         {value:335, name:'直接访问'},
+    //         {value:310, name:'邮件营销'},
+    //         {value:234, name:'联盟广告'},
+    //         {value:135, name:'视频广告'},
+    //         {value:1548, name:'搜索引擎'}
+    //     ],
+    //     itemStyle: {
+    //         emphasis: {
+    //             shadowBlur: 10,
+    //             shadowOffsetX: 0,
+    //             shadowColor: 'rgba(0, 0, 0, 0.5)'
+    //         }
+    //     }
+    // }
+  ],
 };
 // const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
 //     title : {
@@ -346,110 +347,108 @@ const Elevator_Error_Ratio_Chart_Options = {
 //     ]
 // };
 const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
-    title : {
-        text: '维保人员派单量和完成量',
-        subtext: '',
-        x:'center'
-
+  title: {
+    text: '维保人员派单量和完成量',
+    subtext: '',
+    x: 'center',
+  },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      // 坐标轴指示器，坐标轴触发有效
+      type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
     },
-    tooltip : {
-        trigger: 'axis',
-        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-        }
-    },
-    legend: {
-        left: 'left',
-        orient: 'vertical',
-        data: ['完成量', '未完成量']
-    },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-    },
-    xAxis:  {
-        type: 'category',
-        data: ['周一','周二','周三','周四','周五','周六','周日']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [
-        // {
-        //     name: '直接访问',
-        //     type: 'bar',
-        //     stack: '总量',
-        //     label: {
-        //         normal: {
-        //             show: true,
-        //             position: 'insideRight'
-        //         }
-        //     },
-        //     data: [320, 302, 301, 334, 390, 330, 320]
-        // },
-        // {
-        //     name: '邮件营销',
-        //     type: 'bar',
-        //     stack: '总量',
-        //     label: {
-        //         normal: {
-        //             show: true,
-        //             position: 'insideRight'
-        //         }
-        //     },
-        //     data: [120, 132, 101, 134, 90, 230, 210]
-        // }
-    ]
+  },
+  legend: {
+    left: 'left',
+    orient: 'vertical',
+    data: ['完成量', '未完成量'],
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true,
+  },
+  xAxis: {
+    type: 'category',
+    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+  },
+  yAxis: {
+    type: 'value',
+  },
+  series: [
+    // {
+    //     name: '直接访问',
+    //     type: 'bar',
+    //     stack: '总量',
+    //     label: {
+    //         normal: {
+    //             show: true,
+    //             position: 'insideRight'
+    //         }
+    //     },
+    //     data: [320, 302, 301, 334, 390, 330, 320]
+    // },
+    // {
+    //     name: '邮件营销',
+    //     type: 'bar',
+    //     stack: '总量',
+    //     label: {
+    //         normal: {
+    //             show: true,
+    //             position: 'insideRight'
+    //         }
+    //     },
+    //     data: [120, 132, 101, 134, 90, 230, 210]
+    // }
+  ],
 };
 
-
 const Elevator_maintenance_Orders_Month_Chart_Options = {
-    title: {
-      text: '每月电梯故障数',
-      subtext: '',
-      left: 'center'
+  title: {
+    text: '每月电梯故障数',
+    subtext: '',
+    left: 'center',
+  },
+  color: ['#3398DB'],
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      // 坐标轴指示器，坐标轴触发有效
+      type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
     },
-    color: ['#3398DB'],
-    tooltip : {
-        trigger: 'axis',
-        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-        }
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true,
+  },
+  xAxis: [
+    {
+      type: 'category',
+      data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+      axisTick: {
+        alignWithLabel: true,
+      },
     },
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
+  ],
+  yAxis: [
+    {
+      type: 'value',
     },
-    xAxis : [
-        {
-            type : 'category',
-            data : ['1', '2', '3', '4', '5', '6', '7','8','9','10','11','12'],
-            axisTick: {
-                alignWithLabel: true
-            }
-        }
-    ],
-    yAxis : [
-        {
-            type : 'value'
-        }
-    ],
-    series : [
-        // {
-        //     name:'直接访问',
-        //     type:'bar',
-        //     barWidth: '60%',
-        //     data:[10, 52, 200, 334, 390, 330, 220]
-        // }
-    ]
-}
-const Map_Info_Value = {}
-
-
+  ],
+  series: [
+    // {
+    //     name:'直接访问',
+    //     type:'bar',
+    //     barWidth: '60%',
+    //     data:[10, 52, 200, 334, 390, 330, 220]
+    // }
+  ],
+};
+const Map_Info_Value = {};
 
 export {
   Elevator_Running_Data_Chart_Options,
@@ -460,5 +459,5 @@ export {
   Elevator_Error_Ratio_Chart_Options,
   Elevator_Maintenance_OrdersAndFinish_Chart_Options,
   Elevator_maintenance_Orders_Month_Chart_Options,
-  Map_Info_Value
+  Map_Info_Value,
 };

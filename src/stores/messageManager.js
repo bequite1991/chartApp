@@ -20,8 +20,12 @@ class MessageManager extends EventEmitter {
   cmdList = [];
   subscribe = [];
   messageEmitterTimer = null;
+  parserLoopTimer = null;
+
   serverOptionsValue = SERVER_OPTIONS;
   timestamp = new Date ().getTime ();
+
+  messageList = [];
 
   constructor () {
     super ();
@@ -61,6 +65,31 @@ class MessageManager extends EventEmitter {
     this.messageEmitterTimer = setInterval (() => {
       this.messageEmitter ();
     }, 3000);
+
+    this.parserLoopTimer = setInterval (() => {
+      this.parserLoop ();
+    }, 1000);
+  }
+
+  addMessage (message) {
+    if (message) {
+      this.messageList.push (message);
+    }
+  }
+
+  isMessageListEmpty () {
+    return this.messageList.length == 0;
+  }
+
+  parserLoop () {
+    if (!this.isMessageListEmpty ()) {
+      let message = this.messageList[0];
+      if (message) {
+        this.emit (message.cmd, message);
+        delete this.messageList[0];
+        this.messageList.splice (0, 1);
+      }
+    }
   }
 
   messageEmitter () {
@@ -89,10 +118,10 @@ class MessageManager extends EventEmitter {
           console.info ('topic:' + topic);
           console.info ('packet message:' + message);
           mqttWorker.emit ('session:publish', {topic: topic, message: message});
-
-          this.cmdList = [];
         }
       });
+
+      //this.cmdList = [];
     }
   }
 
@@ -126,6 +155,7 @@ class MessageManager extends EventEmitter {
   reset () {
     this.cmdList = [];
     this.subscribe = [];
+    this.messageList = [];
   }
 
   isCmdEmpty () {

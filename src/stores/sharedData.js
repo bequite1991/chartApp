@@ -1,7 +1,8 @@
 import {observable, computed, toJS, autorun} from 'mobx';
 import EventEmitter from 'events';
-import {randomData} from "../lib/helper.js";
+import {randomData} from '../lib/helper.js';
 
+import messageManager from './messageManager';
 
 import {
   Elevator_Running_Data_Chart_Options,
@@ -12,12 +13,12 @@ import {
   Elevator_Error_Ratio_Chart_Options,
   Elevator_Maintenance_OrdersAndFinish_Chart_Options,
   Elevator_maintenance_Orders_Month_Chart_Options,
-  Map_Info_Value
+  Map_Info_Value,
 } from '../datacenter/chartConfig';
 /**
  * 电梯运行数据
  */
-class sharedData extends EventEmitter{
+class sharedData extends EventEmitter {
   @observable runningDataOptionValue = Elevator_Running_Data_Chart_Options;
   @observable systemCountOptionValue = Elevator_System_Count_Chart_Options;
   @observable runningDistanceEveryMonthOptionValue = Elevator_Running_Distance_Every_Month_Chart_Option;
@@ -28,95 +29,94 @@ class sharedData extends EventEmitter{
   @observable maintenanceOrdersMonthOptionValue = Elevator_maintenance_Orders_Month_Chart_Options;
   @observable mapInfoValue = Map_Info_Value;
 
-
+  @observable totalValue = '0'; // 总数量
+  @observable onLineTotalValue = '0'; // 在线数量
 
   sumDay = '50'; // 运行天数
 
   //runningDataOption = null;
 
   constructor () {
-    super();
-    //var runningDataOptionValue = this.runningDataOptionValue;
-    //var runningDataOptionValue_series = runningDataOptionValue.series[0];
-    //let series = [row];
-    this.runningDataOptionValue.series[0].data = ['50'];
-    this.systemCountOptionValue.series[0].data = ['150'];
+    super ();
+
+    this.runningDataOptionValue.series[0].data = ['0'];
+    this.systemCountOptionValue.series[0].data = ['0'];
 
     this.mapChinaOptionValue.series[0].data = [
-      {name: '北京',value: randomData(),pingyin:"beijing"},
-      {name: '天津',value: randomData(),pingyin:"beijing" },
-      {name: '上海',value: randomData(),pingyin:"beijing" },
-      {name: '浙江',value: randomData(),pingyin:"zhejiang" },
-      {name: '台湾',value: randomData(),pingyin:"beijing" },
-      {name: '香港',value: randomData(),pingyin:"beijing" },
-      {name: '澳门',value: randomData(),pingyin:"beijing" }
+      {name: '北京', value: randomData (), pingyin: 'beijing'},
+      {name: '天津', value: randomData (), pingyin: 'beijing'},
+      {name: '上海', value: randomData (), pingyin: 'beijing'},
+      {name: '浙江', value: randomData (), pingyin: 'zhejiang'},
+      {name: '台湾', value: randomData (), pingyin: 'beijing'},
+      {name: '香港', value: randomData (), pingyin: 'beijing'},
+      {name: '澳门', value: randomData (), pingyin: 'beijing'},
     ];
     this.elevatorErrorEveryMonthOptionValue.series = [
-        {
-            name:'故障数',
-            type:'bar',
-            barWidth: '60%',
-            data:[100, 2, 2, 5, 6, 7, 6,5,4,3,1,2]
-        }
+      {
+        name: '故障数',
+        type: 'bar',
+        barWidth: '60%',
+        data: [0, 0, 0, 0, 0],
+      },
     ];
     this.elevatorErrorRatioOptionValue.series = [
-        {
-            name: '访问来源',
-            type: 'pie',
-            radius : '55%',
-            center: ['50%', '60%'],
-            data:[
-                {value:335, name:'电气强度降低'},
-                {value:310, name:'磨损与污损'},
-                {value:234, name:'整体故障'},
-                {value:135, name:'贯穿'},
-                {value:1548, name:'其他故障'}
-            ],
-            itemStyle: {
-                emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
-        }
-    ]
+      {
+        name: '访问来源',
+        type: 'pie',
+        radius: '55%',
+        center: ['50%', '60%'],
+        data: [
+          {value: 335, name: '电气强度降低'},
+          {value: 310, name: '磨损与污损'},
+          {value: 234, name: '整体故障'},
+          {value: 135, name: '贯穿'},
+          {value: 1548, name: '其他故障'},
+        ],
+        itemStyle: {
+          emphasis: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+      },
+    ];
 
     this.maintenanceOrdersAndFinishOptionValue.series = [
-         {
-            name: '完成量',
-            type: 'line',
-            stack: '总量',
-            label: {
-                normal: {
-                    show: true,
-                    position: 'insideRight'
-                }
-            },
-            data: [320, 302, 301, 334, 390, 330, 320]
+      {
+        name: '完成量',
+        type: 'line',
+        stack: '总量',
+        label: {
+          normal: {
+            show: true,
+            position: 'insideRight',
+          },
         },
-        {
-            name: '未成量',
-            type: 'line',
-            stack: '总量',
-            label: {
-                normal: {
-                    show: true,
-                    position: 'insideRight'
-                }
-            },
-            data: [120, 132, 101, 134, 90, 230, 210]
+        data: [320, 302, 301, 334, 390, 330, 320],
+      },
+      {
+        name: '未成量',
+        type: 'line',
+        stack: '总量',
+        label: {
+          normal: {
+            show: true,
+            position: 'insideRight',
+          },
         },
-    ]
+        data: [120, 132, 101, 134, 90, 230, 210],
+      },
+    ];
 
     this.maintenanceOrdersMonthOptionValue.series = [
-        {
-            name:'维保数',
-            type:'bar',
-            barWidth: '60%',
-            data:[10, 20, 20, 50, 60, 70, 60,50,40,30,10,20]
-        }
-    ]
+      {
+        name: '维保数',
+        type: 'bar',
+        barWidth: '60%',
+        data: [10, 20, 20, 50, 60, 70, 60, 50, 40, 30, 10, 20],
+      },
+    ];
 
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
@@ -126,8 +126,58 @@ class sharedData extends EventEmitter{
     //   let option = optionValueWatcher;
     //   console.info ('autorun:' + option);
     // });
-  }
 
+    messageManager.on ('9012', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+
+        if (rows && rows.length > 0) {
+          let dataArray = [];
+
+          rows.forEach (item => {
+            let data = item.total;
+            dataArray.push (data);
+          });
+
+          this.runningDataOptionValue.series[0].data = dataArray;
+        }
+      }
+    });
+
+    messageManager.on ('9005', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+
+        if (rows && rows.length > 0) {
+          let dataArray = [];
+          let categoryArray = [];
+
+          rows.forEach (item => {
+            let month = item.month;
+            let total = item.total;
+            categoryArray.push (month);
+            dataArray.push (total);
+          });
+          this.systemCountOptionValue.xAxis[0].data = categoryArray;
+          this.systemCountOptionValue.series[0].data = dataArray;
+        }
+      }
+    });
+
+    messageManager.on ('9006', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let row = rows[0];
+          let totalInfo = {
+            total: row.total ? row.total : '0',
+            onLineTotal: row.on_total ? row.on_total : '0',
+          };
+          this.totalInfo = totalInfo;
+        }
+      }
+    });
+  }
 
   @computed get runningDataOption () {
     return toJS (this.runningDataOptionValue);
@@ -220,6 +270,18 @@ class sharedData extends EventEmitter{
     this.maintenanceOrdersMonthOptionValue = option;
   }
 
+  @computed get totalInfo () {
+    let totalInfo = {
+      total: this.totalValue,
+      onLineTotal: this.onLineTotalValue,
+    };
+    return toJS (totalInfo);
+  }
+
+  set totalInfo (value) {
+    this.totalValue = value.total;
+    this.onLineTotalValue = value.onLineTotal;
+  }
 
   // async computeMapData (val){
   //   await ()=>{
@@ -233,20 +295,19 @@ class sharedData extends EventEmitter{
   // }
   @computed get mapInfo () {
     const t = this;
-    const load = function(val){
-      let data1 = require(`echarts/map/js/province/${val.pingyin}`);
-      console.log("1")
-    }
-    async function computeMapData (val){
-      await load(val);
-      console.log("2")
+    const load = function (val) {
+      let data1 = require (`echarts/map/js/province/${val.pingyin}`);
+      console.log ('1');
+    };
+    async function computeMapData (val) {
+      await load (val);
+      console.log ('2');
       return toJS (t.mapInfoValue);
     }
-    computeMapData (toJS (t.mapInfoValue))
+    computeMapData (toJS (t.mapInfoValue));
     // const mapData =  computeMapData(this.mapInfoValue);
-    console.log("3")
+    console.log ('3');
     return toJS (this.mapInfoValue);
-
   }
   set mapInfo (value) {
     this.mapInfoValue = value;
