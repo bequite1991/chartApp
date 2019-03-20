@@ -96,7 +96,7 @@ class MessageManager extends EventEmitter {
 
   packetMessage (cmd, topic_custom, salt, timestamp, message_num) {
     let key = md5 (salt).toUpperCase ();
-    let token = Base64.encode ({cmd: cmd, key: key, timestamp: timestamp});
+    let token = Base64.encode (JSON.stringify({cmd: cmd, key: key, timestamp: timestamp}));
     console.info (
       'cmd:' +
         cmd +

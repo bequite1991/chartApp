@@ -99,7 +99,6 @@ class MqttWorker extends EventEmitter {
     };
 
     this.client.onConnectionLost = () => {
-      debugger;
       setConnect (true);
       clientInstance.client.connect (connectOpt);
       console.log ('mqtt reConnect ...');
@@ -107,7 +106,6 @@ class MqttWorker extends EventEmitter {
 
     this.client.onMessageArrived = message => {
       message._index = ++i;
-      debugger;
       setMessage (message);
       console.log (message);
     };
