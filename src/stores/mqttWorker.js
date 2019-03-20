@@ -2,6 +2,8 @@ import {observable, computed, toJS, autorun} from 'mobx';
 
 import EventEmitter from 'events';
 
+import messageManager from './messageManager';
+
 let clientInstance = null;
 
 const CHANNEL_INIT = 'session:init';
@@ -12,7 +14,7 @@ const CHANNEL_PUBLISH = 'session:publish';
 const CHANNEL_CMD = 'session:data';
 const CHANNEL_EXIT = 'session:exit';
 
-class MqttWorker extends EventEmitter{
+class MqttWorker extends EventEmitter {
   messageList = []; // 消息列表
   toClose = false;
   hasSubscribe = [];
@@ -40,7 +42,7 @@ class MqttWorker extends EventEmitter{
 
     this.on (CHANNEL_PUBLISH, options => {
       //debugger;
-      this.publish(options.topic,options.message , 1, false);
+      this.publish (options.topic, options.message, 1, false);
     });
 
     clientInstance = this;
@@ -73,7 +75,6 @@ class MqttWorker extends EventEmitter{
     var setConnect = function () {};
     var setMessage = function () {};
     let i = 0;
-
 
     this.client = new Paho.MQTT.Client (
       options.ip,
