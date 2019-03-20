@@ -72,7 +72,7 @@ export default class Home extends PureComponent {
   render () {
     return (
       <Provider sharedData={sharedData} messageManager={messageManager}>
-        <Row>
+        <Row className={styles.homeBackground}>
           <Col span={6}>
             <RunningDataChart />
             <SystemCountChart />
@@ -85,7 +85,6 @@ export default class Home extends PureComponent {
             <Elevator_Error_Every_Month_Chart />
             <Elevator_Error_Ratio_Chart />
             <Maintenance_Orders_And_Finish_Chart />
-            <Maintenance_Orders_Month_Chart />
           </Col>
         </Row>
       </Provider>

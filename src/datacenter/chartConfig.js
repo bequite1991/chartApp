@@ -370,11 +370,11 @@ const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
         containLabel: true
     },
     xAxis:  {
-        type: 'value'
-    },
-    yAxis: {
         type: 'category',
         data: ['周一','周二','周三','周四','周五','周六','周日']
+    },
+    yAxis: {
+        type: 'value'
     },
     series: [
         // {
@@ -402,7 +402,7 @@ const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
         //     data: [120, 132, 101, 134, 90, 230, 210]
         // }
     ]
-};;
+};
 
 
 const Elevator_maintenance_Orders_Month_Chart_Options = {

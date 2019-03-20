@@ -6,6 +6,7 @@ import styles from './map.less';
 import ReactEcharts from 'echarts-for-react';
 import {inject, observer} from 'mobx-react';
 require('echarts/map/js/china.js');
+require("./map.less");
 
 
 @inject ('sharedData')

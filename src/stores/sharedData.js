@@ -85,7 +85,7 @@ class sharedData extends EventEmitter{
     this.maintenanceOrdersAndFinishOptionValue.series = [
          {
             name: '完成量',
-            type: 'bar',
+            type: 'line',
             stack: '总量',
             label: {
                 normal: {
@@ -97,7 +97,7 @@ class sharedData extends EventEmitter{
         },
         {
             name: '未成量',
-            type: 'bar',
+            type: 'line',
             stack: '总量',
             label: {
                 normal: {

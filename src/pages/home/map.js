@@ -53,13 +53,13 @@ export default class Map extends Component {
         peopleArr.push(<p key={key}>姓名：<span>{val.name}</span>手机号：<span>{val.phone}</span>维保区域：<span>{val.area}</span>目前位置：<span>{val.location}</span></p>);
     });
     return (
-        <div className='map-china'>
-            <p className="title">慧保电梯管理平台</p>
-            <div className="subtitle"><span>电梯在线数量：</span><span className="detail">25213</span><span>总安装数量：</span><span className="detail">41982</span></div>
+        <div className={styles.mapChina}>
+            <p className={styles.title}>慧保电梯管理平台</p>
+            <div className={styles.subtitle}><span className={styles.subtitleInfo}>电梯在线数量：<span className={styles.detail}>25213</span></span><span className={styles.subtitleInfo}>总安装数量：<span className={styles.detail}>41982</span></span></div>
             <ReactEcharts
                 onEvents={this.onEvents}
                 option={option}
-                style={{height: '70vh', width: '100%'}}
+                style={{height: '65vh', width: '100%'}}
                 className='react_for_echarts' />
             <div>
                 <p>维保人员：<span>在线</span></p>
