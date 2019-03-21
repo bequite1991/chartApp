@@ -9,20 +9,24 @@ import echarts from 'echarts';
 import {inject, observer} from 'mobx-react';
 import {debug} from 'util';
 
-@inject ('sharedData')
+@inject ('sharedData', 'messageManager')
 @observer
 export default class RunningDataChart extends React.Component {
+  flagReceive = false;
   constructor (props) {
     super (props);
     this.state = {};
-
-    // setInterval (() => {
-    //   const {sharedData} = this.props;
-    //   //debugger;
-    //   sharedData.runningDataOption = Math.ceil (Math.random () * 100) + '';
-    // }, 5000);
+    this.flagReceive = false;
+    const {messageManager} = this.props;
+    messageManager.emit ('register', {cmd: '9001'});
   }
-  componentWillUnmount () {}
+
+  componentWillUnmount () {
+    const {messageManager} = this.props;
+    messageManager.emit ('unregister', {cmd: '9001'});
+  }
+
+  onRunningDataOptionChange = () => {};
 
   onChartClick (param, echarts) {
     console.log (param);
@@ -40,7 +44,7 @@ export default class RunningDataChart extends React.Component {
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}
-        style={{width: '100%', height: '20vh'}}
+        style={{width: '100%', height: '20vh',minHeight:'100px'}}
       />
     );
   }

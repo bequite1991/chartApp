@@ -25,6 +25,10 @@ import Maintenance_Orders_And_Finish_Chart from './maintenanceOrdersAndFinishCha
 import Maintenance_Orders_Month_Chart from './maintenanceOrdersMonthChart.js';
 //首页全国地图
 import Map_China from './map';
+//安装记录
+import Installation_Record from './installationRecord.js';
+//维保记录
+import Maintenance_Record from './maintenanceRecord.js';
 
 import {
   Elevator_Running_Data_Chart_Options,
@@ -70,23 +74,74 @@ export default class Home extends PureComponent {
   // }
 
   render () {
-    return (
-      <Provider sharedData={sharedData} messageManager={messageManager}>
-        <Row className={styles.homeBackground}>
-          <Col span={6}>
-            <RunningDataChart />
-            <SystemCountChart />
-            <Elevator_Running_Distance_Every_Month_Chart
+
+
+    let charts;
+    if(document.body.clientWidth < 1000){
+      charts = (<Row>
+          <Col span={24}><Map_China /></Col>
+          <Col span={24}>
+            <div className={styles.chartContent}>
+              <RunningDataChart />
+            </div>
+            <div className={styles.chartContent}>
+              <SystemCountChart />
+            </div>
+            <div className={styles.chartContent}>
+              <Elevator_Running_Distance_Every_Month_Chart
               options={Elevator_Running_Distance_Every_Month_Chart_Option}
             />
+            </div>
+            <div className={styles.chartContent}><Installation_Record /></div>
+          </Col>
+          <Col span={24}>
+            <div className={styles.chartContent}>
+              <Elevator_Error_Every_Month_Chart />
+            </div>
+            <div className={styles.chartContent}>
+              <Elevator_Error_Ratio_Chart />
+            </div>
+            <div className={styles.chartContent}>
+                <Maintenance_Orders_And_Finish_Chart />
+            </div>
+            <div className={styles.chartContent}><Maintenance_Record /></div>
+          </Col>
+        </Row>)
+      }else{
+        charts = (<Row>
+          <Col span={6}>
+            <div className={styles.chartContent}>
+              <RunningDataChart />
+            </div>
+            <div className={styles.chartContent}>
+              <SystemCountChart />
+            </div>
+            <div className={styles.chartContent}>
+              <Elevator_Running_Distance_Every_Month_Chart
+              options={Elevator_Running_Distance_Every_Month_Chart_Option}
+            />
+            </div>
+            <div className={styles.chartContent}><Installation_Record /></div>
           </Col>
           <Col span={12}><Map_China /></Col>
           <Col span={6}>
-            <Elevator_Error_Every_Month_Chart />
-            <Elevator_Error_Ratio_Chart />
-            <Maintenance_Orders_And_Finish_Chart />
+            <div className={styles.chartContent}>
+              <Elevator_Error_Every_Month_Chart />
+            </div>
+            <div className={styles.chartContent}>
+              <Elevator_Error_Ratio_Chart />
+            </div>
+            <div className={styles.chartContent}>
+                <Maintenance_Orders_And_Finish_Chart />
+            </div>
+            <div className={styles.chartContent}><Maintenance_Record /></div>
           </Col>
-        </Row>
+        </Row>)
+      }
+
+    return (
+      <Provider sharedData={sharedData} messageManager={messageManager}>
+        {charts}
       </Provider>
     );
   }

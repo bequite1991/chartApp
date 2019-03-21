@@ -1,7 +1,12 @@
 const Elevator_Running_Data_Chart_Options = {
   title: {
     text: '电梯运行数据',
-    subtext: '数据来自网络',
+    subtext: '',
+    textStyle: {
+      fontWeight: 'normal',              //标题颜色
+      color: '#666666',
+      fontSize:'12px'
+    },
   },
   tooltip: {
     trigger: 'axis',
@@ -50,6 +55,11 @@ const Elevator_System_Count_Chart_Options = {
   title: {
     text: '电梯系统安装数量',
     subtext: '纯属虚构',
+    textStyle: {
+      fontWeight: 'normal',              //标题颜色
+      color: '#666666',
+      fontSize:'12px'
+    },
   },
   tooltip: {
     trigger: 'axis',
@@ -97,7 +107,12 @@ const Elevator_System_Count_Chart_Options = {
 const Elevator_Running_Distance_Every_Month_Chart_Option = {
   title: {
     text: '每月电梯运行距离',
-    subtext: '大数据',
+    subtext: '',
+    textStyle: {
+      fontWeight: 'normal',              //标题颜色
+      color: '#666666',
+      fontSize:'12px'
+    },
   },
   tooltip: {
     trigger: 'axis',
@@ -166,7 +181,12 @@ const Elevator_Map_China_Options = {
   title: {
     text: '设备分布',
     subtext: '慧保电梯设备分布图',
-    left: 'center'
+    left: 'center',
+    textStyle: {
+      fontWeight: 'normal',              //标题颜色
+      color: '#666666',
+      fontSize:'12px'
+    },
   },
   tooltip: {
     trigger: 'item'
@@ -228,7 +248,12 @@ const Elevator_Error_Every_Month_Chart_Options = {
     title: {
       text: '每月电梯故障数',
       subtext: '',
-      left: 'center'
+      left: 'center',
+      textStyle: {
+        fontWeight: 'normal',              //标题颜色
+        color: '#666666',
+        fontSize:'12px'
+      },
     },
     color: ['#3398DB'],
     tooltip : {
@@ -270,7 +295,12 @@ const Elevator_Error_Ratio_Chart_Options = {
     title : {
         text: '故障问题比例',
         subtext: '',
-        x:'center'
+        x:'center',
+        textStyle: {
+          fontWeight: 'normal',              //标题颜色
+          color: '#666666',
+          fontSize:'12px'
+        },
     },
     tooltip : {
         trigger: 'item',
@@ -349,7 +379,12 @@ const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
     title : {
         text: '维保人员派单量和完成量',
         subtext: '',
-        x:'center'
+        x:'center',
+        textStyle: {
+          fontWeight: 'normal',              //标题颜色
+          color: '#666666',
+          fontSize:'12px'
+        },
 
     },
     tooltip : {
@@ -409,7 +444,12 @@ const Elevator_maintenance_Orders_Month_Chart_Options = {
     title: {
       text: '每月电梯故障数',
       subtext: '',
-      left: 'center'
+      left: 'center',
+      textStyle: {
+        fontWeight: 'normal',              //标题颜色
+        color: '#666666',
+        fontSize:'12px'
+      },
     },
     color: ['#3398DB'],
     tooltip : {

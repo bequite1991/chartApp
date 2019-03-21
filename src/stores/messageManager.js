@@ -48,19 +48,19 @@ class MessageManager extends EventEmitter {
     mqttWorker.emit ('session:init', this.subscribe);
     mqttWorker.emit ('session:connect', options);
 
-    this.on ('register', args => {
-      console.info ('注册消息:' + args.cmd);
-      this.addCommand (args.cmd);
-    });
+    // this.on ('register', args => {
+    //   console.info ('注册消息:' + args.cmd);
+    //   this.addCommand (args.cmd);
+    // });
 
-    this.on ('unregister', args => {
-      console.info ('取消注册消息:' + args.cmd);
-      this.removeCommand (args.cmd);
-    });
+    // this.on ('unregister', args => {
+    //   console.info ('取消注册消息:' + args.cmd);
+    //   this.removeCommand (args.cmd);
+    // });
 
-    this.messageEmitterTimer = setInterval (() => {
-      this.messageEmitter ();
-    }, 3000);
+    // this.messageEmitterTimer = setInterval (() => {
+    //   this.messageEmitter ();
+    // }, 3000);
   }
 
   messageEmitter () {

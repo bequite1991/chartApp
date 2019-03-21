@@ -7,7 +7,8 @@ import styles from './index.less';
 
 import {Provider} from 'mobx-react';
 
-import sharedData from '../../stores/sharedDataDetail';
+import sharedDataDetail from '../../stores/sharedDataDetail';
+import sharedData from '../../stores/sharedData';
 
 // 电梯运行数据(Elevator Running Data)
 import RunningDataChart from './runningDataChart';
@@ -25,14 +26,18 @@ import Maintenance_Orders_And_Finish_Chart from './maintenanceOrdersAndFinishCha
 import Maintenance_Orders_Month_Chart from './maintenanceOrdersMonthChart.js';
 //首页全国地图
 import Map_China from './map';
+//安装记录
+import Installation_Record from './installationRecord.js';
+//维保记录
+import Maintenance_Record from './maintenanceRecord.js';
 
 import {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
   Elevator_Running_Distance_Every_Month_Chart_Option,
-} from '../../datacenter/chartConfigInfo';
+} from '../../datacenter/chartConfig';
 
-import mqttWorker from '../../stores/mqttWorker';
+import messageManager from '../../stores/messageManager';
 
 // @inject ('runningData')
 // @observer
@@ -41,37 +46,6 @@ export default class Home extends PureComponent {
   constructor (props) {
     super (props);
     this.state = {};
-
-    if (this.init == true) {
-      return;
-    }
-
-    // let runningData2 = Elevator_Running_Data_Chart_Options;
-    // let runningSumDay = '200';
-    // runningData2.series.unshift (runningSumDay);
-
-    // console.info ('runningData:' + runningData);
-
-    let options = {
-      ip: '121.43.165.110',
-      port: 3994,
-      userName: '15051841028',
-      passWord: 'huibao1841028',
-      clientName: 'JSClient-Demo-' + new Date ().toLocaleTimeString (),
-      cleanSession: true,
-      timeout: 30,
-      keepAliveInterval: 30,
-    };
-
-    let subscribe = [
-      '/inshn_dtimao/huibao/req/dev_info/' + options.userName,
-      '/inshn_dtimao/huibao/req/month_dev_num' + options.userName,
-    ];
-
-    // mqttWorker.emit ('session:init', subscribe);
-    // mqttWorker.emit ('session:connect', options);
-
-    this.init = true;
 
     // setInterval (() => {
     //   //cleanup();
@@ -101,24 +75,74 @@ export default class Home extends PureComponent {
   // }
 
   render () {
-    return (
-      <Provider sharedData={sharedData}>
-        <Row>
-          <Col span={6}>
-            <RunningDataChart />
-            <SystemCountChart />
-            <Elevator_Running_Distance_Every_Month_Chart
+
+
+    let charts;
+    if(document.body.clientWidth < 1000){
+      charts = (<Row>
+          <Col span={24}><Map_China /></Col>
+          <Col span={24}>
+            <div className={styles.chartContent}>
+              <RunningDataChart />
+            </div>
+            <div className={styles.chartContent}>
+              <SystemCountChart />
+            </div>
+            <div className={styles.chartContent}>
+              <Elevator_Running_Distance_Every_Month_Chart
               options={Elevator_Running_Distance_Every_Month_Chart_Option}
             />
+            </div>
+            <div className={styles.chartContent}><Installation_Record /></div>
+          </Col>
+          <Col span={24}>
+            <div className={styles.chartContent}>
+              <Elevator_Error_Every_Month_Chart />
+            </div>
+            <div className={styles.chartContent}>
+              <Elevator_Error_Ratio_Chart />
+            </div>
+            <div className={styles.chartContent}>
+                <Maintenance_Orders_And_Finish_Chart />
+            </div>
+            <div className={styles.chartContent}><Maintenance_Record /></div>
+          </Col>
+        </Row>)
+      }else{
+        charts = (<Row>
+          <Col span={6}>
+            <div className={styles.chartContent}>
+              <RunningDataChart />
+            </div>
+            <div className={styles.chartContent}>
+              <SystemCountChart />
+            </div>
+            <div className={styles.chartContent}>
+              <Elevator_Running_Distance_Every_Month_Chart
+              options={Elevator_Running_Distance_Every_Month_Chart_Option}
+            />
+            </div>
+            <div className={styles.chartContent}><Installation_Record /></div>
           </Col>
           <Col span={12}><Map_China /></Col>
           <Col span={6}>
-            <Elevator_Error_Every_Month_Chart />
-            <Elevator_Error_Ratio_Chart />
-            <Maintenance_Orders_And_Finish_Chart />
-            <Maintenance_Orders_Month_Chart />
+            <div className={styles.chartContent}>
+              <Elevator_Error_Every_Month_Chart />
+            </div>
+            <div className={styles.chartContent}>
+              <Elevator_Error_Ratio_Chart />
+            </div>
+            <div className={styles.chartContent}>
+                <Maintenance_Orders_And_Finish_Chart />
+            </div>
+            <div className={styles.chartContent}><Maintenance_Record /></div>
           </Col>
-        </Row>
+        </Row>)
+      }
+
+    return (
+      <Provider sharedDataDetail={sharedDataDetail} sharedData={sharedData} messageManager={messageManager}>
+        {charts}
       </Provider>
     );
   }

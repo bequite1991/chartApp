@@ -118,6 +118,26 @@ class sharedData extends EventEmitter{
         }
     ]
 
+
+    //小区安装记录
+    this.installRecordDataValue = [
+      "xxxx小区安装纪律1",
+      "xxxx小区安装纪律2",
+      "xxxx小区安装纪律3",
+      "xxxx小区安装纪律4",
+      "xxxx小区安装纪律5",
+      "xxxx小区安装纪律6"
+    ]
+    //小区维保记录
+    this.maintenanceRecordValue = [
+      "xxxx小区维保纪律1",
+      "xxxx小区维保纪律2",
+      "xxxx小区维保纪律3",
+      "xxxx小区维保纪律4",
+      "xxxx小区维保纪律5",
+      "xxxx小区维保纪律6"
+    ]
+
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
     // });
@@ -220,17 +240,6 @@ class sharedData extends EventEmitter{
     this.maintenanceOrdersMonthOptionValue = option;
   }
 
-
-  // async computeMapData (val){
-  //   await ()=>{
-  //     try{
-  //       let data1 = require(`echarts/map/js/province/${val.pingyin}`);
-  //       return true;
-  //     }catch(ex){
-  //       console.log("error:",ex);
-  //     }
-  //   }
-  // }
   @computed get mapInfo () {
     const t = this;
     const load = function(val){
@@ -250,6 +259,22 @@ class sharedData extends EventEmitter{
   }
   set mapInfo (value) {
     this.mapInfoValue = value;
+  }
+
+  @computed get installRecordData () {
+    return toJS (this.installRecordDataValue);
+  }
+
+  set installRecordData (value) {
+    this.installRecordDataValue = value;
+  }
+
+  @computed get maintenanceRecordData () {
+    return toJS (this.maintenanceRecordValue);
+  }
+
+  set maintenanceRecordData (value) {
+    this.maintenanceRecordValue = value;
   }
 }
 

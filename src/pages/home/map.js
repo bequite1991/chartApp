@@ -50,7 +50,7 @@ export default class Map extends Component {
     const peopleArr = [];
 
     arr.forEach((val,key)=>{
-        peopleArr.push(<p key={key}>姓名：<span>{val.name}</span>手机号：<span>{val.phone}</span>维保区域：<span>{val.area}</span>目前位置：<span>{val.location}</span></p>);
+        peopleArr.push(<span key={key} className={styles.peopleList}>姓名：<span>{val.name}</span>手机号：<span>{val.phone}</span>维保区域：<span>{val.area}</span>目前位置：<span>{val.location}</span></span>);
     });
     return (
         <div className={styles.mapChina}>
@@ -61,7 +61,7 @@ export default class Map extends Component {
                 option={option}
                 style={{height: '65vh', width: '100%'}}
                 className='react_for_echarts' />
-            <div>
+            <div className={styles.peopleListContent}>
                 <p>维保人员：<span>在线</span></p>
                 {peopleArr}
             </div>

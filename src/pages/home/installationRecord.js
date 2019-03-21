@@ -9,20 +9,14 @@ import echarts from 'echarts';
 import {inject, observer} from 'mobx-react';
 import {debug} from 'util';
 
-@inject ('sharedData','messageManager')
+@inject ('sharedData')
 @observer
-export default class SystemCountChart extends React.Component {
+export default class MaintenanceOrdersAndFinishChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};
-    const {messageManager} = this.props;
-    //messageManager.emit("register",{cmd:"9001"})
   }
-
-  componentWillUnmount () {
-    const {messageManager} = this.props;
-    messageManager.emit("unregister",{cmd:"9001"})
-  }
+  componentWillUnmount () {}
 
   onChartClick (param, echarts) {
     console.log (param);
@@ -34,15 +28,19 @@ export default class SystemCountChart extends React.Component {
     };
 
     const {sharedData} = this.props;
-    const option = sharedData.systemCountOption;
+    const installRecordDatas = sharedData.installRecordData;
+    let arr = [];
+    if(sharedData.installRecordData){
+      sharedData.installRecordData.forEach((ele,key)=>{
+        arr.push(<span key={key} className={styles.installRecordDetail}>{ele}</span>)
+      });
+    }
+
     return (
-      <ReactEcharts
-        option={option}
-        notMerge={true}
-        lazyUpdate={true}
-        onEvents={onEvents}
-        style={{width: '100%', height: '20vh',minHeight:'100px'}}
-      />
+      <div className={styles.installRecord}>
+        <span className={styles.title}>小区安装记录</span>
+        {arr}
+      </div>
     );
   }
 }

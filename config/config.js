@@ -71,7 +71,7 @@ export default {
         // dashboard
         {
           path: '/home',
-          name: 'home',
+          name: '首页',
           icon: 'smile',
           component: './home',
         },
