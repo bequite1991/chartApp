@@ -7,7 +7,7 @@ import messageManager from './messageManager';
 import {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
-  Elevator_Running_Distance_Every_Month_Chart_Option,
+  Elevator_Offline_Count_Every_Month_Chart_Option,
   Elevator_Map_China_Options,
   Elevator_Error_Every_Month_Chart_Options,
   Elevator_Error_Ratio_Chart_Options,
@@ -21,7 +21,7 @@ import {
 class sharedData extends EventEmitter {
   @observable runningDataOptionValue = Elevator_Running_Data_Chart_Options;
   @observable systemCountOptionValue = Elevator_System_Count_Chart_Options;
-  @observable runningDistanceEveryMonthOptionValue = Elevator_Running_Distance_Every_Month_Chart_Option;
+  @observable offlineCountOptionValue = Elevator_Offline_Count_Every_Month_Chart_Option;
   @observable mapChinaOptionValue = Elevator_Map_China_Options;
   @observable elevatorErrorEveryMonthOptionValue = Elevator_Error_Every_Month_Chart_Options;
   @observable elevatorErrorRatioOptionValue = Elevator_Error_Ratio_Chart_Options;
@@ -59,18 +59,19 @@ class sharedData extends EventEmitter {
         data: [0, 0, 0, 0, 0],
       },
     ];
+
     this.elevatorErrorRatioOptionValue.series = [
       {
-        name: '访问来源',
+        name: '故障比例',
         type: 'pie',
         radius: '55%',
         center: ['50%', '60%'],
         data: [
-          {value: 335, name: '电气强度降低'},
-          {value: 310, name: '磨损与污损'},
-          {value: 234, name: '整体故障'},
-          {value: 135, name: '贯穿'},
-          {value: 1548, name: '其他故障'},
+          // {value: 335, name: '电气强度降低'},
+          // {value: 310, name: '磨损与污损'},
+          // {value: 234, name: '整体故障'},
+          // {value: 135, name: '贯穿'},
+          // {value: 1548, name: '其他故障'},
         ],
         itemStyle: {
           emphasis: {
@@ -118,25 +119,24 @@ class sharedData extends EventEmitter {
       },
     ];
 
-
     //小区安装记录
     this.installRecordDataValue = [
-      "xxxx小区安装纪律1",
-      "xxxx小区安装纪律2",
-      "xxxx小区安装纪律3",
-      "xxxx小区安装纪律4",
-      "xxxx小区安装纪律5",
-      "xxxx小区安装纪律6"
-    ]
+      'xxxx小区安装纪律1',
+      'xxxx小区安装纪律2',
+      'xxxx小区安装纪律3',
+      'xxxx小区安装纪律4',
+      'xxxx小区安装纪律5',
+      'xxxx小区安装纪律6',
+    ];
     //小区维保记录
     this.maintenanceRecordValue = [
-      "xxxx小区维保纪律1",
-      "xxxx小区维保纪律2",
-      "xxxx小区维保纪律3",
-      "xxxx小区维保纪律4",
-      "xxxx小区维保纪律5",
-      "xxxx小区维保纪律6"
-    ]
+      'xxxx小区维保纪律1',
+      'xxxx小区维保纪律2',
+      'xxxx小区维保纪律3',
+      'xxxx小区维保纪律4',
+      'xxxx小区维保纪律5',
+      'xxxx小区维保纪律6',
+    ];
 
 
     this.warningMessageValue = {
@@ -203,6 +203,71 @@ class sharedData extends EventEmitter {
         }
       }
     });
+
+    messageManager.on ('9007', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let dataArray = [];
+          let categoryArray = [];
+          let pieDataArray = [];
+
+          rows.forEach (item => {
+            let title = item.on_total;
+            let total = item.total;
+            categoryArray.push (title);
+            dataArray.push (total);
+
+            pieDataArray.push ({
+              value: total,
+              name: title,
+            });
+          });
+
+          this.elevatorErrorEveryMonthOptionValue.xAxis[0].data = categoryArray;
+
+          this.elevatorErrorEveryMonthOptionValue.series = [
+            {
+              name: '离线数量',
+              type: 'bar',
+              barWidth: '20%',
+              data: dataArray,
+            },
+          ];
+
+          this.elevatorErrorRatioOptionValue.legend.data = categoryArray;
+          this.elevatorErrorRatioOptionValue.series[0].data = pieDataArray;
+        }
+      }
+    });
+
+    messageManager.on ('9003', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let dataArray = [];
+          let categoryArray = [];
+
+          rows.forEach (item => {
+            let month = item.month;
+            let total = item.total;
+            categoryArray.push (month);
+            dataArray.push (total);
+          });
+
+          this.offlineCountOptionValue.xAxis[0].data = categoryArray;
+
+          this.offlineCountOptionValue.series = [
+            {
+              name: '离线数量',
+              type: 'bar',
+              barWidth: '10%',
+              data: dataArray,
+            },
+          ];
+        }
+      }
+    });
   }
 
   @computed get runningDataOption () {
@@ -229,6 +294,17 @@ class sharedData extends EventEmitter {
       option.series[0].data = [this.sumDay];
     }
     this.systemCountOptionValue = option;
+  }
+
+  @computed get offlineCountOption () {
+    return toJS (this.offlineCountOptionValue);
+  }
+
+  set offlineCountOption (value) {
+    var option = this.offlineCountOptionValue;
+    option.xAxis[0].data = value.categoryArray;
+    option.series[0].data = value.dataArray;
+    this.offlineCountOptionValue = option;
   }
 
   @computed get mapChinaOption () {
