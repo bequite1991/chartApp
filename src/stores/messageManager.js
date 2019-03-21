@@ -17,7 +17,7 @@ import {encode, timestampToTime} from '../lib/helper.js';
 let Base64 = require ('js-base64').Base64;
 
 class MessageManager extends EventEmitter {
-  cmdList = [];
+  commandList = [];
   subscribe = [];
   messageEmitterTimer = null;
   parserLoopTimer = null;
@@ -54,12 +54,16 @@ class MessageManager extends EventEmitter {
 
     this.on ('register', args => {
       console.info ('注册消息:' + args.cmd);
-      this.addCommand (args.cmd);
+      this.addCommand ({
+        uuid: args.uuid ? args.uuid : '',
+        cmd: args.cmd,
+        filter: args.filter ? args.filter : '',
+      });
     });
 
     this.on ('unregister', args => {
       console.info ('取消注册消息:' + args.cmd);
-      this.removeCommand (args.cmd);
+      //this.removeCommand (args.cmd);
     });
 
     this.messageEmitterTimer = setInterval (() => {
@@ -93,9 +97,10 @@ class MessageManager extends EventEmitter {
   }
 
   messageEmitter () {
-    if (!this.isCmdEmpty ()) {
-      this.cmdList.forEach (cmd => {
-        //debugger;
+    if (!this.isCommandEmpty ()) {
+      this.commandList.forEach (command => {
+        let cmd = command.cmd;
+        let filter = command.filter ? command.filter : '';
         if (this.hasTopic (cmd)) {
           let topic =
             PROTOCAL_REQUEST[cmd] + '/' + this.serverOptionsValue.userName;
@@ -113,7 +118,8 @@ class MessageManager extends EventEmitter {
             username,
             this.serverOptionsValue.passWord,
             new Date ().getTime (),
-            message_num
+            message_num,
+            filter
           );
           console.info ('topic:' + topic);
           console.info ('packet message:' + message);
@@ -129,7 +135,7 @@ class MessageManager extends EventEmitter {
     return PROTOCAL_REQUEST[cmd];
   }
 
-  packetMessage (cmd, src, user, salt, timestamp, message_num) {
+  packetMessage (cmd, src, user, salt, timestamp, message_num, filter) {
     let key = '7D13B47CEA2DC5828D6910D3C0FA31DD'; //md5 (salt).toUpperCase ();
     let token = Base64.encode (
       JSON.stringify ({cmd: cmd, key: key, timestamp: timestamp})
@@ -149,25 +155,25 @@ class MessageManager extends EventEmitter {
     let messageIndex = 0;
     let num_id = timestampToTime (timestamp) + message_num;
     num_id = num_id.substring (0, 20);
-    return encode (cmd, num_id, timestamp, src, user, 200, token, '', []);
+    return encode (cmd, num_id, timestamp, src, user, 200, token, filter, []);
   }
 
   reset () {
-    this.cmdList = [];
+    this.commandList = [];
     this.subscribe = [];
     this.messageList = [];
   }
 
-  isCmdEmpty () {
-    return this.cmdList.length == 0;
+  isCommandEmpty () {
+    return this.commandList.length == 0;
   }
 
   hasCommand (cmd) {
     let index = -1;
     let id = -1;
-    this.cmdList.forEach (item => {
+    this.commandList.forEach (item => {
       ++index;
-      if (item == cmd) {
+      if (item.cmd == cmd) {
         id = index;
         return;
       }
@@ -176,10 +182,11 @@ class MessageManager extends EventEmitter {
     return id;
   }
 
-  addCommand (cmd) {
-    let index = this.hasCommand (cmd);
-    if (index < 0) {
-      this.cmdList.push (cmd);
+  addCommand (command) {
+    // let index = this.hasCommand (command);
+    // if (index < 0)
+    {
+      this.commandList.push (command);
     }
   }
 
