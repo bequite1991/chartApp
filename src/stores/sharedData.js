@@ -59,6 +59,7 @@ class sharedData extends EventEmitter {
         data: [0, 0, 0, 0, 0],
       },
     ];
+
     this.elevatorErrorRatioOptionValue.series = [
       {
         name: '访问来源',
@@ -118,25 +119,24 @@ class sharedData extends EventEmitter {
       },
     ];
 
-
     //小区安装记录
     this.installRecordDataValue = [
-      "xxxx小区安装纪律1",
-      "xxxx小区安装纪律2",
-      "xxxx小区安装纪律3",
-      "xxxx小区安装纪律4",
-      "xxxx小区安装纪律5",
-      "xxxx小区安装纪律6"
-    ]
+      'xxxx小区安装纪律1',
+      'xxxx小区安装纪律2',
+      'xxxx小区安装纪律3',
+      'xxxx小区安装纪律4',
+      'xxxx小区安装纪律5',
+      'xxxx小区安装纪律6',
+    ];
     //小区维保记录
     this.maintenanceRecordValue = [
-      "xxxx小区维保纪律1",
-      "xxxx小区维保纪律2",
-      "xxxx小区维保纪律3",
-      "xxxx小区维保纪律4",
-      "xxxx小区维保纪律5",
-      "xxxx小区维保纪律6"
-    ]
+      'xxxx小区维保纪律1',
+      'xxxx小区维保纪律2',
+      'xxxx小区维保纪律3',
+      'xxxx小区维保纪律4',
+      'xxxx小区维保纪律5',
+      'xxxx小区维保纪律6',
+    ];
 
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
@@ -194,6 +194,34 @@ class sharedData extends EventEmitter {
             onLineTotal: row.on_total ? row.on_total : '0',
           };
           this.totalInfo = totalInfo;
+        }
+      }
+    });
+
+    messageManager.on ('9007', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let dataArray = [];
+          let categoryArray = [];
+
+          rows.forEach (item => {
+            let title = item.on_total;
+            let total = item.total;
+            categoryArray.push (title);
+            dataArray.push (total);
+          });
+
+          this.elevatorErrorEveryMonthOptionValue.xAxis[0].data = categoryArray;
+
+          this.elevatorErrorEveryMonthOptionValue.series = [
+            {
+              name: '故障数',
+              type: 'bar',
+              barWidth: '60%',
+              data: dataArray,
+            },
+          ];
         }
       }
     });
