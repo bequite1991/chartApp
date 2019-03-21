@@ -109,6 +109,18 @@ class MqttWorker extends EventEmitter {
       //setMessage (message);
       //console.log (message);
       console.log ('payloadString:' + message.payloadString);
+
+      if (
+        messageManager &&
+        message &&
+        message.payloadString &&
+        message.payloadString.length > 0
+      ) {
+        let messageBody = JSON.parse (message.payloadString);
+        if (messageBody.rows && messageBody.rows.length > 0) {
+          messageManager.addMessage (messageBody);
+        }
+      }
     };
 
     this.client.connect (connectOpt);

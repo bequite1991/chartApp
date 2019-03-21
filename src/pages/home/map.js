@@ -11,7 +11,7 @@ import router from 'umi/router';
 require('echarts/map/js/china.js');
 
 
-@inject ('sharedData')
+@inject ('sharedData','messageManager')
 @observer
 export default class Map extends Component {
   constructor(props) {
@@ -20,16 +20,22 @@ export default class Map extends Component {
         'click': this.onChartClick.bind(this),
         'legendselectchanged': this.onChartLegendselectchanged.bind(this)
     };
+  
+
+     const {messageManager} = this.props;
+    messageManager.emit ('register', {cmd: '9006'});
   }
 
-  componentDidMount() {
+  componentDidMount () {}
+  componentWillUnmount () {
+    const {messageManager} = this.props;
+    messageManager.emit ('unregister', {cmd: '9006'});
+  }
 
-  };
-  componentWillUnmount() {
-  };
   randomData() {
     return Math.round(Math.random()*10000);
   };
+
   onChartClick(val){
     const {sharedData} = this.props;
     sharedData.mapInfo = val.data;
@@ -40,6 +46,12 @@ export default class Map extends Component {
   render() {
     const {sharedData} = this.props;
     const option = sharedData.mapChinaOption;
+    const totalInfo = sharedData.totalInfo;
+
+    const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';
+    const onLineTotal = totalInfo
+      ? totalInfo.onLineTotal ? totalInfo.onLineTotal : '0'
+      : '0';
 
     const arr = [
         {name:"维保一",phone:"1777777777",area:"上海市晒暖干海带额",location:"上海市晒暖干海"},
@@ -55,7 +67,8 @@ export default class Map extends Component {
     return (
         <div className={styles.mapChina}>
             <p className={styles.title}>慧保电梯管理平台</p>
-            <div className={styles.subtitle}><span className={styles.subtitleInfo}>电梯在线数量：<span className={styles.detail}>25213</span></span><span className={styles.subtitleInfo}>总安装数量：<span className={styles.detail}>41982</span></span></div>
+            <div className={styles.subtitle}>
+            <span className={styles.subtitleInfo}>电梯在线数量：<span className={styles.detail}>{total}</span></span><span className={styles.subtitleInfo}>总安装数量：<span className={styles.detail}>{onLineTotal}</span></span></div>
             <ReactEcharts
                 onEvents={this.onEvents}
                 option={option}

@@ -9,19 +9,20 @@ import echarts from 'echarts';
 import {inject, observer} from 'mobx-react';
 import {debug} from 'util';
 
-@inject ('sharedData','messageManager')
+@inject ('sharedData', 'messageManager')
 @observer
 export default class SystemCountChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};
     const {messageManager} = this.props;
+    messageManager.emit ('register', {cmd: '9005'});
     //messageManager.emit("register",{cmd:"9001"})
   }
 
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit("unregister",{cmd:"9001"})
+    messageManager.emit ('unregister', {cmd: '9005'});
   }
 
   onChartClick (param, echarts) {
