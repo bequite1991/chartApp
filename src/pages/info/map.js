@@ -66,6 +66,7 @@ export default class Map extends Component {
                 <p>维保人员：<span>在线</span></p>
                 {peopleArr}
             </div>
+            <div id="address"></div>
         </div>
     );
   };

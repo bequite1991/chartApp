@@ -26,7 +26,10 @@ export default class Map extends Component {
     messageManager.emit ('register', {cmd: '9006'});
   }
 
-  componentDidMount () {}
+  componentDidMount () {
+    this.initMap();
+
+  }
   componentWillUnmount () {
     const {messageManager} = this.props;
     messageManager.emit ('unregister', {cmd: '9006'});
@@ -42,6 +45,14 @@ export default class Map extends Component {
     router.push('/info');
   }
   onChartLegendselectchanged(){
+  }
+  initMap(){
+    var BMap = window.BMap
+    var map = new BMap.Map("allmap"); // 创建Map实例
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 5); // 初始化地图,设    置中心点坐标和地图级别
+    map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+    map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
+    map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
   }
   render() {
     const {sharedData} = this.props;
@@ -72,12 +83,14 @@ export default class Map extends Component {
             <ReactEcharts
                 onEvents={this.onEvents}
                 option={option}
-                style={{height: '65vh', width: '100%'}}
+                style={{height: '0vh', width: '100%'}}
                 className='react_for_echarts' />
+            <div className={styles.allmap} id="allmap"></div>
             <div className={styles.peopleListContent}>
                 <p>维保人员：<span>在线</span></p>
                 {peopleArr}
             </div>
+            
         </div>
     );
   };

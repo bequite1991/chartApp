@@ -388,6 +388,7 @@ class sharedData extends EventEmitter {
   @computed get mapInfo () {
     const t = this;
     const load = function (val) {
+      val.pingyin = val.pingyin || "zhejiang";
       let data1 = require (`echarts/map/js/province/${val.pingyin}`);
       console.log ('1');
     };

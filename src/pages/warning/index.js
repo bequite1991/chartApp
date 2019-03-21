@@ -14,7 +14,7 @@ import Detail_Index from './detail_index.js';
 
 @inject ('sharedData')
 @observer
-export default class Home extends PureComponent {
+export default class Home extends React.Component {
   constructor (props) {
     super (props);
     this.state = {
@@ -24,6 +24,11 @@ export default class Home extends PureComponent {
     setInterval (() => {
       
     }, 2000);
+    const {sharedData} = this.props;
+    const warningMessage = sharedData.warningMessage;
+    if (sharedData.warningMessage) {
+      this.openNotification(warningMessage)
+    }
     // this.openNotification();
   }
 
@@ -38,11 +43,19 @@ export default class Home extends PureComponent {
   //     return true;
   //   }
   // }
+
+  componentWillReceiveProps(nextProps){
+    const {sharedData} = nextProps;
+    const warningMessage = sharedData.warningMessage;
+    if (sharedData.warningMessage) {
+      this.openNotification(warningMessage)
+    }
+  }
   //打开通知窗口
-  notificationClose(key){
+  notificationClose(key,t){
     console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
     notification.close(key);
-    this.setModalVisible(true);
+    t.setModalVisible(true);
   };
   //打开通知
   openNotification(warningMessage){
@@ -51,10 +64,10 @@ export default class Home extends PureComponent {
     const contents = (
       <div className={styles.notification}>
         <span className={styles.notificationInfo}>{warningMessage.message}</span>
-        <Button className={styles.button} type="primary" size="small" onClick={() => t.notificationClose(key)}>
+        <Button className={styles.button} type="primary" size="small" onClick={() => t.notificationClose(key,t)}>
           故障处理
         </Button>
-        <Button className={styles.button} type="default" size="small" onClick={() => t.notificationClose(key)}>
+        <Button className={styles.button} type="default" size="small" onClick={() => t.notificationClose(key,t)}>
           取消
         </Button>
       </div>
@@ -63,9 +76,9 @@ export default class Home extends PureComponent {
       duration:null,
       type:"warning",
       message: '故障警报',
-      description:contents ,
+      description:contents,
       key,
-      onClose: t.notificationClose,
+      onClose: t.notificationClose(key,t),
       placement:"bottomRight"
     });
   };
@@ -76,13 +89,9 @@ export default class Home extends PureComponent {
   }
 
   render () {
-    const {sharedData} = this.props;
     const {modalVisible} = this.state;
+    const {sharedData} = this.props;
     const warningMessage = sharedData.warningMessage;
-    if (sharedData.warningMessage) {
-      this.openNotification(warningMessage)
-    }
-    debugger
     return (
       <Modal
         width="100%"
