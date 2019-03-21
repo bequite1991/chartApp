@@ -138,6 +138,12 @@ class sharedData extends EventEmitter {
       "xxxx小区维保纪律6"
     ]
 
+
+    this.warningMessageValue = {
+      id:123,
+      message:"浙江省杭州市余杭区 xxx 电梯 xxx故障"
+    }
+
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
     // });
@@ -337,6 +343,14 @@ class sharedData extends EventEmitter {
 
   set maintenanceRecordData (value) {
     this.maintenanceRecordValue = value;
+  }
+
+  @computed get warningMessage () {
+    return toJS (this.warningMessageValue);
+  }
+
+  set warningMessage (value) {
+    this.warningMessageValue = value;
   }
 }
 

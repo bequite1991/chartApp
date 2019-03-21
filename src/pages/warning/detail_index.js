@@ -1,12 +1,13 @@
 import React, {PureComponent} from 'react';
 import {inject, observer} from 'mobx-react';
-import {Icon,Row, Col,Button, notification} from 'antd';
+import {Icon,Row, Col} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 
 import {Provider} from 'mobx-react';
 
+import sharedDataDetail from '../../stores/sharedDataDetail';
 import sharedData from '../../stores/sharedData';
 
 // 电梯运行数据(Elevator Running Data)
@@ -30,9 +31,6 @@ import Installation_Record from './installationRecord.js';
 //维保记录
 import Maintenance_Record from './maintenanceRecord.js';
 
-//维保记录
-import Warning from '../warning';
-
 import {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
@@ -49,9 +47,12 @@ export default class Home extends PureComponent {
     super (props);
     this.state = {};
 
-    setInterval (() => {
-      
-    }, 2000);
+    // setInterval (() => {
+    //   //cleanup();
+    //   let runningData = this.props.runningData;
+    //   //debugger;
+    //   runningData.runningDataOption = Math.ceil (Math.random () * 100) + '';
+    // }, 5000);
   }
 
   componentWillUnmount () {}
@@ -72,7 +73,6 @@ export default class Home extends PureComponent {
   //     return true;
   //   }
   // }
-  //打开通知窗口
 
   render () {
 
@@ -141,11 +141,8 @@ export default class Home extends PureComponent {
       }
 
     return (
-      <Provider sharedData={sharedData} messageManager={messageManager}>
-        <div>
-          {charts}
-          <Warning />
-        </div>
+      <Provider sharedDataDetail={sharedDataDetail} sharedData={sharedData} messageManager={messageManager}>
+        {charts}
       </Provider>
     );
   }

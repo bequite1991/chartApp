@@ -158,40 +158,47 @@ class BasicLayout extends React.PureComponent {
     const isTop = PropsLayout === 'topmenu';
     const routerConfig = this.getRouterAuthority(pathname, routes);
     const contentStyle = !fixedHeader ? { paddingTop: 0 } : {};
+    // const layout = (
+    //   <Layout>
+    //     {isTop && !isMobile ? null : (
+    //       <SiderMenu
+    //         logo={logo}
+    //         theme={navTheme}
+    //         onCollapse={this.handleMenuCollapse}
+    //         menuData={menuData}
+    //         isMobile={isMobile}
+    //         collapsed={this.state.collapsed}
+    //         {...this.props}
+    //       />
+    //     )}
+    //     <Layout
+    //       style={{
+    //         ...this.getLayoutStyle(),
+    //         minHeight: '100vh',
+    //       }}
+    //     >
+    //       <Header
+    //         menuData={menuData}
+    //         handleMenuCollapse={this.handleMenuCollapse}
+    //         logo={logo}
+    //         isMobile={isMobile}
+    //         {...this.props}
+    //       />
+    //       <Content className={styles.content} style={contentStyle}>
+    //         <Authorized authority={routerConfig} noMatch={<p>Exception403</p>}>
+    //           {children}
+    //         </Authorized>
+    //       </Content>
+    //       <Footer />
+    //     </Layout>
+    //   </Layout>
+    // ); 
     const layout = (
-      <Layout>
-        {isTop && !isMobile ? null : (
-          <SiderMenu
-            logo={logo}
-            theme={navTheme}
-            onCollapse={this.handleMenuCollapse}
-            menuData={menuData}
-            isMobile={isMobile}
-            collapsed={this.state.collapsed}
-            {...this.props}
-          />
-        )}
-        <Layout
-          style={{
-            ...this.getLayoutStyle(),
-            minHeight: '100vh',
-          }}
-        >
-          <Header
-            menuData={menuData}
-            handleMenuCollapse={this.handleMenuCollapse}
-            logo={logo}
-            isMobile={isMobile}
-            {...this.props}
-          />
-          <Content className={styles.content} style={contentStyle}>
-            <Authorized authority={routerConfig} noMatch={<p>Exception403</p>}>
-              {children}
-            </Authorized>
-          </Content>
-          <Footer />
-        </Layout>
-      </Layout>
+      <Content className={styles.content} style={contentStyle}>
+        <Authorized authority={routerConfig} noMatch={<p>Exception403</p>}>
+          {children}
+        </Authorized>
+      </Content>
     );
     return (
       <React.Fragment>

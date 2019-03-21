@@ -25,16 +25,15 @@ const Elevator_Running_Data_Chart_Options = {
     },
   },
   calculable: true,
-  xAxis: [
-    {
-      type: 'value',
-      boundaryGap: [0, 0.01],
-    },
-  ],
-  yAxis: [
-    {
+  xAxis: [{
       type: 'category',
       data: ['总运行天数（天）'],
+    },
+    
+  ],
+  yAxis: [{
+      type: 'value',
+      boundaryGap: [0, 0.01],
     },
   ],
   series: [
