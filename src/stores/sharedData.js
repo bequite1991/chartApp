@@ -7,7 +7,7 @@ import messageManager from './messageManager';
 import {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
-  Elevator_Running_Distance_Every_Month_Chart_Option,
+  Elevator_Offline_Count_Every_Month_Chart_Option,
   Elevator_Map_China_Options,
   Elevator_Error_Every_Month_Chart_Options,
   Elevator_Error_Ratio_Chart_Options,
@@ -21,7 +21,7 @@ import {
 class sharedData extends EventEmitter {
   @observable runningDataOptionValue = Elevator_Running_Data_Chart_Options;
   @observable systemCountOptionValue = Elevator_System_Count_Chart_Options;
-  @observable runningDistanceEveryMonthOptionValue = Elevator_Running_Distance_Every_Month_Chart_Option;
+  @observable offlineCountOptionValue = Elevator_Offline_Count_Every_Month_Chart_Option;
   @observable mapChinaOptionValue = Elevator_Map_China_Options;
   @observable elevatorErrorEveryMonthOptionValue = Elevator_Error_Every_Month_Chart_Options;
   @observable elevatorErrorRatioOptionValue = Elevator_Error_Ratio_Chart_Options;
@@ -216,9 +216,37 @@ class sharedData extends EventEmitter {
 
           this.elevatorErrorEveryMonthOptionValue.series = [
             {
-              name: '故障数',
+              name: '离线数量',
               type: 'bar',
-              barWidth: '60%',
+              barWidth: '20%',
+              data: dataArray,
+            },
+          ];
+        }
+      }
+    });
+
+    messageManager.on ('9003', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let dataArray = [];
+          let categoryArray = [];
+
+          rows.forEach (item => {
+            let month = item.month;
+            let total = item.total;
+            categoryArray.push (month);
+            dataArray.push (total);
+          });
+
+          this.offlineCountOptionValue.xAxis[0].data = categoryArray;
+
+          this.offlineCountOptionValue.series = [
+            {
+              name: '离线数量',
+              type: 'bar',
+              barWidth: '10%',
               data: dataArray,
             },
           ];
@@ -251,6 +279,17 @@ class sharedData extends EventEmitter {
       option.series[0].data = [this.sumDay];
     }
     this.systemCountOptionValue = option;
+  }
+
+  @computed get offlineCountOption () {
+    return toJS (this.offlineCountOptionValue);
+  }
+
+  set offlineCountOption (value) {
+    var option = this.offlineCountOptionValue;
+    option.xAxis[0].data = value.categoryArray;
+    option.series[0].data = value.dataArray;
+    this.offlineCountOptionValue = option;
   }
 
   @computed get mapChinaOption () {

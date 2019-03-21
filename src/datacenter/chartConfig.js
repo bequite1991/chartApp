@@ -104,9 +104,9 @@ const Elevator_System_Count_Chart_Options = {
   ],
 };
 
-const Elevator_Running_Distance_Every_Month_Chart_Option = {
+const Elevator_Offline_Count_Every_Month_Chart_Option = {
   title: {
-    text: '每月电梯运行距离',
+    text: '每月电梯离线次数',
     subtext: '',
     textStyle: {
       fontWeight: 'normal', //标题颜色
@@ -118,7 +118,7 @@ const Elevator_Running_Distance_Every_Month_Chart_Option = {
     trigger: 'axis',
   },
   legend: {
-    data: ['运行距离', '故障数'],
+    data: ['次数', '月份'],
   },
   toolbox: {
     show: true,
@@ -135,23 +135,7 @@ const Elevator_Running_Distance_Every_Month_Chart_Option = {
     {
       type: 'category',
       boundaryGap: false,
-      data: [
-        '2017-06',
-        '2017-07',
-        '2017-08',
-        '2017-09',
-        '2017-10',
-        '2017-11',
-        '2017-12',
-        '2017-12',
-        '2018-01',
-        '2018-02',
-        '2018-03',
-        '2018-04',
-        '2018-05',
-        '2018-06',
-        '2018-07',
-      ],
+      data: [],
     },
   ],
   yAxis: [
@@ -493,7 +477,7 @@ const Map_Info_Value = {};
 export {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
-  Elevator_Running_Distance_Every_Month_Chart_Option,
+  Elevator_Offline_Count_Every_Month_Chart_Option,
   Elevator_Map_China_Options,
   Elevator_Error_Every_Month_Chart_Options,
   Elevator_Error_Ratio_Chart_Options,
