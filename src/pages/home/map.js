@@ -11,8 +11,31 @@ import router from 'umi/router';
 require('echarts/map/js/china.js');
 
 
+var opts = {
+  width : 250, // 信息窗口宽度
+  height: 80, // 信息窗口高度
+  title : "信息窗口" , // 信息窗口标题
+  enableMessage:true//设置允许信息窗发送短息
+};
+
+var data = [{ "mapy": "32.94584", "mapx": "112.894350", "time": "12:30" },
+    { "mapy": "33.34683", "mapx": "112.694300", "time": "11:30" },
+    { "mapy": "33.54702", "mapx": "112.094380", "time": "10:30" }, 
+    { "mapy": "33.148780", "mapx": "116.494390", "time": "13:30" }
+    ];
+
+
 @inject ('sharedData','messageManager')
 @observer
+
+
+
+
+
+
+
+
+
 export default class Map extends Component {
   constructor(props) {
     super(props);
@@ -46,14 +69,58 @@ export default class Map extends Component {
   }
   onChartLegendselectchanged(){
   }
+
+  //初始化百度地图
   initMap(){
-    var BMap = window.BMap
-    var map = new BMap.Map("allmap"); // 创建Map实例
-    map.centerAndZoom(new BMap.Point(116.404, 39.915), 5); // 初始化地图,设    置中心点坐标和地图级别
-    map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
-    map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
-    map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+    // var BMap = window.BMap
+    // var map = new BMap.Map("allmap"); // 创建Map实例
+    // map.centerAndZoom(new BMap.Point(116.404, 39.915), 5); // 初始化地图,设    置中心点坐标和地图级别
+    // map.addControl(new BMap.MapTypeControl()); //添加地图类型控件
+    // map.setCurrentCity("北京"); // 设置地图显示的城市 此项是必须设置的
+    // map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
+
+
+
+
+
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(116.404, 39.915), 4); 
+    map.enableScrollWheelZoom(); 
+    var myIcon2 = new BMap.Icon("tb1_0.png", new BMap.Size(30, 40)); 
+     
+    var markers = new Array(); 
+    data.forEach((item,i)=>{ 
+      var point = new BMap.Point(item.mapx, item.mapy); 
+      var marker = new BMap.Marker(point);
+      var content = item.time; 
+      this.addClickHandler(content, marker); //添加点击事件
+
+      markers.push(marker); 
+    })
+    //添加聚合效果。
+    var markerClusterer = new BMapLib.MarkerClusterer(map, {markers:markers});
+    this.map = map;
   }
+
+
+  addClickHandler(content,marker){
+    const t = this;
+    marker.addEventListener("click",function(e){
+      t.openInfo(content,e)}
+    );
+  }
+
+  openInfo(content,e){
+    var p = e.target;
+    var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+    var infoWindow = new BMap.InfoWindow(content,opts); // 创建信息窗口对象 
+    this.map.openInfoWindow(infoWindow,point); //开启信息窗口
+  }
+
+
+
+
   render() {
     const {sharedData} = this.props;
     const option = sharedData.mapChinaOption;

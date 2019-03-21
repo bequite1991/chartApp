@@ -75,28 +75,28 @@ export default class Home extends PureComponent {
         <Row>
           <Col span={24}><Map_China /></Col>
           <Col span={24}>
-            <div className={styles.chartContent}>
-              <RunningDataChart />
+            <div className={styles.RunningDataChart}>
+              <RunningDataChart className={styles.RunningDataChart}/>
             </div>
             <div className={styles.chartContent}>
-              <SystemCountChart />
+              <SystemCountChart className={styles.SystemCountChart}/>
             </div>
             <div className={styles.chartContent}>
-              <Offline_Count_Every_Month_Chart />
+              <Offline_Count_Every_Month_Chart className={styles.Offline_Count_Every_Month_Chart} />
             </div>
-            <div className={styles.chartContent}><Installation_Record /></div>
+            <div className={styles.chartContent}><Installation_Record className={styles.Installation_Record}/></div>
           </Col>
           <Col span={24}>
             <div className={styles.chartContent}>
-              <Elevator_Error_Every_Month_Chart />
+              <Elevator_Error_Every_Month_Chart className={styles.Elevator_Error_Every_Month_Chart}/>
             </div>
             <div className={styles.chartContent}>
-              <Elevator_Error_Ratio_Chart />
+              <Elevator_Error_Ratio_Chart className={styles.Elevator_Error_Ratio_Chart}/>
             </div>
             <div className={styles.chartContent}>
-              <Maintenance_Orders_And_Finish_Chart />
+              <Maintenance_Orders_And_Finish_Chart className={styles.Maintenance_Orders_And_Finish_Chart}/>
             </div>
-            <div className={styles.chartContent}><Maintenance_Record /></div>
+            <div className={styles.chartContent}><Maintenance_Record className={styles.Maintenance_Record}/></div>
           </Col>
         </Row>
       );
@@ -104,29 +104,29 @@ export default class Home extends PureComponent {
       charts = (
         <Row>
           <Col span={6}>
-            <div className={styles.chartContent}>
+            <div className={styles.RunningDataChart}>
               <RunningDataChart />
             </div>
-            <div className={styles.chartContent}>
+            <div className={styles.SystemCountChart}>
               <SystemCountChart />
             </div>
-            <div className={styles.chartContent}>
+            <div className={styles.Offline_Count_Every_Month_Chart}>
               <Offline_Count_Every_Month_Chart />
             </div>
-            <div className={styles.chartContent}><Installation_Record /></div>
+            <div className={styles.Installation_Record}><Installation_Record /></div>
           </Col>
           <Col span={12}><Map_China /></Col>
           <Col span={6}>
-            <div className={styles.chartContent}>
+            <div className={styles.Elevator_Error_Every_Month_Chart}>
               <Elevator_Error_Every_Month_Chart />
             </div>
-            <div className={styles.chartContent}>
+            <div className={styles.Elevator_Error_Ratio_Chart}>
               <Elevator_Error_Ratio_Chart />
             </div>
-            <div className={styles.chartContent}>
+            <div className={styles.Maintenance_Orders_And_Finish_Chart}>
               <Maintenance_Orders_And_Finish_Chart />
             </div>
-            <div className={styles.chartContent}><Maintenance_Record /></div>
+            <div className={styles.Maintenance_Record}><Maintenance_Record /></div>
           </Col>
         </Row>
       );

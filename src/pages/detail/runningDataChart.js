@@ -18,12 +18,21 @@ export default class RunningDataChart extends React.Component {
     this.state = {};
     this.flagReceive = false;
     const {messageManager} = this.props;
-    messageManager.emit ('register', {cmd: '9001'});
+    // messageManager.emit ('register', {cmd: '9001'});
+    // messageManager.emit ('register', {cmd: '9002'});
+    // messageManager.emit ('register', {cmd: '9003'});
+    // messageManager.emit ('register', {cmd: '9004'});
+    //messageManager.emit ('register', {cmd: '9006'});
+    // messageManager.emit ('register', {cmd: '9007'});
+    // messageManager.emit ('register', {cmd: '9009'});
+    //messageManager.emit ('register', {cmd: '9010'});
+    //messageManager.emit ('register', {cmd: '9011'});
+    messageManager.emit ('register', {cmd: '9012'});
   }
 
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {cmd: '9001'});
+    messageManager.emit ('unregister', {cmd: '9012'});
   }
 
   onRunningDataOptionChange = () => {};

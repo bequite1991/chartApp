@@ -11,19 +11,15 @@ import {debug} from 'util';
 
 @inject ('sharedData', 'messageManager')
 @observer
-export default class SystemCountChart extends React.Component {
+export default class OfflineCountEveryMonthChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};
-    const {messageManager} = this.props;
-    messageManager.emit ('register', {cmd: '9005'});
-    //messageManager.emit("register",{cmd:"9001"})
-  }
 
-  componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {cmd: '9005'});
+    messageManager.emit ('register', {cmd: '9003'});
   }
+  componentWillUnmount () {}
 
   onChartClick (param, echarts) {
     console.log (param);
@@ -33,16 +29,15 @@ export default class SystemCountChart extends React.Component {
     let onEvents = {
       click: this.onChartClick.bind (this),
     };
-
     const {sharedData} = this.props;
-    const option = sharedData.systemCountOption;
+    const option = sharedData.offlineCountOption;
     return (
       <ReactEcharts
         option={option}
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}
-        style={{width: '100%', height: '20vh',minHeight:'100px'}}
+        style={{width: '100%', height: '20vh', minHeight: '100px'}}
       />
     );
   }
