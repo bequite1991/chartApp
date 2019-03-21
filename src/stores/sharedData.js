@@ -62,16 +62,16 @@ class sharedData extends EventEmitter {
 
     this.elevatorErrorRatioOptionValue.series = [
       {
-        name: '访问来源',
+        name: '故障比例',
         type: 'pie',
         radius: '55%',
         center: ['50%', '60%'],
         data: [
-          {value: 335, name: '电气强度降低'},
-          {value: 310, name: '磨损与污损'},
-          {value: 234, name: '整体故障'},
-          {value: 135, name: '贯穿'},
-          {value: 1548, name: '其他故障'},
+          // {value: 335, name: '电气强度降低'},
+          // {value: 310, name: '磨损与污损'},
+          // {value: 234, name: '整体故障'},
+          // {value: 135, name: '贯穿'},
+          // {value: 1548, name: '其他故障'},
         ],
         itemStyle: {
           emphasis: {
@@ -204,12 +204,18 @@ class sharedData extends EventEmitter {
         if (rows && rows.length > 0) {
           let dataArray = [];
           let categoryArray = [];
+          let pieDataArray = [];
 
           rows.forEach (item => {
             let title = item.on_total;
             let total = item.total;
             categoryArray.push (title);
             dataArray.push (total);
+
+            pieDataArray.push ({
+              value: total,
+              name: title,
+            });
           });
 
           this.elevatorErrorEveryMonthOptionValue.xAxis[0].data = categoryArray;
@@ -222,6 +228,9 @@ class sharedData extends EventEmitter {
               data: dataArray,
             },
           ];
+
+          this.elevatorErrorRatioOptionValue.legend.data = categoryArray;
+          this.elevatorErrorRatioOptionValue.series[0].data = pieDataArray;
         }
       }
     });

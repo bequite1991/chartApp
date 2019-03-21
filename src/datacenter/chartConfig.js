@@ -294,7 +294,7 @@ const Elevator_Error_Ratio_Chart_Options = {
   legend: {
     orient: 'vertical',
     left: 'left',
-    data: ['电气强度降低', '磨损与污损', '整体故障', '贯穿', '其他故障'],
+    data: [],
   },
   series: [
     // {
