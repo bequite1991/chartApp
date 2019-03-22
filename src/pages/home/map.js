@@ -101,15 +101,35 @@ export default class Map extends Component {
       var marker = new BMap.Marker (point);
       var content = item.ara_addr_name;
       this.addClickHandler (item, marker); //添加点击事件
+      marker.info = item;
 
       markers.push (marker);
     });
 
   //添加聚合效果。
     var markerClusterer = new BMapLib.MarkerClusterer (this.map, {markers: markers});
+    this.addClickClusterer(markerClusterer);
+    // markerClusterer._clusters[0]._clusterMarker._domElement.addEventListener ('click', function (e) {
+    //   debugger
+    // });
+  }
+  //聚合点点击
+  addClickClusterer (markerClusterer) {
+    const t = this;
+    if(markerClusterer._clusters.length){
+      markerClusterer._clusters.forEach((ele,key)=>{
+        if(!ele._clusterMarker._domElement){
+          return;
+        }else{
+            ele._clusterMarker._domElement.addEventListener ('click', function (e) {
+              t.goInfo(ele,markerClusterer,e);
+            });
+        }
+      });
+    }
   }
 
-
+  //单个电梯点击
   addClickHandler (content, marker) {
     const t = this;
     marker.addEventListener ('click', function (e) {
@@ -124,12 +144,38 @@ export default class Map extends Component {
     var p = e.target;
     var point = new BMap.Point (p.getPosition ().lng, p.getPosition ().lat);
     var infoWindow = new BMap.InfoWindow (JSON.stringify(content), opts); // 创建信息窗口对象
-    debugger
     this.map.openInfoWindow (infoWindow, point); //开启信息窗口
   }
 
-  goInfo(){
+  goInfo(ele,markerClusterer,e){
+    function getMarks(){
+      const marks = new Array();
+      ele._markerClusterer._clusters.forEach((item,key)=>{
+        marks.concat(item._markers);
+      });
+      return marks
+    }
+    
+    function getId(marks){
+      let dev_id;
+      marks.forEach((mark,index)=>{
+        if(dev_id){
+          dev_id = dev_id + "," + mark.info.dev_id;
+        }else{
+          dev_id = mark.info.dev_id;
+        }
+      });
+      return dev_id;
+    }
 
+    async function goUrl(){
+      let marks = await getMarks();
+      let dev_id = await getId(marks);
+      const url = "/home?dev_id=" + dev_id;
+      debugger
+    }
+    goUrl();
+    // router.push (url);
   }
 
   goDetail(content, e){
