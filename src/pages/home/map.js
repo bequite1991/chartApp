@@ -193,32 +193,7 @@ export default class Map extends Component {
       ? totalInfo.onLineTotal ? totalInfo.onLineTotal : '0'
       : '0';
 
-    const arr = [
-      {
-        name: '维保一',
-        phone: '1777777777',
-        area: '上海市晒暖干海带额',
-        location: '上海市晒暖干海',
-      },
-      {
-        name: '维保一',
-        phone: '1777777777',
-        area: '上海市晒暖干海带额',
-        location: '上海市晒暖干海',
-      },
-      {
-        name: '维保一',
-        phone: '1777777777',
-        area: '上海市晒暖干海带额',
-        location: '上海市晒暖干海',
-      },
-      {
-        name: '维保一',
-        phone: '1777777777',
-        area: '上海市晒暖干海带额',
-        location: '上海市晒暖干海',
-      },
-    ];
+    const arr = sharedData.maiUserInfo ? sharedData.maiUserInfo : [];
     const peopleArr = [];
 
     arr.forEach ((val, key) => {
@@ -228,10 +203,16 @@ export default class Map extends Component {
           <span>{val.name}</span>
           手机号：
           <span>{val.phone}</span>
+          维保单位：
+          <span>{val.corp}</span>
           维保区域：
           <span>{val.area}</span>
           目前位置：
           <span>{val.location}</span>
+          维保时间：
+          <span>{val.time}</span>
+          维保人员：
+          <span>{val.status == 0 ? '离线' : '在线'}</span>
         </span>
       );
     });
@@ -248,7 +229,6 @@ export default class Map extends Component {
         </div>
         <div className={styles.allmap} id="allmap" />
         <div className={styles.peopleListContent}>
-          <p>维保人员：<span>在线</span></p>
           {peopleArr}
         </div>
 
