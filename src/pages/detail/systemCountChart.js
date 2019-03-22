@@ -38,7 +38,7 @@ export default class SystemCountChart extends React.Component {
     const option = sharedData.systemCountOption;
     return (
       <div className={styles.elevatorStatus}>
-        <span>电梯动态信息</span>
+        <span className={styles.title}>电梯动态信息</span>
         <span>运行状态：{option.status}</span>
         <span>楼层：{option.floors}</span>
         <span>电量：{option.energy}</span>
