@@ -138,11 +138,10 @@ class sharedData extends EventEmitter {
       'xxxx小区维保纪律6',
     ];
 
-
     this.warningMessageValue = {
-      id:123,
-      message:"浙江省杭州市余杭区 xxx 电梯 xxx故障"
-    }
+      id: 123,
+      message: '浙江省杭州市余杭区 xxx 电梯 xxx故障',
+    };
 
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
@@ -268,6 +267,16 @@ class sharedData extends EventEmitter {
         }
       }
     });
+
+    messageManager.on ('9001', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          debugger;
+          this.mapChinaOptionValue = rows;
+        }
+      }
+    });
   }
 
   @computed get runningDataOption () {
@@ -388,7 +397,7 @@ class sharedData extends EventEmitter {
   @computed get mapInfo () {
     const t = this;
     const load = function (val) {
-      val.pingyin = val.pingyin || "zhejiang";
+      val.pingyin = val.pingyin || 'zhejiang';
       let data1 = require (`echarts/map/js/province/${val.pingyin}`);
       console.log ('1');
     };
