@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Icon} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import styles from './index.less';
+import styles from './errorMonthChart.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
@@ -11,22 +11,18 @@ import {debug} from 'util';
 
 @inject ('sharedData', 'messageManager')
 @observer
-export default class RunningDataChart extends React.Component {
-  flagReceive = false;
+export default class SystemCountChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};
-    this.flagReceive = false;
     const {messageManager} = this.props;
-    messageManager.emit ('register', {cmd: '9001'});
+    messageManager.emit ('register', {cmd: '9007'});
   }
 
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {cmd: '9001'});
+    messageManager.emit ('unregister', {cmd: '9007'});
   }
-
-  onRunningDataOptionChange = () => {};
 
   onChartClick (param, echarts) {
     console.log (param);
@@ -36,16 +32,14 @@ export default class RunningDataChart extends React.Component {
     let onEvents = {
       click: this.onChartClick.bind (this),
     };
+
     const {sharedData} = this.props;
-    const option = sharedData.runningDataOption;
+    const option = sharedData.elevatorErrorEveryMonthOption;
     return (
-      <ReactEcharts
-        option={option}
-        notMerge={true}
-        lazyUpdate={true}
-        onEvents={onEvents}
-        style={{width: '100%', height: '20vh',minHeight:'100px'}}
-      />
+      <div className={styles.control}>
+        <div className={styles.button}><Icon type="phone" className={styles.icon}/><span>通话</span></div>
+        <div className={styles.button}><Icon type="dashboard" className={styles.icon}/><span>监视</span></div>
+      </div>
     );
   }
 }

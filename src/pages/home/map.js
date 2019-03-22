@@ -11,7 +11,7 @@ require ('echarts/map/js/china.js');
 
 var opts = {
   width: 250, // 信息窗口宽度
-  height: 80, // 信息窗口高度
+  height: 150, // 信息窗口高度
   title: '信息窗口', // 信息窗口标题
   enableMessage: true, //设置允许信息窗发送短息
 };
@@ -26,6 +26,10 @@ var data = [
 @inject ('sharedData', 'messageManager')
 @observer
 export default class Map extends Component {
+
+
+  //let markers = [];
+
   constructor (props) {
     super (props);
     this.onEvents = {
@@ -33,13 +37,25 @@ export default class Map extends Component {
       legendselectchanged: this.onChartLegendselectchanged.bind (this),
     };
 
-    const {messageManager} = this.props;
+
+    const {messageManager,sharedData} = this.props;
     messageManager.emit ('register', {cmd: '9006'});
     messageManager.emit ('register', {cmd: '9001'});
+
+   
   }
 
   componentDidMount () {
+    const {sharedData} = this.props;
     this.initMap ();
+     sharedData.on("map_markers",(mapData)=>{
+      if(mapData && mapData.length > 0){
+        this.mapUpdate(mapData);
+      }
+    });
+  }
+  componentWillUpdate(nextProps){
+   
   }
   componentWillUnmount () {
     const {messageManager} = this.props;
@@ -72,37 +88,58 @@ export default class Map extends Component {
     map.enableScrollWheelZoom ();
     var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
 
+  //添加聚合效果。
+    var markerClusterer = new BMapLib.MarkerClusterer (this.map, {markers: []});
+
+    this.map = map;
+  }
+
+  mapUpdate(mapData=[]){
     var markers = new Array ();
-    data.forEach ((item, i) => {
-      var point = new BMap.Point (item.mapx, item.mapy);
+    mapData.forEach ((item, i) => {
+      var point = new BMap.Point (item.longitude,item.latitude);
       var marker = new BMap.Marker (point);
-      var content = item.time;
-      this.addClickHandler (content, marker); //添加点击事件
+      var content = item.ara_addr_name;
+      this.addClickHandler (item, marker); //添加点击事件
 
       markers.push (marker);
     });
-    //添加聚合效果。
-    var markerClusterer = new BMapLib.MarkerClusterer (map, {markers: markers});
-    this.map = map;
+
+  //添加聚合效果。
+    var markerClusterer = new BMapLib.MarkerClusterer (this.map, {markers: markers});
   }
+
 
   addClickHandler (content, marker) {
     const t = this;
     marker.addEventListener ('click', function (e) {
       t.openInfo (content, e);
+      t.goDetail (content, e);
+
     });
   }
+
 
   openInfo (content, e) {
     var p = e.target;
     var point = new BMap.Point (p.getPosition ().lng, p.getPosition ().lat);
-    var infoWindow = new BMap.InfoWindow (content, opts); // 创建信息窗口对象
+    var infoWindow = new BMap.InfoWindow (JSON.stringify(content), opts); // 创建信息窗口对象
+    debugger
     this.map.openInfoWindow (infoWindow, point); //开启信息窗口
+  }
+
+  goInfo(){
+
+  }
+
+  goDetail(content, e){
+    const url = "/detail?dev_id=" + content.dev_id;
+    router.push (url);
   }
 
   render () {
     const {sharedData} = this.props;
-    const option = sharedData.mapChinaOption;
+    // const option = sharedData.mapChinaOption;
     const totalInfo = sharedData.totalInfo;
 
     const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';

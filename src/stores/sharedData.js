@@ -22,7 +22,7 @@ class sharedData extends EventEmitter {
   @observable runningDataOptionValue = Elevator_Running_Data_Chart_Options;
   @observable systemCountOptionValue = Elevator_System_Count_Chart_Options;
   @observable offlineCountOptionValue = Elevator_Offline_Count_Every_Month_Chart_Option;
-  @observable mapChinaOptionValue = Elevator_Map_China_Options;
+  @observable mapChinaOptionValue = [];
   @observable elevatorErrorEveryMonthOptionValue = Elevator_Error_Every_Month_Chart_Options;
   @observable elevatorErrorRatioOptionValue = Elevator_Error_Ratio_Chart_Options;
   @observable maintenanceOrdersAndFinishOptionValue = Elevator_Maintenance_OrdersAndFinish_Chart_Options;
@@ -44,15 +44,15 @@ class sharedData extends EventEmitter {
     this.runningDataOptionValue.series[0].data = ['0'];
     this.systemCountOptionValue.series[0].data = ['0'];
 
-    this.mapChinaOptionValue.series[0].data = [
-      {name: '北京', value: randomData (), pingyin: 'beijing'},
-      {name: '天津', value: randomData (), pingyin: 'beijing'},
-      {name: '上海', value: randomData (), pingyin: 'beijing'},
-      {name: '浙江', value: randomData (), pingyin: 'zhejiang'},
-      {name: '台湾', value: randomData (), pingyin: 'beijing'},
-      {name: '香港', value: randomData (), pingyin: 'beijing'},
-      {name: '澳门', value: randomData (), pingyin: 'beijing'},
-    ];
+    // this.mapChinaOptionValue.series[0].data = [
+    //   {name: '北京', value: randomData (), pingyin: 'beijing'},
+    //   {name: '天津', value: randomData (), pingyin: 'beijing'},
+    //   {name: '上海', value: randomData (), pingyin: 'beijing'},
+    //   {name: '浙江', value: randomData (), pingyin: 'zhejiang'},
+    //   {name: '台湾', value: randomData (), pingyin: 'beijing'},
+    //   {name: '香港', value: randomData (), pingyin: 'beijing'},
+    //   {name: '澳门', value: randomData (), pingyin: 'beijing'},
+    // ];
     this.elevatorErrorEveryMonthOptionValue.series = [
       {
         name: '故障数',
@@ -274,8 +274,8 @@ class sharedData extends EventEmitter {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
-          debugger;
-          this.mapChinaOptionValue = rows;
+          this.emit("map_markers",rows);
+          //this.mapChinaOptionValue = rows;
         }
       }
     });
