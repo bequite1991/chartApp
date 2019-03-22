@@ -115,7 +115,7 @@ export default class Home extends PureComponent {
             </div>
             <div className={styles.Installation_Record}><Installation_Record /></div>
           </Col>
-          <Col span={12}><Map_China /></Col>
+          <Col span={12}><Map_China /><div className={styles.Maintenance_Record}><Maintenance_Record /></div></Col>
           <Col span={6}>
             <div className={styles.Elevator_Error_Every_Month_Chart}>
               <Elevator_Error_Every_Month_Chart />
