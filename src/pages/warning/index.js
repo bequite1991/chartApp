@@ -10,7 +10,7 @@ import sharedData from '../../stores/sharedData';
 import messageManager from '../../stores/messageManager';
 
 //电梯故障详情
-import Detail_Index from './detail_index.js';
+import Detail_Index from './detail';
 
 @inject ('sharedData')
 @observer

@@ -282,7 +282,6 @@ class sharedData extends EventEmitter {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
-          debugger;
           //this.mapChinaOptionValue = rows;
         }
       }

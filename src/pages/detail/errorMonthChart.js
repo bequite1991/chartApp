@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Icon} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import styles from './index.less';
+import styles from './errorMonthChart.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
@@ -37,8 +37,8 @@ export default class SystemCountChart extends React.Component {
     const option = sharedData.elevatorErrorEveryMonthOption;
     return (
       <div className={styles.control}>
-        <span><Icon type="phone" />通话</span>
-        <span><Icon type="dashboard" />监视</span>
+        <div className={styles.button}><Icon type="phone" className={styles.icon}/><span>通话</span></div>
+        <div className={styles.button}><Icon type="dashboard" className={styles.icon}/><span>监视</span></div>
       </div>
     );
   }
