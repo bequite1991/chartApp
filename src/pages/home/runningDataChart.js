@@ -24,8 +24,8 @@ export default class RunningDataChart extends React.Component {
     // messageManager.emit ('register', {cmd: '9004'});
     //messageManager.emit ('register', {cmd: '9006'});
     // messageManager.emit ('register', {cmd: '9007'});
-    // messageManager.emit ('register', {cmd: '9009'});
-    //messageManager.emit ('register', {cmd: '9010'});
+    messageManager.emit ('register', {cmd: '9009', filter: '2019-02'});
+    messageManager.emit ('register', {cmd: '9010'});
     //messageManager.emit ('register', {cmd: '9011'});
     messageManager.emit ('register', {cmd: '9012'});
   }
@@ -53,7 +53,7 @@ export default class RunningDataChart extends React.Component {
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}
-        style={{width: '100%', height: '20vh',minHeight:'100px'}}
+        style={{width: '100%', height: '20vh', minHeight: '100px'}}
       />
     );
   }

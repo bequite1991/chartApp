@@ -25,13 +25,14 @@ const Elevator_Running_Data_Chart_Options = {
     },
   },
   calculable: true,
-  xAxis: [{
+  xAxis: [
+    {
       type: 'category',
       data: ['总运行天数（天）'],
     },
-    
   ],
-  yAxis: [{
+  yAxis: [
+    {
       type: 'value',
       boundaryGap: [0, 0.01],
     },
@@ -390,7 +391,7 @@ const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
   },
   xAxis: {
     type: 'category',
-    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+    data: [],
   },
   yAxis: {
     type: 'value',

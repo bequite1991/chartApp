@@ -1,13 +1,17 @@
 {
-    "cmd": "9009",
+    "cmd": "9010",
     "filter": "",
-    "num_id": "2019-03-20 18:14:160",
+    "num_id": "2019-03-22 17:52:080",
     "resp": "200",
     "rows": [{
-
+        "cname": "testye",
+        "mai_corp_name": "慧保公司",
+        "mai_time": "09:50 ~ 17:30",
+        "phone": "11111",
+        "status": "0"
     }],
     "src": "inshn_dtimao.huibao.resp.mai_user_info.15051841028",
-    "timestap": "2019-03-20",
-    "token": "eyJjbWQiOiI5MDA5Iiwia2V5IjoiN0QxM0I0N0NFQTJEQzU4MjhENjkxMEQzQzBGQTMxREQiLCJ0aW1lc3RhbXAiOjE1NTMwNzY4NTY4NDJ9",
+    "timestap": "2019-03-22",
+    "token": "eyJjbWQiOiI5MDEwIiwia2V5IjoiN0QxM0I0N0NFQTJEQzU4MjhENjkxMEQzQzBGQTMxREQiLCJ0aW1lc3RhbXAiOjE1NTMyNDgzMjg2MzF9",
     "user": "15051841028"
 }

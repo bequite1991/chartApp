@@ -29,6 +29,8 @@ class sharedData extends EventEmitter {
   @observable maintenanceOrdersMonthOptionValue = Elevator_maintenance_Orders_Month_Chart_Options;
   @observable mapInfoValue = Map_Info_Value;
 
+  @observable maiUserInfoList = [];
+
   @observable totalValue = '0'; // 总数量
   @observable onLineTotalValue = '0'; // 在线数量
 
@@ -94,7 +96,7 @@ class sharedData extends EventEmitter {
             position: 'insideRight',
           },
         },
-        data: [320, 302, 301, 334, 390, 330, 320],
+        data: [],
       },
       {
         name: '未成量',
@@ -106,7 +108,7 @@ class sharedData extends EventEmitter {
             position: 'insideRight',
           },
         },
-        data: [120, 132, 101, 134, 90, 230, 210],
+        data: [],
       },
     ];
 
@@ -283,7 +285,44 @@ class sharedData extends EventEmitter {
         let rows = args.rows;
         if (rows && rows.length > 0) {
           debugger;
-          //this.mapChinaOptionValue = rows;
+
+          let dataTotalArray = [];
+          let dataInvalidArray = [];
+          let categoryArray = [];
+
+          rows.forEach (item => {
+            let month = item.month;
+            let total = item.mai_total; // 维保总数
+            let invalid = item.mai_invalid; // 维保无效
+            categoryArray.push (month);
+            dataTotalArray.push (total);
+            dataInvalidArray.push (invalid);
+          });
+
+          this.maintenanceOrdersAndFinishOptionValue.xAxis.data = categoryArray;
+          this.maintenanceOrdersAndFinishOptionValue.series[0].data = dataTotalArray;
+          this.maintenanceOrdersAndFinishOptionValue.series[1].data = dataInvalidArray;
+        }
+      }
+    });
+
+    messageManager.on ('9010', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let maiUserList = [];
+          rows.forEach (item => {
+            maiUserList.push ({
+              name: item.cname ? item.cname : '',
+              phone: item.phone ? item.phone : '',
+              corp: item.mai_corp_name ? item.mai_corp_name : '',
+              area: item.area ? item.area : '',
+              time: item.mai_time ? item.mai_time : '',
+              location: item.location ? item.location : '',
+              status: item.status,
+            });
+          });
+          this.maiUserInfoList = maiUserList;
         }
       }
     });
@@ -447,6 +486,14 @@ class sharedData extends EventEmitter {
 
   set warningMessage (value) {
     this.warningMessageValue = value;
+  }
+
+  @computed get maiUserInfo () {
+    return toJS (this.maiUserInfoList);
+  }
+
+  set maiUserInfo (list) {
+    this.maiUserInfoList = list;
   }
 }
 
