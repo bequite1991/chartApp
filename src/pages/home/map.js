@@ -163,12 +163,6 @@ export default class Map extends Component {
             总安装数量：<span className={styles.detail}>{onLineTotal}</span>
           </span>
         </div>
-        <ReactEcharts
-          onEvents={this.onEvents}
-          option={option}
-          style={{height: '0vh', width: '100%'}}
-          className="react_for_echarts"
-        />
         <div className={styles.allmap} id="allmap" />
         <div className={styles.peopleListContent}>
           <p>维保人员：<span>在线</span></p>
