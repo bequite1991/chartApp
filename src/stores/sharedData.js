@@ -277,6 +277,16 @@ class sharedData extends EventEmitter {
         }
       }
     });
+
+    messageManager.on ('9009', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          debugger;
+          //this.mapChinaOptionValue = rows;
+        }
+      }
+    });
   }
 
   @computed get runningDataOption () {
