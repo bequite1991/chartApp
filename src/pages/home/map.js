@@ -26,6 +26,10 @@ var data = [
 @inject ('sharedData', 'messageManager')
 @observer
 export default class Map extends Component {
+
+
+  //let markers = [];
+
   constructor (props) {
     super (props);
     this.onEvents = {
@@ -33,13 +37,25 @@ export default class Map extends Component {
       legendselectchanged: this.onChartLegendselectchanged.bind (this),
     };
 
-    const {messageManager} = this.props;
+
+    const {messageManager,sharedData} = this.props;
     messageManager.emit ('register', {cmd: '9006'});
     messageManager.emit ('register', {cmd: '9001'});
+
+   
   }
 
   componentDidMount () {
+    const {sharedData} = this.props;
     this.initMap ();
+     sharedData.on("map_markers",(mapData)=>{
+      if(mapData && mapData.length > 0){
+        this.mapUpdate(mapData);
+      }
+    });
+  }
+  componentWillUpdate(nextProps){
+   
   }
   componentWillUnmount () {
     const {messageManager} = this.props;
@@ -72,26 +88,36 @@ export default class Map extends Component {
     map.enableScrollWheelZoom ();
     var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
 
-    var markers = new Array ();
-    data.forEach ((item, i) => {
-      var point = new BMap.Point (item.mapx, item.mapy);
-      var marker = new BMap.Marker (point);
-      var content = item.time;
-      this.addClickHandler (content, marker); //添加点击事件
+  //添加聚合效果。
+    var markerClusterer = new BMapLib.MarkerClusterer (this.map, {markers: []});
 
-      markers.push (marker);
-    });
-    //添加聚合效果。
-    var markerClusterer = new BMapLib.MarkerClusterer (map, {markers: markers});
     this.map = map;
   }
 
+  mapUpdate(mapData=[]){
+    var markers = new Array ();
+    mapData.forEach ((item, i) => {
+      var point = new BMap.Point (item.longitude,item.latitude);
+      var marker = new BMap.Marker (point);
+      var content = item.ara_addr_name;
+      this.addClickHandler (item, marker); //添加点击事件
+
+      markers.push (marker);
+    });
+
+  //添加聚合效果。
+    var markerClusterer = new BMapLib.MarkerClusterer (this.map, {markers: markers});
+  }
+
+
   addClickHandler (content, marker) {
+    debugger
     const t = this;
     marker.addEventListener ('click', function (e) {
       t.openInfo (content, e);
     });
   }
+
 
   openInfo (content, e) {
     var p = e.target;
@@ -102,7 +128,7 @@ export default class Map extends Component {
 
   render () {
     const {sharedData} = this.props;
-    const option = sharedData.mapChinaOption;
+    // const option = sharedData.mapChinaOption;
     const totalInfo = sharedData.totalInfo;
 
     const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';
