@@ -11,7 +11,7 @@ require ('echarts/map/js/china.js');
 
 var opts = {
   width: 250, // 信息窗口宽度
-  height: 80, // 信息窗口高度
+  height: 150, // 信息窗口高度
   title: '信息窗口', // 信息窗口标题
   enableMessage: true, //设置允许信息窗发送短息
 };
@@ -111,10 +111,11 @@ export default class Map extends Component {
 
 
   addClickHandler (content, marker) {
-    debugger
     const t = this;
     marker.addEventListener ('click', function (e) {
       t.openInfo (content, e);
+      t.goDetail (content, e);
+
     });
   }
 
@@ -122,8 +123,18 @@ export default class Map extends Component {
   openInfo (content, e) {
     var p = e.target;
     var point = new BMap.Point (p.getPosition ().lng, p.getPosition ().lat);
-    var infoWindow = new BMap.InfoWindow (content, opts); // 创建信息窗口对象
+    var infoWindow = new BMap.InfoWindow (JSON.stringify(content), opts); // 创建信息窗口对象
+    debugger
     this.map.openInfoWindow (infoWindow, point); //开启信息窗口
+  }
+
+  goInfo(){
+
+  }
+
+  goDetail(content, e){
+    const url = "/detail?dev_id=" + content.dev_id;
+    router.push (url);
   }
 
   render () {

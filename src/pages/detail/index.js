@@ -7,6 +7,7 @@ import styles from './index.less';
 
 import {Provider} from 'mobx-react';
 
+import sharedDataDetail from '../../stores/sharedDataDetail.js';
 import sharedData from '../../stores/sharedData';
 
 // 电梯运行数据(Elevator Running Data)
@@ -81,10 +82,6 @@ export default class Home extends PureComponent {
             <div className={styles.chartContent}>
               <SystemCountChart className={styles.SystemCountChart}/>
             </div>
-            // <div className={styles.chartContent}>
-            //   <Offline_Count_Every_Month_Chart className={styles.Offline_Count_Every_Month_Chart} />
-            // </div>
-            // <div className={styles.chartContent}><Installation_Record className={styles.Installation_Record}/></div>
           </Col>
           <Col span={24}>
             <div className={styles.chartContent}>
@@ -93,10 +90,6 @@ export default class Home extends PureComponent {
             <div className={styles.chartContent}>
               <Elevator_Error_Ratio_Chart className={styles.Elevator_Error_Ratio_Chart}/>
             </div>
-            // <div className={styles.chartContent}>
-            //   <Maintenance_Orders_And_Finish_Chart className={styles.Maintenance_Orders_And_Finish_Chart}/>
-            // </div>
-            // <div className={styles.chartContent}><Maintenance_Record className={styles.Maintenance_Record}/></div>
           </Col>
         </Row>
       );
@@ -110,10 +103,6 @@ export default class Home extends PureComponent {
             <div className={styles.SystemCountChart}>
               <SystemCountChart />
             </div>
-            // <div className={styles.Offline_Count_Every_Month_Chart}>
-            //   <Offline_Count_Every_Month_Chart />
-            // </div>
-            // <div className={styles.Installation_Record}><Installation_Record /></div>
           </Col>
           <Col span={12}><Map_China /><div className={styles.Maintenance_Record}><Maintenance_Record /></div></Col>
           <Col span={6}>
@@ -123,17 +112,13 @@ export default class Home extends PureComponent {
             <div className={styles.Elevator_Error_Ratio_Chart}>
               <Elevator_Error_Ratio_Chart />
             </div>
-            // <div className={styles.Maintenance_Orders_And_Finish_Chart}>
-            //   <Maintenance_Orders_And_Finish_Chart />
-            // </div>
-            // <div className={styles.Maintenance_Record}><Maintenance_Record /></div>
           </Col>
         </Row>
       );
     }
 
     return (
-      <Provider sharedData={sharedData} messageManager={messageManager}>
+      <Provider sharedData={sharedData} sharedDataDetail={sharedDataDetail} messageManager={messageManager}>
         <div>
           {charts}
           <Warning />
