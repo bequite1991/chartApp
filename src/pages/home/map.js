@@ -179,7 +179,7 @@ export default class Map extends Component {
           }
           if(index == (marks.length - 1)){
             const url = "/home?dev_id_list=" + dev_id;
-            //router.push (url);
+            router.push (url);
           }
         });
       }
