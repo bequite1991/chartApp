@@ -14,11 +14,15 @@ import md5 from 'js-md5';
 
 import {encode, timestampToTime} from '../lib/helper.js';
 
+import QueryString from 'query-string';
+
 let Base64 = require ('js-base64').Base64;
 
 class MessageManager extends EventEmitter {
-  commandList = [];
+  //commandList = [];
+  commandMap = new Map ();
   subscribe = [];
+  removeUUIDList = [];
   messageEmitterTimer = null;
   parserLoopTimer = null;
 
@@ -26,6 +30,10 @@ class MessageManager extends EventEmitter {
   timestamp = new Date ().getTime ();
 
   messageList = [];
+
+  isdetail = false;
+
+  dev_id = '';
 
   constructor () {
     super ();
@@ -40,6 +48,8 @@ class MessageManager extends EventEmitter {
     //     keepAliveInterval: 30,
     //   };
 
+    this.dev_id = QueryString.parse (window.location.search).dev_id || '';
+
     let options = this.serverOptionsValue;
     options.clientName =
       options.clientName + '-' + new Date ().toLocaleTimeString ();
@@ -53,17 +63,20 @@ class MessageManager extends EventEmitter {
     mqttWorker.emit ('session:connect', options);
 
     this.on ('register', args => {
-      console.info ('注册消息:' + args.cmd);
-      this.addCommand ({
-        uuid: args.uuid ? args.uuid : '',
-        cmd: args.cmd,
-        filter: args.filter ? args.filter : '',
-      });
+      console.info ('注册消息:' + args.cmd + ' uuid:' + args.uuid);
+
+      if (args.uuid && args.uuid.length > 0) {
+        this.addCommand ({
+          uuid: args.uuid ? args.uuid : '',
+          cmd: args.cmd,
+          filter: args.filter ? args.filter : '',
+        });
+      }
     });
 
     this.on ('unregister', args => {
       console.info ('取消注册消息:' + args.cmd);
-      //this.removeCommand (args.cmd);
+      this.removeCommand (args);
     });
 
     this.messageEmitterTimer = setInterval (() => {
@@ -97,37 +110,96 @@ class MessageManager extends EventEmitter {
   }
 
   messageEmitter () {
-    if (!this.isCommandEmpty ()) {
-      this.commandList.forEach (command => {
-        let cmd = command.cmd;
-        let filter = command.filter ? command.filter : '';
-        if (this.hasTopic (cmd)) {
-          let topic =
-            PROTOCAL_REQUEST[cmd] + '/' + this.serverOptionsValue.userName;
-          let src_topic = PROTOCAL_RESPONSE[cmd].replace (
-            new RegExp ('/', 'gm'),
-            '.'
-          ); //PROTOCAL_REQUEST[cmd].split ('/')[3];
+    // 移除列表数据
+    let index = 0;
+    let removeUUID = '';
+    try {
+      if (this.removeUUIDList.length > 0) {
+        this.removeUUIDList.forEach (uuidcommand => {
+          removeUUID = uuidcommand;
 
-          src_topic = src_topic + '.' + this.serverOptionsValue.userName;
-          let username = this.serverOptionsValue.userName;
-          let message_num = '0001';
-          let message = this.packetMessage (
-            cmd,
-            src_topic,
-            username,
-            this.serverOptionsValue.passWord,
-            new Date ().getTime (),
-            message_num,
-            filter
-          );
-          console.info ('topic:' + topic);
-          console.info ('packet message:' + message);
-          mqttWorker.emit ('session:publish', {topic: topic, message: message});
-        }
+          this.commandMap.remove (uuidcommand);
+          console.info ('移除:' + uuidcommand);
+        });
+        this.removeUUIDList.clear ();
+      }
+    } catch (ex) {
+      console.info ('uuidcommand:' + removeUUID);
+    }
+
+    let count = this.commandMap.size;
+    if (count > 0) {
+      //debugger;
+      this.commandMap.forEach (command => {
+        this.sendCommand (command);
       });
 
+      // for (let key in this.commandMap) {
+      //   let command = this.commandMap[key];
+      //   if (command) {
+      //     this.sendCommand (command);
+      //   }
+      // }
+
+      // commandList.forEach (command => {
+      //   let cmd = command.cmd;
+      //   let filter = command.filter ? command.filter : '';
+      //   if (this.hasTopic (cmd)) {
+      //     let topic =
+      //       PROTOCAL_REQUEST[cmd] + '/' + this.serverOptionsValue.userName;
+      //     let src_topic = PROTOCAL_RESPONSE[cmd].replace (
+      //       new RegExp ('/', 'gm'),
+      //       '.'
+      //     ); //PROTOCAL_REQUEST[cmd].split ('/')[3];
+
+      //     src_topic = src_topic + '.' + this.serverOptionsValue.userName;
+      //     let username = this.serverOptionsValue.userName;
+      //     let message_num = '0001';
+      //     let message = this.packetMessage (
+      //       cmd,
+      //       src_topic,
+      //       username,
+      //       this.serverOptionsValue.passWord,
+      //       new Date ().getTime (),
+      //       message_num,
+      //       filter
+      //     );
+      //     console.info ('topic:' + topic);
+      //     console.info ('packet message:' + message);
+      //     mqttWorker.emit ('session:publish', {topic: topic, message: message});
+      //   }
+      // });
+
       //this.cmdList = [];
+    }
+  }
+
+  sendCommand (command) {
+    let cmd = command.cmd;
+    let filter = command.filter ? command.filter : '';
+    if (this.hasTopic (cmd)) {
+      let topic =
+        PROTOCAL_REQUEST[cmd] + '/' + this.serverOptionsValue.userName;
+      let src_topic = PROTOCAL_RESPONSE[cmd].replace (
+        new RegExp ('/', 'gm'),
+        '.'
+      ); //PROTOCAL_REQUEST[cmd].split ('/')[3];
+
+      src_topic = src_topic + '.' + this.serverOptionsValue.userName;
+      let username = this.serverOptionsValue.userName;
+      let message_num = '0001';
+      let message = this.packetMessage (
+        cmd,
+        src_topic,
+        username,
+        this.serverOptionsValue.passWord,
+        new Date ().getTime (),
+        message_num,
+        filter
+      );
+      console.info ('topic:' + topic);
+      console.info ('packet message:' + message);
+      mqttWorker.emit ('session:publish', {topic: topic, message: message});
     }
   }
 
@@ -159,19 +231,21 @@ class MessageManager extends EventEmitter {
   }
 
   reset () {
-    this.commandList = [];
+    //this.commandList = [];
+    this.commandMap.clear ();
     this.subscribe = [];
     this.messageList = [];
   }
 
-  isCommandEmpty () {
-    return this.commandList.length == 0;
-  }
+  // isCommandEmpty () {
+  //   return this.commandList.length == 0;
+  // }
 
   hasCommand (cmd) {
     let index = -1;
     let id = -1;
-    this.commandList.forEach (item => {
+    let commandList = Object.values (this.commandMap);
+    commandList.forEach (item => {
       ++index;
       if (item.cmd == cmd) {
         id = index;
@@ -183,14 +257,29 @@ class MessageManager extends EventEmitter {
   }
 
   addCommand (command) {
+    if (command && command.uuid != null && command.uuid.length > 0) {
+      this.commandMap.set (command.uuid + '-' + command.cmd, command);
+    }
+
     // let index = this.hasCommand (command);
     // if (index < 0)
-    {
-      this.commandList.push (command);
-    }
+    // {
+    //   this.commandList.push (command);
+    // }
   }
 
-  removeCommand (cmd) {
+  removeCommand({uuid, cmd}) {
+    // let index = 0;
+    // this.commandList.forEach (command => {
+    //   let _uuid = command.uuid;
+    //   let cmd = command.uuid;
+
+    //   if (_uuid == uuid) {
+    //   }
+    //   ++index;
+    // });
+
+    this.removeUUIDList.push (uuid + '-' + cmd);
     // let index = this.hasCommand(cmd);
     // if(index > -1){
     //     this.cmdList.remove(index);

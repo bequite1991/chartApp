@@ -9,6 +9,10 @@ import router from 'umi/router';
 
 require ('echarts/map/js/china.js');
 
+import QueryString from 'query-string';
+
+const uuid = require ('node-uuid');
+
 var opts = {
   width: 250, // 信息窗口宽度
   height: 150, // 信息窗口高度
@@ -26,10 +30,8 @@ var data = [
 @inject ('sharedData', 'messageManager')
 @observer
 export default class Map extends Component {
-
-
   //let markers = [];
-
+  uuid = '';
   constructor (props) {
     super (props);
     this.onEvents = {
@@ -37,29 +39,42 @@ export default class Map extends Component {
       legendselectchanged: this.onChartLegendselectchanged.bind (this),
     };
 
-
-    const {messageManager,sharedData} = this.props;
-    messageManager.emit ('register', {cmd: '9006'});
-    messageManager.emit ('register', {cmd: '9001'});
-
-   
+    this.uuid = uuid.v1 ();
+    const dev_id = QueryString.parse (window.location.search).dev_id || '';
+    const {messageManager, sharedData} = this.props;
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9006',
+      filter: dev_id,
+    });
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9001',
+      filter: dev_id,
+    });
   }
 
   componentDidMount () {
     const {sharedData} = this.props;
     this.initMap ();
-     sharedData.on("map_markers",(mapData)=>{
-      if(mapData && mapData.length > 0){
-        this.mapUpdate(mapData);
+    sharedData.on ('map_markers', mapData => {
+      if (mapData && mapData.length > 0) {
+        this.mapUpdate (mapData);
       }
     });
   }
-  componentWillUpdate(nextProps){
-   
-  }
+  componentWillUpdate (nextProps) {}
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {cmd: '9006'});
+    messageManager.emit ('unregister', {
+      uuid: this.uuid,
+      cmd: '9006',
+    });
+
+    messageManager.emit ('unregister', {
+      uuid: this.uuid,
+      cmd: '9001',
+    });
   }
 
   randomData () {
@@ -88,16 +103,16 @@ export default class Map extends Component {
     map.enableScrollWheelZoom ();
     var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
 
-  //添加聚合效果。
+    //添加聚合效果。
     var markerClusterer = new BMapLib.MarkerClusterer (this.map, {markers: []});
 
     this.map = map;
   }
 
-  mapUpdate(mapData=[]){
+  mapUpdate (mapData = []) {
     var markers = new Array ();
     mapData.forEach ((item, i) => {
-      var point = new BMap.Point (item.longitude,item.latitude);
+      var point = new BMap.Point (item.longitude, item.latitude);
       var marker = new BMap.Marker (point);
       var content = item.ara_addr_name;
       this.addClickHandler (item, marker); //添加点击事件
@@ -106,9 +121,11 @@ export default class Map extends Component {
       markers.push (marker);
     });
 
-  //添加聚合效果。
-    var markerClusterer = new BMapLib.MarkerClusterer (this.map, {markers: markers});
-    this.addClickClusterer(markerClusterer);
+    //添加聚合效果。
+    var markerClusterer = new BMapLib.MarkerClusterer (this.map, {
+      markers: markers,
+    });
+    this.addClickClusterer (markerClusterer);
     // markerClusterer._clusters[0]._clusterMarker._domElement.addEventListener ('click', function (e) {
     //   debugger
     // });
@@ -116,14 +133,16 @@ export default class Map extends Component {
   //聚合点点击
   addClickClusterer (markerClusterer) {
     const t = this;
-    if(markerClusterer._clusters.length){
-      markerClusterer._clusters.forEach((ele,key)=>{
-        if(!ele._clusterMarker._domElement){
+    if (markerClusterer._clusters.length) {
+      markerClusterer._clusters.forEach ((ele, key) => {
+        if (!ele._clusterMarker._domElement) {
           return;
-        }else{
-            ele._clusterMarker._domElement.addEventListener ('click', function (e) {
-              t.goInfo(ele,markerClusterer,e);
-            });
+        } else {
+          ele._clusterMarker._domElement.addEventListener ('click', function (
+            e
+          ) {
+            t.goInfo (ele, markerClusterer, e);
+          });
         }
       });
     }
@@ -135,51 +154,49 @@ export default class Map extends Component {
     marker.addEventListener ('click', function (e) {
       t.openInfo (content, e);
       t.goDetail (content, e);
-
     });
   }
-
 
   openInfo (content, e) {
     var p = e.target;
     var point = new BMap.Point (p.getPosition ().lng, p.getPosition ().lat);
-    var infoWindow = new BMap.InfoWindow (JSON.stringify(content), opts); // 创建信息窗口对象
+    var infoWindow = new BMap.InfoWindow (JSON.stringify (content), opts); // 创建信息窗口对象
     this.map.openInfoWindow (infoWindow, point); //开启信息窗口
   }
 
-  goInfo(ele,markerClusterer,e){
-    function getMarks(){
-      const marks = new Array();
-      ele._markerClusterer._clusters.forEach((item,key)=>{
-        marks.concat(item._markers);
+  goInfo (ele, markerClusterer, e) {
+    function getMarks () {
+      const marks = new Array ();
+      ele._markerClusterer._clusters.forEach ((item, key) => {
+        marks.concat (item._markers);
       });
-      return marks
+      return marks;
     }
-    
-    function getId(marks){
+
+    function getId (marks) {
       let dev_id;
-      marks.forEach((mark,index)=>{
-        if(dev_id){
-          dev_id = dev_id + "," + mark.info.dev_id;
-        }else{
+      marks.forEach ((mark, index) => {
+        if (dev_id) {
+          dev_id = dev_id + ',' + mark.info.dev_id;
+        } else {
           dev_id = mark.info.dev_id;
         }
       });
       return dev_id;
     }
 
-    async function goUrl(){
-      let marks = await getMarks();
-      let dev_id = await getId(marks);
-      const url = "/home?dev_id=" + dev_id;
-      debugger
+    async function goUrl () {
+      let marks = await getMarks ();
+      let dev_id = await getId (marks);
+      const url = '/home?dev_id=' + dev_id;
+      debugger;
     }
-    goUrl();
+    goUrl ();
     // router.push (url);
   }
 
-  goDetail(content, e){
-    const url = "/detail?dev_id=" + content.dev_id;
+  goDetail (content, e) {
+    const url = '/detail?dev_id=' + content.dev_id;
     router.push (url);
   }
 
@@ -216,6 +233,7 @@ export default class Map extends Component {
         </span>
       );
     });
+
     return (
       <div className={styles.mapChina}>
         <p className={styles.title}>慧保电梯管理平台</p>

@@ -167,6 +167,8 @@ class sharedData extends EventEmitter {
           });
 
           this.runningDataOptionValue.series[0].data = dataArray;
+
+          console.info ('9012 is get data');
         }
       }
     });
@@ -201,6 +203,8 @@ class sharedData extends EventEmitter {
             onLineTotal: row.on_total ? row.on_total : '0',
           };
           this.totalInfo = totalInfo;
+
+          console.info ('9006 is get data');
         }
       }
     });
@@ -274,7 +278,7 @@ class sharedData extends EventEmitter {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
-          this.emit("map_markers",rows);
+          this.emit ('map_markers', rows);
           //this.mapChinaOptionValue = rows;
         }
       }
@@ -284,8 +288,6 @@ class sharedData extends EventEmitter {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
-          debugger;
-
           let dataTotalArray = [];
           let dataInvalidArray = [];
           let categoryArray = [];

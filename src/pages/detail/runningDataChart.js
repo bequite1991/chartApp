@@ -9,30 +9,33 @@ import echarts from 'echarts';
 import {inject, observer} from 'mobx-react';
 import {debug} from 'util';
 
+import QueryString from 'query-string';
+
+const uuid = require ('node-uuid');
+
 @inject ('sharedData', 'messageManager')
 @observer
 export default class RunningDataChart extends React.Component {
   flagReceive = false;
+  uuid = '';
   constructor (props) {
     super (props);
     this.state = {};
     this.flagReceive = false;
+
+    this.uuid = uuid.v1 ();
+    const dev_id = QueryString.parse (window.location.search).dev_id || '';
     const {messageManager} = this.props;
-    // messageManager.emit ('register', {cmd: '9001'});
-    // messageManager.emit ('register', {cmd: '9002'});
-    // messageManager.emit ('register', {cmd: '9003'});
-    // messageManager.emit ('register', {cmd: '9004'});
-    //messageManager.emit ('register', {cmd: '9006'});
-    // messageManager.emit ('register', {cmd: '9007'});
-    // messageManager.emit ('register', {cmd: '9009'});
-    //messageManager.emit ('register', {cmd: '9010'});
-    //messageManager.emit ('register', {cmd: '9011'});
-    messageManager.emit ('register', {cmd: '9012'});
+    messageManager.emit ('register', {
+      cmd: '9012',
+      uuid: this.uuid,
+      filter: dev_id,
+    });
   }
 
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {cmd: '9012'});
+    messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9012'});
   }
 
   onRunningDataOptionChange = () => {};
@@ -53,7 +56,7 @@ export default class RunningDataChart extends React.Component {
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}
-        style={{width: '100%', height: '20vh',minHeight:'100px'}}
+        style={{width: '100%', height: '20vh', minHeight: '100px'}}
       />
     );
   }
