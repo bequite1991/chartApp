@@ -178,13 +178,7 @@ export default class Map extends Component {
             dev_id = mark.info.dev_id;
           }
           if(index == (marks.length - 1)){
-            const url = "/home?dev_id=" + dev_id;
-            console.log("t:",t);
-            console.log("router:",router);
-            console.log("match:",match);
-            console.log("location:",location);
-            console.log("history:",history);
-            debugger
+            const url = "/home?dev_id_list=" + dev_id;
             //router.push (url);
           }
         });
