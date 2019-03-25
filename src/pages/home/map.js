@@ -102,7 +102,6 @@ export default class Map extends Component {
       var content = item.ara_addr_name;
       this.addClickHandler (item, marker); //添加点击事件
       marker.info = item;
-
       markers.push (marker);
     });
 
@@ -148,34 +147,32 @@ export default class Map extends Component {
   }
 
   goInfo(ele,markerClusterer,e){
-    function getMarks(){
-      const marks = new Array();
-      ele._markerClusterer._clusters.forEach((item,key)=>{
-        marks.concat(item._markers);
-      });
-      return marks
-    }
-    
-    function getId(marks){
-      let dev_id;
-      marks.forEach((mark,index)=>{
-        if(dev_id){
-          dev_id = dev_id + "," + mark.info.dev_id;
-        }else{
-          dev_id = mark.info.dev_id;
-        }
-      });
-      return dev_id;
-    }
-
-    async function goUrl(){
-      let marks = await getMarks();
-      let dev_id = await getId(marks);
-      const url = "/home?dev_id=" + dev_id;
-      debugger
-    }
-    goUrl();
-    // router.push (url);
+    const { match, location, history } = this.props
+    let marks = new Array();
+    let dev_id;
+    const t = this;
+    ele._markerClusterer._clusters.forEach((item,key)=>{
+      marks = marks.concat(item._markers);
+      if(key == (ele._markerClusterer._clusters.length - 1)){
+        marks.forEach((mark,index)=>{
+          if(dev_id){
+            dev_id = dev_id + "," + mark.info.dev_id;
+          }else{
+            dev_id = mark.info.dev_id;
+          }
+          if(index == (marks.length - 1)){
+            const url = "/home?dev_id=" + dev_id;
+            console.log("t:",t);
+            console.log("router:",router);
+            console.log("match:",match);
+            console.log("location:",location);
+            console.log("history:",history);
+            debugger
+            //router.push (url);
+          }
+        });
+      }
+    });
   }
 
   goDetail(content, e){

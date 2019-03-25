@@ -20,10 +20,6 @@ export default class Home extends React.Component {
     this.state = {
       modalVisible:false
     };
-
-    setInterval (() => {
-      
-    }, 2000);
     const {sharedData} = this.props;
     const warningMessage = sharedData.warningMessage;
     if (sharedData.warningMessage) {
@@ -55,7 +51,6 @@ export default class Home extends React.Component {
   notificationClose(key,t){
     console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
     notification.close(key);
-    t.setModalVisible(true);
   };
   //打开通知
   openNotification(warningMessage){
@@ -64,10 +59,10 @@ export default class Home extends React.Component {
     const contents = (
       <div className={styles.notification}>
         <span className={styles.notificationInfo}>{warningMessage.message}</span>
-        <Button className={styles.button} type="primary" size="small" onClick={() => t.notificationClose(key,t)}>
+        <Button className={styles.button} type="primary" size="small" onClick={() => {t.notificationClose(key,t);t.setModalVisible(true);}}>
           故障处理
         </Button>
-        <Button className={styles.button} type="default" size="small" onClick={() => t.notificationClose(key,t)}>
+        <Button className={styles.button} type="default" size="small" onClick={() => {t.notificationClose(key,t);t.setModalVisible(true);}}>
           取消
         </Button>
       </div>
