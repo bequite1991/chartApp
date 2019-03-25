@@ -115,13 +115,16 @@ class MessageManager extends EventEmitter {
     let removeUUID = '';
     try {
       if (this.removeUUIDList.length > 0) {
+        debugger;
         this.removeUUIDList.forEach (uuidcommand => {
+          let command = this.commandMap.get (uuidcommand);
+          if (command) {
+            this.commandMap.delete (uuidcommand);
+            console.info ('移除:' + uuidcommand);
+          }
           removeUUID = uuidcommand;
-
-          this.commandMap.remove (uuidcommand);
-          console.info ('移除:' + uuidcommand);
         });
-        this.removeUUIDList.clear ();
+        //this.removeUUIDList = [];
       }
     } catch (ex) {
       console.info ('uuidcommand:' + removeUUID);
@@ -134,6 +137,7 @@ class MessageManager extends EventEmitter {
         this.sendCommand (command);
       });
 
+      this.removeUUIDList = [];
       // for (let key in this.commandMap) {
       //   let command = this.commandMap[key];
       //   if (command) {
@@ -222,7 +226,8 @@ class MessageManager extends EventEmitter {
         ' key:' +
         key +
         ' token:' +
-        token
+        token,
+      ' filter:' + filter
     );
     let messageIndex = 0;
     let num_id = timestampToTime (timestamp) + message_num;
