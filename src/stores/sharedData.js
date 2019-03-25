@@ -145,6 +145,8 @@ class sharedData extends EventEmitter {
       message: '浙江省杭州市余杭区 xxx 电梯 xxx故障',
     };
 
+    this.devIdListValue = window.location.search.split("dev_id_list=")[1].split(",");
+
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
     // });
@@ -496,6 +498,15 @@ class sharedData extends EventEmitter {
 
   set maiUserInfo (list) {
     this.maiUserInfoList = list;
+  }
+
+  //设备id维护
+  @computed get devIdList () {
+    return toJS (this.devIdListValue);
+  }
+
+  set devIdList (list) {
+    this.devIdListValue = list;
   }
 }
 

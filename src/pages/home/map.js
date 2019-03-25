@@ -164,21 +164,24 @@ export default class Map extends Component {
   }
 
   goInfo(ele,markerClusterer,e){
-    const { match, location, history } = this.props
+    const { sharedData } = this.props
     let marks = new Array();
     let dev_id;
     const t = this;
     ele._markerClusterer._clusters.forEach((item,key)=>{
       marks = marks.concat(item._markers);
       if(key == (ele._markerClusterer._clusters.length - 1)){
+        const ids = new Array();
         marks.forEach((mark,index)=>{
           if(dev_id){
             dev_id = dev_id + "," + mark.info.dev_id;
           }else{
             dev_id = mark.info.dev_id;
           }
+          ids.push(mark.info.dev_id);
           if(index == (marks.length - 1)){
             const url = "/home?dev_id_list=" + dev_id;
+            sharedData.devIdList = ids;
             router.push (url);
           }
         });
