@@ -157,10 +157,10 @@ export default class Map extends Component {
         <p className={styles.title}>慧保电梯管理平台</p>
         <div className={styles.subtitle}>
           <span className={styles.subtitleInfo}>
-            电梯在线数量：<span className={styles.detail}>{total}</span>
+            电梯在线数量：<span className={styles.detail}>{onLineTotal}</span>
           </span>
           <span className={styles.subtitleInfo}>
-            总安装数量：<span className={styles.detail}>{onLineTotal}</span>
+            总安装数量：<span className={styles.detail}>{total}</span>
           </span>
         </div>
         <div className={styles.elevator1}></div>

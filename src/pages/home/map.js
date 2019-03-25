@@ -163,24 +163,24 @@ export default class Map extends Component {
     this.map.openInfoWindow (infoWindow, point); //开启信息窗口
   }
 
-  goInfo(ele,markerClusterer,e){
-    const { sharedData } = this.props
-    let marks = new Array();
+  goInfo (ele, markerClusterer, e) {
+    const {sharedData} = this.props;
+    let marks = new Array ();
     let dev_id;
     const t = this;
-    ele._markerClusterer._clusters.forEach((item,key)=>{
-      marks = marks.concat(item._markers);
-      if(key == (ele._markerClusterer._clusters.length - 1)){
-        const ids = new Array();
-        marks.forEach((mark,index)=>{
-          if(dev_id){
-            dev_id = dev_id + "," + mark.info.dev_id;
-          }else{
+    ele._markerClusterer._clusters.forEach ((item, key) => {
+      marks = marks.concat (item._markers);
+      if (key == ele._markerClusterer._clusters.length - 1) {
+        const ids = new Array ();
+        marks.forEach ((mark, index) => {
+          if (dev_id) {
+            dev_id = dev_id + ',' + mark.info.dev_id;
+          } else {
             dev_id = mark.info.dev_id;
           }
-          ids.push(mark.info.dev_id);
-          if(index == (marks.length - 1)){
-            const url = "/home?dev_id_list=" + dev_id;
+          ids.push (mark.info.dev_id);
+          if (index == marks.length - 1) {
+            const url = '/home?dev_id_list=' + dev_id;
             sharedData.devIdList = ids;
             router.push(url);
           }
@@ -234,10 +234,10 @@ export default class Map extends Component {
         <p className={styles.title}>慧保电梯管理平台</p>
         <div className={styles.subtitle}>
           <span className={styles.subtitleInfo}>
-            电梯在线数量：<span className={styles.detail}>{total}</span>
+            电梯在线数量：<span className={styles.detail}>{onLineTotal}</span>
           </span>
           <span className={styles.subtitleInfo}>
-            总安装数量：<span className={styles.detail}>{onLineTotal}</span>
+            总安装数量：<span className={styles.detail}>{total}</span>
           </span>
         </div>
         <div className={styles.allmap} id="allmap" />
