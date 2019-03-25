@@ -56,7 +56,7 @@ export default class Map extends Component {
   }
 
   componentDidMount () {
-    this.initMap ();
+    // this.initMap ();
   }
   componentWillUnmount () {
     const {messageManager} = this.props;
@@ -163,11 +163,10 @@ export default class Map extends Component {
             总安装数量：<span className={styles.detail}>{onLineTotal}</span>
           </span>
         </div>
-        <div className={styles.allmap} id="allmap" />
+        <div className={styles.elevator1}></div>
         <div className={styles.peopleListContent}>
           {peopleArr}
         </div>
-
       </div>
     );
   }
