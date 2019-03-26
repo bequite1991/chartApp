@@ -21,7 +21,7 @@ var doInitSocket = function() {
 	var sign = 'eyJpZCI6InllIiwia2V5IjoiNDZDQzQ1QTcyN0JFQzdERTk3RjlFNzM4QUQ0MjgxNTMiLCJwcm9qZWN0Q29kZSI6Imh1aWJhbyIsInRpbWVzdGFtcCI6IjIwMTcxMTA2MTgxNDA2In0=';
 	webSocket = new WebSocket('ws://www.dtimao.com:8088/dtimao/webSocket/' + sign);
 	webSocket.onopen = function(event) {
-		webSocket.send('{\"cmd\":\"1001\",\"strAgent\":[\"13722000000000000001\"],\"transactionId\":\"123456\",\"projectCode\":\"huibao\"}');
+		webSocket.send('{\"cmd\":\"1001\",\"strAgent\":[\"'  + '900000000000001447\",' + '\"\",' +'\"\"' +'],\"transactionId\":\"123456\",\"projectCode\":\"huibao\"}');
 	};
 	webSocket.onmessage = function(event) {
 		onMessage(event);
