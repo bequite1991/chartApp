@@ -4,6 +4,10 @@ import {randomData} from '../lib/helper.js';
 
 import messageManager from './messageManager';
 
+import {CONSTANT_CONFIG} from '../datacenter/constantConfig';
+
+import QueryString from 'query-string';
+
 import {
   Elevator_Running_Data_Chart_Options,
   Elevator_System_Count_Chart_Options,
@@ -294,7 +298,20 @@ class sharedData extends EventEmitter {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
-          this.emit ('map_markers', rows);
+          let filter = args.filter;
+          const dev_id =
+            QueryString.parse (window.location.search).dev_id || '';
+          if (filter != null && filter.length > 0 && dev_id == filter) {
+            let item = rows[0];
+            if (item) {
+              let url = item.url;
+              if (url && url.length > 0) {
+                console.log ('url:' + url);
+              }
+            }
+          } else {
+            this.emit ('map_markers', rows);
+          }
           //this.mapChinaOptionValue = rows;
         }
       }
@@ -384,8 +401,9 @@ class sharedData extends EventEmitter {
       let signalLevel = args.signalLevel;
       let dynamicInfo = this.dynamicInfoOption;
 
+      let status = CONSTANT_CONFIG[elevatorState];
       this.dynamicInfoOption = {
-        status: elevatorState ? elevatorState : '',
+        status: status,
         floors: dynamicInfo.floors ? dynamicInfo.floors : '',
         energy: dynamicInfo.energy,
         signal: signalLevel ? signalLevel : '',

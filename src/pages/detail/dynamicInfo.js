@@ -24,13 +24,6 @@ export default class DynamicInfo extends React.Component {
     this.uuid = uuid.v1 ();
     const dev_id = QueryString.parse (window.location.search).dev_id || '';
     const {messageManager} = this.props;
-    debugger;
-
-    // messageManager.emit ('ws-unregister', {
-    //   uuid: this.uuid,
-    //   cmd: '1001',
-    // });
-
     messageManager.emit ('ws-register', {
       uuid: this.uuid,
       cmd: '1001',
@@ -57,7 +50,6 @@ export default class DynamicInfo extends React.Component {
 
     const {sharedData} = this.props;
     const option = sharedData.dynamicInfoOption;
-    debugger;
     return (
       <div className={styles.elevatorStatus}>
         <span className={styles.title}>电梯动态信息</span>

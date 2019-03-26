@@ -58,7 +58,6 @@ class WebsocketWorker extends EventEmitter {
   connect (options) {
     let url = options.url;
     let sign = options.key;
-    debugger;
 
     console.info ('url:' + url);
     console.info ('sign:' + sign);
@@ -72,8 +71,7 @@ class WebsocketWorker extends EventEmitter {
     };
 
     this.webSocket.onmessage = event => {
-      debugger;
-      var data = event.data;
+      let data = event.data;
       if (null == data || data.length == 0) return;
       console.log ('[' + this.getDatetime () + ']onMessage:' + data);
 
@@ -84,7 +82,6 @@ class WebsocketWorker extends EventEmitter {
         messageBody.cmd &&
         messageBody.cmd.length > 0
       ) {
-        debugger;
         messageManager.addWSMessage (messageBody);
       }
     };
