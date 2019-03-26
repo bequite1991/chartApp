@@ -26,7 +26,7 @@ import Maintenance_Orders_And_Finish_Chart
 // 维保人员每月派单量和完成量(maintenance Orders And Finish)
 import Maintenance_Orders_Month_Chart from './maintenanceOrdersMonthChart.js';
 //首页全国地图
-import Map_China from './map';
+import Map_China from './elevatorStatus';
 //安装记录
 import Installation_Record from './installationRecord.js';
 //维保记录

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Icon} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import styles from './map.less';
+import styles from './elevatorStatus.less';
 import ReactEcharts from 'echarts-for-react';
 import {inject, observer} from 'mobx-react';
 import router from 'umi/router';
@@ -120,7 +120,7 @@ export default class Map extends Component {
 
   render () {
     const {sharedData} = this.props;
-    const option = sharedData.mapChinaOption;
+    const elevatorStatus = sharedData.elevatorStatus;
     const totalInfo = sharedData.totalInfo;
 
     const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';

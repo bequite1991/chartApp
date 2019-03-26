@@ -160,6 +160,8 @@ class sharedData extends EventEmitter {
       phone: '',
       video: '',
     };
+    //单个电梯状态
+    this.elevatorStatusValue = {};
 
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
@@ -585,6 +587,15 @@ class sharedData extends EventEmitter {
 
   set dynamicInfoOption (value) {
     this.dynamicInfoOptionValue = value;
+  }
+
+  //单个电梯状态
+  @computed get elevatorStatus () {
+    return toJS (this.elevatorStatusValue);
+  }
+
+  set elevatorStatus (value) {
+    this.elevatorStatusValue = value;
   }
 }
 
