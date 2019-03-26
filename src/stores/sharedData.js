@@ -269,6 +269,28 @@ class sharedData extends EventEmitter {
       }
     });
 
+    messageManager.on ('9002', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let filter = args.filter;
+          const dev_id =
+            QueryString.parse (window.location.search).dev_id || '';
+          if (filter != null && filter.length > 0 && dev_id == filter) {
+            let item = rows[0];
+            if (item) {
+              this.elevatorLog = {
+                dev_id: item.dev_id,
+                dev_cname: item.dev_cname,
+                on_time: item.on_time,
+                off_time: item.off_time,
+              };
+            }
+          }
+        }
+      }
+    });
+
     messageManager.on ('9003', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
