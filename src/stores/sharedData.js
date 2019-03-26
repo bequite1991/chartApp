@@ -393,6 +393,11 @@ class sharedData extends EventEmitter {
       let currentFloor = args.currentFloor;
       let energy = args.batteryLevel;
       let dynamicInfo = this.dynamicInfoOption;
+      let runningState = args.runningState;
+
+      this.elevatorStatus = {
+        runningState: runningState,
+      };
 
       this.dynamicInfoOption = {
         status: dynamicInfo.status ? dynamicInfo.status : '',
