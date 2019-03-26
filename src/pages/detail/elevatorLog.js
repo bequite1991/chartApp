@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Icon} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import styles from './index.less';
+import styles from './elevatorLog.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
@@ -11,7 +11,7 @@ import {debug} from 'util';
 
 @inject ('sharedData')
 @observer
-export default class MaintenanceOrdersAndFinishChart extends React.Component {
+export default class SystemCountChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};
@@ -28,18 +28,14 @@ export default class MaintenanceOrdersAndFinishChart extends React.Component {
     };
 
     const {sharedData} = this.props;
-    const installRecordDatas = sharedData.installRecordData;
-    let arr = [];
-    if(sharedData.installRecordData){
-      sharedData.installRecordData.forEach((ele,key)=>{
-        arr.push(<span key={key} className={styles.installRecordDetail}>{ele}</span>)
-      });
-    }
-
+    const elevatorLog = sharedData.elevatorLog;
     return (
-      <div className={styles.installRecord}>
-        <span className={styles.title}>小区安装记录</span>
-        {arr}
+      <div className={styles.elevatorStatus}>
+        <span className={styles.title}>电梯上下线日志</span>
+        <span>运行状态：{elevatorLog.status}</span>
+        <span>楼层：{elevatorLog.floors}</span>
+        <span>电量：{elevatorLog.energy}</span>
+        <span>信号：{elevatorLog.signal}</span>
       </div>
     );
   }

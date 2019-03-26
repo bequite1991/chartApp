@@ -162,6 +162,7 @@ class sharedData extends EventEmitter {
     };
     //单个电梯状态
     this.elevatorStatusValue = {};
+    this.elevatorLogValue = {};
 
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
@@ -596,6 +597,14 @@ class sharedData extends EventEmitter {
 
   set elevatorStatus (value) {
     this.elevatorStatusValue = value;
+  }
+
+  @computed get elevatorLog () {
+    return toJS (this.elevatorLogValue);
+  }
+
+  set elevatorLog (value) {
+    this.elevatorLogValue = value;
   }
 }
 
