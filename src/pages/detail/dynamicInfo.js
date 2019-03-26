@@ -15,7 +15,7 @@ const uuid = require ('node-uuid');
 
 @inject ('sharedData', 'messageManager')
 @observer
-export default class SystemCountChart extends React.Component {
+export default class DynamicInfo extends React.Component {
   uuid = '';
   constructor (props) {
     super (props);
@@ -24,20 +24,26 @@ export default class SystemCountChart extends React.Component {
     this.uuid = uuid.v1 ();
     const dev_id = QueryString.parse (window.location.search).dev_id || '';
     const {messageManager} = this.props;
-    // messageManager.emit ('register', {
+    debugger;
+
+    // messageManager.emit ('ws-unregister', {
     //   uuid: this.uuid,
-    //   cmd: '9005',
-    //   filter: QueryString.dev_id ? QueryString.dev_id : '',
+    //   cmd: '1001',
     // });
-    //messageManager.emit("register",{cmd:"9001"})
+
+    messageManager.emit ('ws-register', {
+      uuid: this.uuid,
+      cmd: '1001',
+      filter: dev_id,
+    });
   }
 
   componentWillUnmount () {
     const {messageManager} = this.props;
-    // messageManager.emit ('unregister', {
-    //   uuid: this.uuid,
-    //   cmd: '9005',
-    // });
+    messageManager.emit ('ws-unregister', {
+      uuid: this.uuid,
+      cmd: '1001',
+    });
   }
 
   onChartClick (param, echarts) {
@@ -50,7 +56,8 @@ export default class SystemCountChart extends React.Component {
     };
 
     const {sharedData} = this.props;
-    const option = sharedData.systemCountOption;
+    const option = sharedData.dynamicInfoOption;
+    debugger;
     return (
       <div className={styles.elevatorStatus}>
         <span className={styles.title}>电梯动态信息</span>

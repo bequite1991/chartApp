@@ -26,6 +26,11 @@ const PROTOCAL_RESPONSE = {
   '9012': 'inshn_dtimao/huibao/resp/dev_run_day/user', // 电梯安装日期到当前日期的总天数查询接口
 };
 
+const WSPROTOCAL_REQUEST = {
+  '1001': '',
+  '1002': '',
+};
+
 const PROTOCAL_MAP = [];
 
-export {PROTOCAL_REQUEST, PROTOCAL_RESPONSE};
+export {PROTOCAL_REQUEST, PROTOCAL_RESPONSE, WSPROTOCAL_REQUEST};

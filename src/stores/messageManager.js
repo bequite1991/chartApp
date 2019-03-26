@@ -4,6 +4,8 @@ import EventEmitter from 'events';
 
 import mqttWorker from './mqttWorker';
 
+import websocketWorker from './websocketWorker';
+
 import mqttMessage from './mqttMessage';
 
 import {PROTOCAL_REQUEST, PROTOCAL_RESPONSE} from '../datacenter/protocol';
@@ -19,10 +21,14 @@ import QueryString from 'query-string';
 let Base64 = require ('js-base64').Base64;
 
 class MessageManager extends EventEmitter {
-  //commandList = [];
+  wsCommandMap = new Map ();
+
   commandMap = new Map ();
+
   subscribe = [];
+  removeWsUUIDList = [];
   removeUUIDList = [];
+  wsMessageEmitterTimer = null;
   messageEmitterTimer = null;
   parserLoopTimer = null;
 
@@ -31,22 +37,18 @@ class MessageManager extends EventEmitter {
 
   messageList = [];
 
+  wsMessageList = [];
+
   isdetail = false;
 
   dev_id = '';
 
+  isWSInit = false;
+
+  isWSOpen = false;
+
   constructor () {
     super ();
-    // let options = {
-    //     ip: '121.43.165.110',
-    //     port: 3994,
-    //     userName: '15051841028',
-    //     passWord: 'huibao1841028',
-    //     clientName: 'JSClient-Demo-' + new Date ().toLocaleTimeString (),
-    //     cleanSession: true,
-    //     timeout: 30,
-    //     keepAliveInterval: 30,
-    //   };
 
     this.dev_id = QueryString.parse (window.location.search).dev_id || '';
 
@@ -79,6 +81,35 @@ class MessageManager extends EventEmitter {
       this.removeCommand (args);
     });
 
+    this.on ('ws-register', args => {
+      if (this.isWSInit == false && websocketWorker) {
+        this.isWSInit = true;
+        let key =
+          'eyJpZCI6InllIiwia2V5IjoiNDZDQzQ1QTcyN0JFQzdERTk3RjlFNzM4QUQ0MjgxNTMiLCJwcm9qZWN0Q29kZSI6Imh1aWJhbyIsInRpbWVzdGFtcCI6IjIwMTcxMTA2MTgxNDA2In0=';
+        let url = 'ws://www.dtimao.com:8088/dtimao/webSocket/';
+        websocketWorker.emit ('ws-connect', {url: url, key: key});
+      }
+
+      console.info ('ws注册消息:' + args.cmd + ' uuid:' + args.uuid);
+      if (args.uuid && args.uuid.length > 0) {
+        this.addWsCommand ({
+          uuid: args.uuid ? args.uuid : '',
+          cmd: args.cmd,
+          dev_id: args.filter ? args.filter : '',
+        });
+      }
+    });
+
+    this.on ('ws-unregister', args => {
+      debugger;
+      console.info ('取消注册消息:' + args.cmd);
+      this.removeWsCommand (args);
+    });
+
+    this.on ('ws-open', args => {
+      this.isWSOpen = args.isOpen ? args.isOpen : false;
+    });
+
     this.messageEmitterTimer = setInterval (() => {
       this.messageEmitter ();
     }, 3000);
@@ -86,6 +117,55 @@ class MessageManager extends EventEmitter {
     this.parserLoopTimer = setInterval (() => {
       this.parserLoop ();
     }, 1000);
+
+    this.wsMessageEmitterTimer = setInterval (() => {
+      this.wsMessageEmitter ();
+    }, 5000);
+  }
+
+  wsMessageEmitter () {
+    if (!websocketWorker || this.isWSInit == false) {
+      return;
+    }
+    // 移除列表数据
+    let index = 0;
+    let removeUUID = '';
+    try {
+      if (this.removeWsUUIDList.length > 0) {
+        this.removeWsUUIDList.forEach (uuidcommand => {
+          let command = this.wsCommandMap.get (uuidcommand);
+          if (command) {
+            this.wsCommandMap.delete (uuidcommand);
+            console.info ('移除:' + uuidcommand);
+          }
+          removeUUID = uuidcommand;
+        });
+      }
+    } catch (ex) {
+      console.info ('uuidcommand:' + removeUUID);
+    }
+
+    let count = this.wsCommandMap.size;
+    if (count > 0 && this.isWSOpen == true) {
+      this.wsCommandMap.forEach (command => {
+        this.sendWsCommand (command);
+      });
+
+      this.wsCommandMap.clear ();
+    }
+
+    if (this.removeWsUUIDList.length) {
+      this.removeWsUUIDList = [];
+    }
+  }
+
+  sendWsCommand (command) {
+    if (command && websocketWorker) {
+      websocketWorker.emit ('ws-send', {
+        cmd: command.cmd,
+        dev_id: command.dev_id,
+      });
+    }
   }
 
   addMessage (message) {
@@ -94,8 +174,18 @@ class MessageManager extends EventEmitter {
     }
   }
 
+  addWSMessage (message) {
+    if (message) {
+      this.wsMessageList.push (message);
+    }
+  }
+
   isMessageListEmpty () {
     return this.messageList.length == 0;
+  }
+
+  isWSMessageListEmpty () {
+    return this.wsMessageList.length == 0;
   }
 
   parserLoop () {
@@ -105,6 +195,15 @@ class MessageManager extends EventEmitter {
         this.emit (message.cmd, message);
         delete this.messageList[0];
         this.messageList.splice (0, 1);
+      }
+    }
+
+    if (!this.isWSMessageListEmpty ()) {
+      let message = this.wsMessageList[0];
+      if (message) {
+        this.emit (message.cmd, message);
+        delete this.wsMessageList[0];
+        this.wsMessageList.splice (0, 1);
       }
     }
   }
@@ -124,7 +223,6 @@ class MessageManager extends EventEmitter {
           }
           removeUUID = uuidcommand;
         });
-        //this.removeUUIDList = [];
       }
     } catch (ex) {
       console.info ('uuidcommand:' + removeUUID);
@@ -132,49 +230,13 @@ class MessageManager extends EventEmitter {
 
     let count = this.commandMap.size;
     if (count > 0) {
-      //debugger;
       this.commandMap.forEach (command => {
         this.sendCommand (command);
       });
+    }
 
+    if (this.removeUUIDList.length > 0) {
       this.removeUUIDList = [];
-      // for (let key in this.commandMap) {
-      //   let command = this.commandMap[key];
-      //   if (command) {
-      //     this.sendCommand (command);
-      //   }
-      // }
-
-      // commandList.forEach (command => {
-      //   let cmd = command.cmd;
-      //   let filter = command.filter ? command.filter : '';
-      //   if (this.hasTopic (cmd)) {
-      //     let topic =
-      //       PROTOCAL_REQUEST[cmd] + '/' + this.serverOptionsValue.userName;
-      //     let src_topic = PROTOCAL_RESPONSE[cmd].replace (
-      //       new RegExp ('/', 'gm'),
-      //       '.'
-      //     ); //PROTOCAL_REQUEST[cmd].split ('/')[3];
-
-      //     src_topic = src_topic + '.' + this.serverOptionsValue.userName;
-      //     let username = this.serverOptionsValue.userName;
-      //     let message_num = '0001';
-      //     let message = this.packetMessage (
-      //       cmd,
-      //       src_topic,
-      //       username,
-      //       this.serverOptionsValue.passWord,
-      //       new Date ().getTime (),
-      //       message_num,
-      //       filter
-      //     );
-      //     console.info ('topic:' + topic);
-      //     console.info ('packet message:' + message);
-      //     mqttWorker.emit ('session:publish', {topic: topic, message: message});
-      //   }
-      // });
-
-      //this.cmdList = [];
     }
   }
 
@@ -238,6 +300,7 @@ class MessageManager extends EventEmitter {
   reset () {
     //this.commandList = [];
     this.commandMap.clear ();
+    this.wsCommandMap.clear ();
     this.subscribe = [];
     this.messageList = [];
   }
@@ -265,30 +328,20 @@ class MessageManager extends EventEmitter {
     if (command && command.uuid != null && command.uuid.length > 0) {
       this.commandMap.set (command.uuid + '-' + command.cmd, command);
     }
-
-    // let index = this.hasCommand (command);
-    // if (index < 0)
-    // {
-    //   this.commandList.push (command);
-    // }
   }
 
   removeCommand({uuid, cmd}) {
-    // let index = 0;
-    // this.commandList.forEach (command => {
-    //   let _uuid = command.uuid;
-    //   let cmd = command.uuid;
-
-    //   if (_uuid == uuid) {
-    //   }
-    //   ++index;
-    // });
-
     this.removeUUIDList.push (uuid + '-' + cmd);
-    // let index = this.hasCommand(cmd);
-    // if(index > -1){
-    //     this.cmdList.remove(index);
-    // }
+  }
+
+  addWsCommand (command) {
+    if (command && command.uuid != null && command.uuid.length > 0) {
+      this.wsCommandMap.set (command.uuid + '-' + command.cmd, command);
+    }
+  }
+
+  removeWsCommand({uuid, cmd}) {
+    this.removeWsUUIDList.push (uuid + '-' + cmd);
   }
 }
 

@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {inject, observer} from 'mobx-react';
-import {Icon,Row, Col,Button, notification} from 'antd';
+import {Icon, Row, Col, Button, notification} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
@@ -12,8 +12,8 @@ import sharedData from '../../stores/sharedData';
 
 // 电梯运行数据(Elevator Running Data)
 import RunningDataChart from './runningDataChart';
-// 电梯系统安装数量(Elevator System Count)
-import SystemCountChart from './systemCountChart';
+// 电梯动态信息(Elevator System Count)
+import DynamicInfo from './dynamicInfo';
 // 每月电梯离线次数(Elevator Running Distance Every Month)
 import Offline_Count_Every_Month_Chart from './offlineCountEveryMonthChart';
 // 每月电梯故障数(Elevator Error Every Month)
@@ -44,9 +44,7 @@ export default class Home extends PureComponent {
     super (props);
     this.state = {};
 
-    setInterval (() => {
-      
-    }, 2000);
+    setInterval (() => {}, 2000);
   }
 
   componentWillUnmount () {}
@@ -77,18 +75,22 @@ export default class Home extends PureComponent {
           <Col span={24}><Map_China /></Col>
           <Col span={24}>
             <div className={styles.RunningDataChart}>
-              <RunningDataChart className={styles.RunningDataChart}/>
+              <RunningDataChart className={styles.RunningDataChart} />
             </div>
             <div className={styles.chartContent}>
-              <SystemCountChart className={styles.SystemCountChart}/>
+              <DynamicInfo className={styles.SystemCountChart} />
             </div>
           </Col>
           <Col span={24}>
             <div className={styles.chartContent}>
-              <Elevator_Error_Every_Month_Chart className={styles.Elevator_Error_Every_Month_Chart}/>
+              <Elevator_Error_Every_Month_Chart
+                className={styles.Elevator_Error_Every_Month_Chart}
+              />
             </div>
             <div className={styles.chartContent}>
-              <Elevator_Error_Ratio_Chart className={styles.Elevator_Error_Ratio_Chart}/>
+              <Elevator_Error_Ratio_Chart
+                className={styles.Elevator_Error_Ratio_Chart}
+              />
             </div>
           </Col>
         </Row>
@@ -101,10 +103,15 @@ export default class Home extends PureComponent {
               <RunningDataChart />
             </div>
             <div className={styles.SystemCountChart}>
-              <SystemCountChart />
+              <DynamicInfo />
             </div>
           </Col>
-          <Col span={12}><Map_China /><div className={styles.Maintenance_Record}><Maintenance_Record /></div></Col>
+          <Col span={12}>
+            <Map_China />
+            <div className={styles.Maintenance_Record}>
+              <Maintenance_Record />
+            </div>
+          </Col>
           <Col span={6}>
             <div className={styles.Elevator_Error_Every_Month_Chart}>
               <Elevator_Error_Every_Month_Chart />
@@ -118,7 +125,11 @@ export default class Home extends PureComponent {
     }
 
     return (
-      <Provider sharedData={sharedData} sharedDataDetail={sharedDataDetail} messageManager={messageManager}>
+      <Provider
+        sharedData={sharedData}
+        sharedDataDetail={sharedDataDetail}
+        messageManager={messageManager}
+      >
         <div>
           {charts}
           <Warning />

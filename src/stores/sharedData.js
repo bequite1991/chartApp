@@ -34,6 +34,13 @@ class sharedData extends EventEmitter {
   @observable totalValue = '0'; // 总数量
   @observable onLineTotalValue = '0'; // 在线数量
 
+  @observable dynamicInfoOptionValue = {
+    status: '',
+    floors: '',
+    energy: 0,
+    signal: 0,
+  };
+
   sumDay = '50'; // 运行天数
 
   //runningDataOption = null;
@@ -145,11 +152,13 @@ class sharedData extends EventEmitter {
       message: '浙江省杭州市余杭区 xxx 电梯 xxx故障',
     };
 
-    this.devIdListValue = window.location.search.split("dev_id_list=")[1]?window.location.search.split("dev_id_list=")[1].split(","):[];
+    this.devIdListValue = window.location.search.split ('dev_id_list=')[1]
+      ? window.location.search.split ('dev_id_list=')[1].split (',')
+      : [];
 
     this.elevatorConnectOptionValue = {
-      phone:"",
-      video:""
+      phone: '',
+      video: '',
     };
 
     // const optionValueWatcher = computed (() => {
@@ -334,6 +343,53 @@ class sharedData extends EventEmitter {
           this.maiUserInfoList = maiUserList;
         }
       }
+    });
+
+    messageManager.on ('9004', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          debugger;
+          let row = rows[0];
+          // let totalInfo = {
+          //   total: row.total ? row.total : '0',
+          //   onLineTotal: row.on_total ? row.on_total : '0',
+          // };
+          // this.totalInfo = totalInfo;
+
+          // console.info('9006 is get data');
+        }
+      }
+    });
+
+    messageManager.on ('1002', args => {
+      console.info ('subId:' + args.id);
+    });
+
+    messageManager.on ('1003', args => {
+      let currentFloor = args.currentFloor;
+      let energy = args.batteryLevel;
+      let dynamicInfo = this.dynamicInfoOption;
+
+      this.dynamicInfoOption = {
+        status: dynamicInfo.status ? dynamicInfo.status : '',
+        floors: currentFloor ? currentFloor : '',
+        energy: energy,
+        signal: dynamicInfo.signal,
+      };
+    });
+
+    messageManager.on ('1004', args => {
+      let elevatorState = args.elevatorState;
+      let signalLevel = args.signalLevel;
+      let dynamicInfo = this.dynamicInfoOption;
+
+      this.dynamicInfoOption = {
+        status: elevatorState ? elevatorState : '',
+        floors: dynamicInfo.floors ? dynamicInfo.floors : '',
+        energy: dynamicInfo.energy,
+        signal: signalLevel ? signalLevel : '',
+      };
     });
   }
 
@@ -521,6 +577,14 @@ class sharedData extends EventEmitter {
 
   set elevatorConnectOption (list) {
     this.elevatorConnectOptionValue = list;
+  }
+
+  @computed get dynamicInfoOption () {
+    return toJS (this.dynamicInfoOptionValue);
+  }
+
+  set dynamicInfoOption (value) {
+    this.dynamicInfoOptionValue = value;
   }
 }
 
