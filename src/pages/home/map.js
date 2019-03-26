@@ -182,7 +182,7 @@ export default class Map extends Component {
           if (index == marks.length - 1) {
             const url = '/home?dev_id_list=' + dev_id;
             sharedData.devIdList = ids;
-            router.push (url);
+            router.push(url);
           }
         });
       }
@@ -190,6 +190,7 @@ export default class Map extends Component {
   }
 
   goDetail (content, e) {
+    debugger
     const url = '/detail?dev_id=' + content.dev_id;
     router.push (url);
   }
