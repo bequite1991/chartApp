@@ -15,7 +15,7 @@ const uuid = require ('node-uuid');
 
 @inject ('sharedData', 'messageManager')
 @observer
-export default class SystemCountChart extends React.Component {
+export default class ErrorMonthChart extends React.Component {
   uuid = '';
   constructor (props) {
     super (props);

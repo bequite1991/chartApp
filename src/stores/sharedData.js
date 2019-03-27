@@ -332,9 +332,11 @@ class sharedData extends EventEmitter {
               let url = item.url;
               if (url && url.length > 0) {
                 console.log ('url:' + url);
-                this.elevatorConnectOption = {
-                  url: url,
+                let options = {
+                  video: url,
+                  phone: url,
                 };
+                this.elevatorConnectOption = options;
               }
             }
           } else {
