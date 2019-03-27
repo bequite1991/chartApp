@@ -41,6 +41,7 @@ const Elevator_Running_Data_Chart_Options = {
     {
       name: '2019年',
       type: 'bar',
+      barWidth : 30,
       data: [],
     },
     // {
