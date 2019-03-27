@@ -69,7 +69,19 @@ export default class Home extends PureComponent {
   //打开通知窗口
 
   render () {
-    let charts;
+    let charts,maintenance,systemCountChart;
+    const isInfo = sharedData.devIdList.length;
+    if(isInfo){
+      maintenance = (<div className={styles.Maintenance_Record}><Maintenance_Record /></div>);
+    }else{
+      maintenance = (<div className={styles.Maintenance_Orders_And_Finish_Chart}>
+              <Maintenance_Orders_And_Finish_Chart />
+            </div>)
+      systemCountChart = (<div className={styles.chartContent}>
+              <SystemCountChart className={styles.SystemCountChart}/>
+            </div>)
+    }
+
     if (document.body.clientWidth < 1000) {
       charts = (
         <Row>
@@ -78,9 +90,7 @@ export default class Home extends PureComponent {
             <div className={styles.RunningDataChart}>
               <RunningDataChart className={styles.RunningDataChart}/>
             </div>
-            <div className={styles.chartContent}>
-              <SystemCountChart className={styles.SystemCountChart}/>
-            </div>
+            {systemCountChart}
             <div className={styles.chartContent}>
               <Offline_Count_Every_Month_Chart className={styles.Offline_Count_Every_Month_Chart} />
             </div>
@@ -93,10 +103,7 @@ export default class Home extends PureComponent {
             <div className={styles.chartContent}>
               <Elevator_Error_Ratio_Chart className={styles.Elevator_Error_Ratio_Chart}/>
             </div>
-            <div className={styles.chartContent}>
-              <Maintenance_Orders_And_Finish_Chart className={styles.Maintenance_Orders_And_Finish_Chart}/>
-            </div>
-            <div className={styles.chartContent}><Maintenance_Record className={styles.Maintenance_Record}/></div>
+            {maintenance}
           </Col>
         </Row>
       );
@@ -107,9 +114,7 @@ export default class Home extends PureComponent {
             <div className={styles.RunningDataChart}>
               <RunningDataChart />
             </div>
-            <div className={styles.SystemCountChart}>
-              <SystemCountChart />
-            </div>
+            {systemCountChart}
             <div className={styles.Offline_Count_Every_Month_Chart}>
               <Offline_Count_Every_Month_Chart />
             </div>
@@ -123,10 +128,7 @@ export default class Home extends PureComponent {
             <div className={styles.Elevator_Error_Ratio_Chart}>
               <Elevator_Error_Ratio_Chart />
             </div>
-            <div className={styles.Maintenance_Orders_And_Finish_Chart}>
-              <Maintenance_Orders_And_Finish_Chart />
-            </div>
-            <div className={styles.Maintenance_Record}><Maintenance_Record /></div>
+            {maintenance}
           </Col>
         </Row>
       );

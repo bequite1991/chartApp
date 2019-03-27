@@ -54,7 +54,7 @@ const Elevator_Running_Data_Chart_Options = {
 const Elevator_System_Count_Chart_Options = {
   title: {
     text: '电梯系统安装数量',
-    subtext: '纯属虚构',
+    subtext: '',
     textStyle: {
       fontWeight: 'normal', //标题颜色
       color: '#666666',

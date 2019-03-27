@@ -20,11 +20,11 @@ export default class Home extends React.Component {
     this.state = {
       modalVisible:false
     };
-    const {sharedData} = this.props;
-    const warningMessage = sharedData.warningMessage;
-    if (sharedData.warningMessage) {
-      this.openNotification(warningMessage)
-    }
+    // const {sharedData} = this.props;
+    // const warningMessage = sharedData.warningMessage;
+    // if (sharedData.warningMessage) {
+    //   this.openNotification(warningMessage)
+    // }
     // this.openNotification();
   }
 

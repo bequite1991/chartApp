@@ -37,7 +37,7 @@ export default class MaintenanceOrdersAndFinishChart extends React.Component {
 
     return (
       <div className={styles.maintenanceRecord}>
-        <span className={styles.title}>小区安装记录</span>
+        <span className={styles.title}>电梯维保记录</span>
         {arr}
       </div>
     );

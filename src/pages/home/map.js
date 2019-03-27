@@ -64,8 +64,10 @@ export default class Map extends Component {
     });
     setTimeout(()=>{
       document.getElementsByClassName('anchorBL')[0].innerHTML = "";
-      document.getElementsByClassName('anchorBL')[1].innerHTML = "";
-    },3000)
+      setTimeout(()=>{
+        document.getElementsByClassName('anchorBL')[1].innerHTML = "";
+      },1500)
+    },500)
 
   }
   componentWillUpdate (nextProps) {}
