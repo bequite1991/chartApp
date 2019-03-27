@@ -5,6 +5,7 @@ import Debounce from 'lodash-decorators/debounce';
 import styles from './elevatorErrorConnect.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
+import router from 'umi/router';
 
 import {inject, observer} from 'mobx-react';
 import {debug} from 'util';
@@ -37,17 +38,16 @@ export default class SystemCountChart extends React.Component {
   }
 
   onChartClick (param, echarts) {
+    const {sharedData} = this.props;
+    const option = sharedData.elevatorConnectOption;
     console.log (param);
+    router.push (option.url);
   }
 
   render () {
     let onEvents = {
       click: this.onChartClick.bind (this),
     };
-
-    const {sharedData} = this.props;
-    const option = sharedData.elevatorConnectOption;
-
     return (
       <div className={styles.control}>
         <div className={styles.button}>
