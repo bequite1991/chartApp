@@ -120,37 +120,57 @@ export default class Map extends Component {
 
   render () {
     const {sharedData} = this.props;
-    const elevatorStatus = sharedData.elevatorStatus;
+    const elevatorStatus = sharedData.dynamicInfoOption.status;
     const totalInfo = sharedData.totalInfo;
 
     const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';
     const onLineTotal = totalInfo
       ? totalInfo.onLineTotal ? totalInfo.onLineTotal : '0'
       : '0';
-
-    const arr = sharedData.maiUserInfo ? sharedData.maiUserInfo : [];
-    const peopleArr = [];
-
-    arr.forEach ((val, key) => {
-      peopleArr.push (
-        <span key={key} className={styles.peopleList}>
-          姓名：
-          <span>{val.name}</span>
-          手机号：
-          <span>{val.phone}</span>
-          维保单位：
-          <span>{val.corp}</span>
-          维保区域：
-          <span>{val.area}</span>
-          目前位置：
-          <span>{val.location}</span>
-          维保时间：
-          <span>{val.time}</span>
-          维保人员：
-          <span>{val.status == 0 ? '离线' : '在线'}</span>
-        </span>
-      );
-    });
+    let statusText;
+    switch(elevatorStatus){
+      case 0:
+        statusText = "离线";
+        break;
+      case 1:
+        statusText = "正常";
+        break;
+      case 2:
+        statusText = "困人";
+        break;
+      case 3:
+        statusText = "正常 通话中 检修中";
+        break;
+      case 4:
+        statusText = "正常 通话中 检修中";
+        break;
+      case 5:
+        statusText = "正常 通话中";
+        break;
+      case 6:
+        statusText = "困人 通话中";
+        break;
+      case 7:
+        statusText = "正常 检修中";
+        break;
+      case 8:
+        statusText = "困人 检修中";
+        break;
+      case 9:
+        statusText = "故障";
+        break;
+      case 10:
+        statusText = "故障 通话中 检修中";
+        break;
+      case 11:
+        statusText = "故障 通话中";
+        break;
+      case 12:
+        statusText = "故障 检修中";
+        break;
+      default:
+        statusText = elevatorStatus;
+    }
 
     return (
       <div className={styles.mapChina}>
@@ -164,9 +184,7 @@ export default class Map extends Component {
           </span>
         </div>
         <div className={styles.elevator1}></div>
-        <div className={styles.peopleListContent}>
-          {peopleArr}
-        </div>
+        <div className={styles.statusText}>{statusText}</div>
       </div>
     );
   }

@@ -103,7 +103,7 @@ export default class Home extends PureComponent {
     } else {
       charts = (
         <Row>
-          <Col span={6}>
+          <Col span={5}>
             <div className={styles.RunningDataChart}>
               <RunningDataChart />
             </div>
@@ -115,8 +115,8 @@ export default class Home extends PureComponent {
             </div>
             <div className={styles.Installation_Record}><Installation_Record /></div>
           </Col>
-          <Col span={12}><Map_China /></Col>
-          <Col span={6}>
+          <Col span={14}><Map_China /></Col>
+          <Col span={5}>
             <div className={styles.Elevator_Error_Every_Month_Chart}>
               <Elevator_Error_Every_Month_Chart />
             </div>

@@ -30,13 +30,13 @@ class MqttWorker extends EventEmitter {
     }
 
     this.on (CHANNEL_INIT, list => {
-      console.info (list);
+      // console.info (list);
       this.hasSubscribe = list;
       this.toClose = true;
     });
 
     this.on (CHANNEL_CONNECT, options => {
-      console.info (options);
+      // console.info (options);
       this.connect (options);
     });
 
@@ -91,7 +91,7 @@ class MqttWorker extends EventEmitter {
       onSuccess: () => {
         setConnect (true);
         this.initSubscribe ();
-        console.log ('mqtt connect success');
+        // console.log ('mqtt connect success');
         //this.setState ({connectStatus: 100});
       },
       onFailure: () =>
@@ -101,12 +101,12 @@ class MqttWorker extends EventEmitter {
     this.client.onConnectionLost = () => {
       setConnect (true);
       clientInstance.client.connect (connectOpt);
-      console.log ('mqtt reConnect ...');
+      // console.log ('mqtt reConnect ...');
     };
 
     this.client.onMessageArrived = message => {
       message._index = ++i;
-      console.log ('payloadString:' + message.payloadString);
+      // console.log ('payloadString:' + message.payloadString);
       if (
         messageManager &&
         message &&
@@ -122,7 +122,7 @@ class MqttWorker extends EventEmitter {
 
     this.client.connect (connectOpt);
 
-    console.log ('mqtt connect ...');
+    // console.log ('mqtt connect ...');
 
     //this.toClose = false;
     // this.setState ({
@@ -138,12 +138,12 @@ class MqttWorker extends EventEmitter {
       return;
     }
     for (let i = 0, l = clientInstance.hasSubscribe.length; i < l; i++) {
-      console.log ('即将订阅的主题：' + clientInstance.hasSubscribe[i]);
+      // console.log ('即将订阅的主题：' + clientInstance.hasSubscribe[i]);
       clientInstance.hasSubscribe[i] &&
         clientInstance.client.subscribe (clientInstance.hasSubscribe[i], {
           onSuccess: function (res) {
             //debugger;
-            console.log ('subscribe success');
+            // console.log ('subscribe success');
           },
         });
     }
@@ -165,7 +165,7 @@ class MqttWorker extends EventEmitter {
     clientInstance.client.isConnected () &&
       clientInstance.client.subscribe (filter);
     hasSubscribe.push (filter);
-    console.log ('mqtt subscribe', filter);
+    // console.log ('mqtt subscribe', filter);
   }
 
   /**
@@ -209,7 +209,7 @@ class MqttWorker extends EventEmitter {
         hasSubscribe.splice (i, 1);
       }
     }
-    console.log ('mqtt unsubscribe', filter);
+    // console.log ('mqtt unsubscribe', filter);
   }
 
   closeConnect () {

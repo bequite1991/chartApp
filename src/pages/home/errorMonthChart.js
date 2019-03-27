@@ -56,7 +56,7 @@ export default class SystemCountChart extends React.Component {
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}
-        style={{width: '100%', height: '33vh', minHeight: '100px'}}
+        style={{width: '100%', height: '25vh', minHeight: '100px'}}
       />
     );
   }

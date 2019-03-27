@@ -62,6 +62,11 @@ export default class Map extends Component {
         this.mapUpdate (mapData);
       }
     });
+    setTimeout(()=>{
+      document.getElementsByClassName('anchorBL')[0].innerHTML = "";
+      document.getElementsByClassName('anchorBL')[1].innerHTML = "";
+    },3000)
+
   }
   componentWillUpdate (nextProps) {}
   componentWillUnmount () {
@@ -99,7 +104,7 @@ export default class Map extends Component {
 
     // 百度地图API功能
     var map = new BMap.Map ('allmap');
-    map.centerAndZoom (new BMap.Point (116.404, 39.915), 4);
+    map.centerAndZoom (new BMap.Point (116.404, 39.915), 5);
     map.enableScrollWheelZoom ();
     var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
 

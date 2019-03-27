@@ -65,7 +65,7 @@ class MessageManager extends EventEmitter {
     mqttWorker.emit ('session:connect', options);
 
     this.on ('register', args => {
-      console.info ('注册消息:' + args.cmd + ' uuid:' + args.uuid);
+      // console.info ('注册消息:' + args.cmd + ' uuid:' + args.uuid);
 
       if (args.uuid && args.uuid.length > 0) {
         this.addCommand ({
@@ -77,7 +77,7 @@ class MessageManager extends EventEmitter {
     });
 
     this.on ('unregister', args => {
-      console.info ('取消注册消息:' + args.cmd);
+      // console.info ('取消注册消息:' + args.cmd);
       this.removeCommand (args);
     });
 
@@ -90,7 +90,7 @@ class MessageManager extends EventEmitter {
         websocketWorker.emit ('ws-connect', {url: url, key: key});
       }
 
-      console.info ('ws注册消息:' + args.cmd + ' uuid:' + args.uuid);
+      // console.info ('ws注册消息:' + args.cmd + ' uuid:' + args.uuid);
       if (args.uuid && args.uuid.length > 0) {
         this.addWsCommand ({
           uuid: args.uuid ? args.uuid : '',
@@ -102,7 +102,7 @@ class MessageManager extends EventEmitter {
 
     this.on ('ws-unregister', args => {
       debugger;
-      console.info ('取消注册消息:' + args.cmd);
+      // console.info ('取消注册消息:' + args.cmd);
       this.removeWsCommand (args);
     });
 
@@ -136,13 +136,13 @@ class MessageManager extends EventEmitter {
           let command = this.wsCommandMap.get (uuidcommand);
           if (command) {
             this.wsCommandMap.delete (uuidcommand);
-            console.info ('移除:' + uuidcommand);
+            // console.info ('移除:' + uuidcommand);
           }
           removeUUID = uuidcommand;
         });
       }
     } catch (ex) {
-      console.info ('uuidcommand:' + removeUUID);
+      // console.info ('uuidcommand:' + removeUUID);
     }
 
     let count = this.wsCommandMap.size;
@@ -219,13 +219,13 @@ class MessageManager extends EventEmitter {
           let command = this.commandMap.get (uuidcommand);
           if (command) {
             this.commandMap.delete (uuidcommand);
-            console.info ('移除:' + uuidcommand);
+            // console.info ('移除:' + uuidcommand);
           }
           removeUUID = uuidcommand;
         });
       }
     } catch (ex) {
-      console.info ('uuidcommand:' + removeUUID);
+      // console.info ('uuidcommand:' + removeUUID);
     }
 
     let count = this.commandMap.size;
@@ -263,8 +263,8 @@ class MessageManager extends EventEmitter {
         message_num,
         filter
       );
-      console.info ('topic:' + topic);
-      console.info ('packet message:' + message);
+      // console.info ('topic:' + topic);
+      // console.info ('packet message:' + message);
       mqttWorker.emit ('session:publish', {topic: topic, message: message});
     }
   }
@@ -278,19 +278,19 @@ class MessageManager extends EventEmitter {
     let token = Base64.encode (
       JSON.stringify ({cmd: cmd, key: key, timestamp: timestamp})
     );
-    console.info (
-      'cmd:' +
-        cmd +
-        ' salt:' +
-        salt +
-        ' timestamp:' +
-        timestamp +
-        ' key:' +
-        key +
-        ' token:' +
-        token,
-      ' filter:' + filter
-    );
+    // console.info (
+    //   'cmd:' +
+    //     cmd +
+    //     ' salt:' +
+    //     salt +
+    //     ' timestamp:' +
+    //     timestamp +
+    //     ' key:' +
+    //     key +
+    //     ' token:' +
+    //     token,
+    //   ' filter:' + filter
+    // );
     let messageIndex = 0;
     let num_id = timestampToTime (timestamp) + message_num;
     num_id = num_id.substring (0, 20);
