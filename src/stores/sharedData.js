@@ -45,6 +45,14 @@ class sharedData extends EventEmitter {
     signal: 0,
   };
 
+  @observable elevatorConnectOptionValue = {
+    phone: '',
+    video: '',
+  };
+
+  @observable elevatorStatusValue = {};
+  @observable elevatorLogValue = {};
+
   sumDay = '50'; // 运行天数
 
   //runningDataOption = null;
