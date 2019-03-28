@@ -19,6 +19,7 @@
   padding: 0 0 0 24px;
   cursor: pointer;
   font-size: 20px;
+
   img {
     display: inline-block;
     vertical-align: middle;
@@ -29,6 +30,7 @@
   :global(.anticon) {
     margin-right: 8px;
   }
+
   :global(.ant-dropdown-menu-item) {
     min-width: 160px;
   }
@@ -39,7 +41,8 @@
   height: @layout-header-height;
   cursor: pointer;
   transition: all 0.3s, padding 0s;
-  padding: ~'calc((@{layout-header-height} - 20px) / 2)' 24px;
+  padding:~'calc((@{layout-header-height} - 20px) / 2)'24px;
+
   &:hover {
     background: @pro-header-hover-bg;
   }
@@ -49,32 +52,39 @@
   float: right;
   height: 100%;
   overflow: hidden;
+
   .action {
     cursor: pointer;
     padding: 0 12px;
     display: inline-block;
     transition: all 0.3s;
     height: 100%;
-    > i {
+
+    >i {
       vertical-align: middle;
       color: @text-color;
     }
+
     &:hover {
       background: @pro-header-hover-bg;
     }
+
     &:global(.opened) {
       background: @pro-header-hover-bg;
     }
   }
+
   .search {
     padding: 0 12px;
+
     &:hover {
       background: transparent;
     }
   }
+
   .account {
     .avatar {
-      margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
+      margin:~'calc((@{layout-header-height} - 24px) / 2)'0;
       margin-right: 8px;
       color: @primary-color;
       background: rgba(255, 255, 255, 0.85);
@@ -85,15 +95,19 @@
 
 .dark {
   height: @layout-header-height;
+
   .action {
     color: rgba(255, 255, 255, 0.85);
-    > i {
+
+    >i {
       color: rgba(255, 255, 255, 0.85);
     }
+
     &:hover,
     &:global(.opened) {
       background: @primary-color;
     }
+
     :global(.ant-badge) {
       color: rgba(255, 255, 255, 0.85);
     }
@@ -105,22 +119,27 @@
     :global(.ant-divider-vertical) {
       vertical-align: unset;
     }
+
     .name {
       display: none;
     }
+
     i.trigger {
       padding: 22px 12px;
     }
+
     .logo {
       padding-left: 12px;
       padding-right: 12px;
       position: relative;
     }
+
     .right {
       position: absolute;
       right: 12px;
       top: 0;
       background: #fff;
+
       .account {
         .avatar {
           margin-right: 0;
@@ -130,94 +149,108 @@
   }
 }
 
-.chartContent{
-  padding-bottom:50px; 
-  margin:0 10px 50px 10px;
+.chartContent {
+  padding-bottom: 50px;
+  margin: 0 10px 50px 10px;
   border-bottom: 1px dashed #dddddd;
   background-image: url("../../../public/bg/1.png");
   background-size: cover;
 }
-.installRecord{
-  .title{
+
+.installRecord {
+  .title {
     display: block;
   }
-  .installRecordDetail{
-    display: block;
-    font-size: 12px;
-  }
-}
-.maintenanceRecord{
-  .title{
-    display: block;
-  }
-  .maintenanceRecordDetail{
+
+  .installRecordDetail {
     display: block;
     font-size: 12px;
   }
 }
-.notification{
-  .notificationInfo{
+
+.maintenanceRecord {
+  .title {
+    display: block;
+    color: #41cff0;
+  }
+
+  .maintenanceRecordDetail {
+    display: block;
+    font-size: 12px;
+  }
+}
+
+.notification {
+  .notificationInfo {
     margin-bottom: 20px;
     display: inline-block;
   }
-  .button{
+
+  .button {
     margin-right: 10px;
   }
 }
-.RunningDataChart{
+
+.RunningDataChart {
   background-image: url("../../../public/bg/1.png");
   background-size: 100% 100%;
-  padding:10px 5px; 
-  margin:0 10px 50px 10px;
-  min-height: 25vh;
-}
-.SystemCountChart{
-  background-image: url("../../../public/bg/2.png");
-  background-size: 100% 100%;
-  padding:10px 5px; 
-  margin:0 10px 50px 10px;
-  min-height: 25vh;
-}
-.Offline_Count_Every_Month_Chart{
-  background-image: url("../../../public/bg/4.png");
-  background-size: 100% 100%;
-  padding:10px 5px; 
-  margin:0 10px 50px 10px;
-  min-height: 25vh;
-}
-.Installation_Record{
-  background-image: url("../../../public/bg/5.png");
-  background-size: 100% 100%;
-  padding:10px 5px; 
-  margin:0 10px 50px 10px;
-  min-height: 25vh;
-}
-.Elevator_Error_Connect{
-  background-image: url("../../../public/bg/9.png");
-  background-size: 100% 100%;
-  padding:10px 5px; 
-  margin:0 10px 50px 10px;
-  min-height: 25vh;
-}
-.Elevator_Log{
-  background-image: url("../../../public/bg/11.png");
-  background-size: 100% 100%;
-  padding:10px 5px; 
-  margin:0 10px 50px 10px;
-  min-height: 25vh;
-}
-.Maintenance_Orders_And_Finish_Chart{
-  background-image: url("../../../public/bg/26.png");
-  background-size: 100% 100%;
-  padding:10px 5px; 
-  margin:0 10px 50px 10px;
-  min-height: 25vh;
-}
-.Maintenance_Record{
-  background-image: url("../../../public/bg/27.png");
-  background-size: 100% 100%;
-  padding:50px; 
-  margin:0 10px 50px 10px;
+  padding: 10px 5px;
+  margin: 0 10px 50px 10px;
   min-height: 25vh;
 }
 
+.SystemCountChart {
+  background-image: url("../../../public/bg/2.png");
+  background-size: 100% 100%;
+  padding: 10px 5px;
+  margin: 0 10px 50px 10px;
+  min-height: 25vh;
+}
+
+.Offline_Count_Every_Month_Chart {
+  background-image: url("../../../public/bg/4.png");
+  background-size: 100% 100%;
+  padding: 10px 5px;
+  margin: 0 10px 50px 10px;
+  min-height: 25vh;
+}
+
+.Installation_Record {
+  background-image: url("../../../public/bg/5.png");
+  background-size: 100% 100%;
+  padding: 10px 5px;
+  margin: 0 10px 50px 10px;
+  min-height: 25vh;
+}
+
+.Elevator_Error_Connect {
+  background-image: url("../../../public/bg/9.png");
+  background-size: 100% 100%;
+  padding: 10px 5px;
+  margin: 0 10px 50px 10px;
+  min-height: 25vh;
+}
+
+.Elevator_Log {
+  background-image: url("../../../public/bg/11.png");
+  background-size: 100% 100%;
+  padding: 10px 5px;
+  margin: 0 10px 50px 10px;
+  min-height: 25vh;
+}
+
+.Maintenance_Orders_And_Finish_Chart {
+  background-image: url("../../../public/bg/26.png");
+  background-size: 100% 100%;
+  padding: 10px 5px;
+  margin: 0 10px 50px 10px;
+  min-height: 25vh;
+}
+
+.Maintenance_Record {
+  background-image: url("../../../public/bg/27.png");
+  background-size: 100% 100%;
+  padding: 50px;
+  margin: 0 10px 50px 10px;
+  min-height: 25vh;
+}

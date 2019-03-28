@@ -46,8 +46,7 @@ class sharedData extends EventEmitter {
   };
 
   @observable elevatorConnectOptionValue = {
-    phone: '',
-    video: '',
+    url: '',
   };
 
   @observable elevatorStatusValue = {};
@@ -78,6 +77,11 @@ class sharedData extends EventEmitter {
         type: 'bar',
         barWidth: '60%',
         data: [0, 0, 0, 0, 0],
+        itemStyle: {
+          normal: {
+            color: '#2dd8db',
+          },
+        },
       },
     ];
 
@@ -268,6 +272,11 @@ class sharedData extends EventEmitter {
               type: 'bar',
               barWidth: '20%',
               data: dataArray,
+              itemStyle: {
+                normal: {
+                  color: '#2dd8db',
+                },
+              },
             },
           ];
 
@@ -309,8 +318,10 @@ class sharedData extends EventEmitter {
           rows.forEach (item => {
             let month = item.month;
             let total = item.total;
-            categoryArray.push (month);
-            dataArray.push (total);
+            if (month) {
+              categoryArray.push (month);
+              dataArray.push (total);
+            }
           });
 
           this.offlineCountOptionValue.xAxis[0].data = categoryArray;
@@ -319,8 +330,14 @@ class sharedData extends EventEmitter {
             {
               name: '离线数量',
               type: 'bar',
-              barWidth: '10%',
               data: dataArray,
+              barWidth: 10,
+              //颜色
+              itemStyle: {
+                normal: {
+                  color: '#2dd8db',
+                },
+              },
             },
           ];
         }
@@ -341,8 +358,7 @@ class sharedData extends EventEmitter {
               if (url && url.length > 0) {
                 console.log ('url:' + url);
                 let options = {
-                  video: url,
-                  phone: url,
+                  url: url,
                 };
                 this.elevatorConnectOption = options;
               }
