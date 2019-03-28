@@ -6,6 +6,7 @@ import styles from './map.less';
 import ReactEcharts from 'echarts-for-react';
 import {inject, observer} from 'mobx-react';
 import router from 'umi/router';
+import mapStyle from './custom_map_config.js';
 
 require ('echarts/map/js/china.js');
 
@@ -68,7 +69,6 @@ export default class Map extends Component {
         document.getElementsByClassName('anchorBL')[1].innerHTML = "";
       },1500)
     },500)
-
   }
   componentWillUpdate (nextProps) {}
   componentWillUnmount () {
@@ -108,6 +108,9 @@ export default class Map extends Component {
     var map = new BMap.Map ('allmap');
     map.centerAndZoom (new BMap.Point (116.404, 39.915), 5);
     map.enableScrollWheelZoom ();
+    map.setMapStyle({
+      style:'midnight'
+    });
     var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
 
     //添加聚合效果。
@@ -121,6 +124,7 @@ export default class Map extends Component {
     mapData.forEach ((item, i) => {
       var point = new BMap.Point (item.longitude, item.latitude);
       var marker = new BMap.Marker (point);
+
       var content = item.ara_addr_name;
       this.addClickHandler (item, marker); //添加点击事件
       marker.info = item;
@@ -135,6 +139,12 @@ export default class Map extends Component {
     // markerClusterer._clusters[0]._clusterMarker._domElement.addEventListener ('click', function (e) {
     //   debugger
     // });
+    setTimeout(()=>{
+      document.getElementsByClassName('anchorBL')[0].innerHTML = "";
+      setTimeout(()=>{
+        document.getElementsByClassName('anchorBL')[1].innerHTML = "";
+      },1500)
+    },500)
   }
   //聚合点点击
   addClickClusterer (markerClusterer) {

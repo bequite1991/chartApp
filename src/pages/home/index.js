@@ -77,7 +77,7 @@ export default class Home extends PureComponent {
       maintenance = (<div className={styles.Maintenance_Orders_And_Finish_Chart}>
               <Maintenance_Orders_And_Finish_Chart />
             </div>)
-      systemCountChart = (<div className={styles.chartContent}>
+      systemCountChart = (<div className={styles.SystemCountChart}>
               <SystemCountChart className={styles.SystemCountChart}/>
             </div>)
     }
