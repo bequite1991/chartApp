@@ -1,6 +1,7 @@
 const Elevator_Running_Data_Chart_Options = {
   title: {
-    text: '电梯运行数据',
+    text: '电梯运行天数',
+    left: 'center',
     subtext: '',
     textStyle: {
       fontWeight: 'normal', //标题颜色
@@ -11,11 +12,11 @@ const Elevator_Running_Data_Chart_Options = {
   tooltip: {
     trigger: 'axis',
   },
-  legend: {
-    data: ['2019年'],
-  },
+  // legend: {
+  //   data: ['2019年'],
+  // },
   toolbox: {
-    show: true,
+    show: false,
     feature: {
       mark: {show: true},
       dataView: {show: true, readOnly: false},
@@ -30,7 +31,7 @@ const Elevator_Running_Data_Chart_Options = {
       type: 'value',
       axisLine: {
         lineStyle: {
-          color: '#96cbe4',
+          color: '#816BC2',
         },
       },
     },
@@ -41,7 +42,8 @@ const Elevator_Running_Data_Chart_Options = {
       data: ['总运行天数（天）'],
       axisLine: {
         lineStyle: {
-          color: '#96cbe4',
+          color: '#816BC2',
+          writingMode:"tb-rl"
         },
       },
     },
@@ -55,7 +57,7 @@ const Elevator_Running_Data_Chart_Options = {
       //颜色
       itemStyle: {
         normal: {
-          color: '#fe8323',
+          color: '#816BC2',
         },
       },
     },
@@ -70,6 +72,7 @@ const Elevator_Running_Data_Chart_Options = {
 const Elevator_System_Count_Chart_Options = {
   title: {
     text: '电梯系统安装数量',
+    left: 'center',
     subtext: '',
     textStyle: {
       fontWeight: 'normal', //标题颜色
@@ -80,11 +83,11 @@ const Elevator_System_Count_Chart_Options = {
   tooltip: {
     trigger: 'axis',
   },
-  legend: {
-    data: ['总数'],
-  },
+  // legend: {
+  //   data: ['总数'],
+  // },
   toolbox: {
-    show: true,
+    show: false,
     feature: {
       mark: {show: true},
       dataView: {show: true, readOnly: false},
@@ -140,6 +143,7 @@ const Elevator_System_Count_Chart_Options = {
 const Elevator_Offline_Count_Every_Month_Chart_Option = {
   title: {
     text: '每月电梯离线次数',
+    left: 'center',
     subtext: '',
     textStyle: {
       fontWeight: 'normal', //标题颜色
@@ -150,11 +154,11 @@ const Elevator_Offline_Count_Every_Month_Chart_Option = {
   tooltip: {
     trigger: 'axis',
   },
-  legend: {
-    data: ['次数', '月份'],
-  },
+  // legend: {
+  //   data: ['次数', '月份'],
+  // },
   toolbox: {
-    show: true,
+    show: false,
     feature: {
       mark: {show: true},
       dataView: {show: true, readOnly: false},
@@ -206,6 +210,7 @@ const Elevator_Offline_Count_Every_Month_Chart_Option = {
 const Elevator_Map_China_Options = {
   title: {
     text: '设备分布',
+    left: 'center',
     subtext: '慧保电梯设备分布图',
     left: 'center',
     textStyle: {
@@ -217,11 +222,11 @@ const Elevator_Map_China_Options = {
   tooltip: {
     trigger: 'item',
   },
-  legend: {
-    orient: 'vertical',
-    left: 'left',
-    data: ['全部型号'],
-  },
+  // legend: {
+  //   orient: 'vertical',
+  //   left: 'left',
+  //   data: ['全部型号'],
+  // },
   visualMap: {
     min: 100,
     max: 10000,
@@ -231,7 +236,7 @@ const Elevator_Map_China_Options = {
     calculable: false,
   },
   toolbox: {
-    show: true,
+    show: false,
     orient: 'vertical',
     left: 'right',
     top: 'center',
@@ -352,11 +357,11 @@ const Elevator_Error_Ratio_Chart_Options = {
     trigger: 'item',
     formatter: '{a} <br/>{b} : {c} ({d}%)',
   },
-  legend: {
-    orient: 'vertical',
-    left: 'left',
-    data: [],
-  },
+  // legend: {
+  //   orient: 'vertical',
+  //   left: 'left',
+  //   data: [],
+  // },
   series: [
     // {
     //     name: '访问来源',
@@ -439,11 +444,11 @@ const Elevator_Maintenance_OrdersAndFinish_Chart_Options = {
       type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
     },
   },
-  legend: {
-    left: 'left',
-    orient: 'vertical',
-    data: ['完成量', '未完成量'],
-  },
+  // legend: {
+  //   left: 'left',
+  //   orient: 'vertical',
+  //   data: ['完成量', '未完成量'],
+  // },
   grid: {
     left: '3%',
     right: '4%',

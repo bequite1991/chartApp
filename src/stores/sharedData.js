@@ -280,7 +280,7 @@ class sharedData extends EventEmitter {
             },
           ];
 
-          this.elevatorErrorRatioOptionValue.legend.data = categoryArray;
+          // this.elevatorErrorRatioOptionValue.legend.data = categoryArray;
           this.elevatorErrorRatioOptionValue.series[0].data = pieDataArray;
         }
       }
