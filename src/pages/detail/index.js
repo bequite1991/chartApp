@@ -52,6 +52,10 @@ export default class Home extends PureComponent {
     window.dispatchEvent (event);
   }
 
+  goBack(){
+    router.go(-1);
+  }
+
   // shouldComponentUpdate (nextProps, nextState) {
   //   if (this.props.option === nextProps.option) {
   //     return false;
@@ -127,6 +131,7 @@ export default class Home extends PureComponent {
         <div>
           {charts}
           <Warning />
+          <Button type="dashed" block onClick={this.goBack}>返回上一页</Button>
         </div>
       </Provider>
     );

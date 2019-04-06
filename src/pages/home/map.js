@@ -111,7 +111,7 @@ export default class Map extends Component {
     map.setMapStyle({
       style:'midnight'
     });
-    var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
+    // var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
 
     //添加聚合效果。
     var markerClusterer = new BMapLib.MarkerClusterer (this.map, {markers: []});
@@ -120,21 +120,88 @@ export default class Map extends Component {
   }
 
   mapUpdate (mapData = []) {
+    var fineMarkers = new Array ();
+    var errorMarkers = new Array ();
+    var offlineMarkers = new Array ();
     var markers = new Array ();
     mapData.forEach ((item, i) => {
+      var iconImg;
+      if(item.real_info == "0"){
+        iconImg = new BMap.Icon ('Info-Point-yello.png', new BMap.Size (30, 30),{    
+           offset: new BMap.Size(10, 30),      
+           imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
+        });
+        // offlineMarkers.push (marker);
+      }else if(item.real_info == "1"){
+        iconImg = new BMap.Icon ('Info-Point-green.png', new BMap.Size (30, 30),{    
+           offset: new BMap.Size(10, 30),      
+           imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
+        });
+        // fineMarkers.push (marker);
+      }else{
+        iconImg = new BMap.Icon ('Info-Point-red.png', new BMap.Size (30, 30),{    
+           offset: new BMap.Size(10, 30),      
+           imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
+        });
+        // errorMarkers.push (marker);
+      }
       var point = new BMap.Point (item.longitude, item.latitude);
-      var marker = new BMap.Marker (point);
-
+      var marker = new BMap.Marker (point,{icon: iconImg});
       var content = item.ara_addr_name;
       this.addClickHandler (item, marker); //添加点击事件
       marker.info = item;
-      markers.push (marker);
+      markers.push(marker);
     });
 
+
+    // var defaultClusterer = new BMapLib.MarkerClusterer (this.map, {
+    //   markers: []
+    // });
+    // var styles = defaultClusterer._styles;
+
+    // var fineStyles = new Array ();
+    // var errorStyles = new Array ();
+    // var offlineStyles = new Array ();
+    // fineStyles.forEach((ele,index)=>{
+    //   var item = ele;
+    //   item.url="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m0.png";
+    //   fineStyles.push(item);
+    // });
+    // errorStyles.forEach((ele,index)=>{
+    //   var item = ele;
+    //   item.url="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png";
+    //   errorStyles.push(item);
+    // });
+    // offlineStyles.forEach((ele,index)=>{
+    //   var item = ele;
+    //   item.url="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png";
+    //   offlineStyles.push(item);
+    // });
+  
+
     //添加聚合效果。
+    // var fineMarkerClusterer = new BMapLib.MarkerClusterer (this.map, {
+    //   markers: fineMarkers,
+    //   // styles:[{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m0.png"},{size:{width:56,height:56},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:66,height:66},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:78,height:78},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m3.png"},{size:{width:90,height:90},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m4.png"}]
+    //   styles:fineStyles
+    // });
+    // var errorMarkerClusterer = new BMapLib.MarkerClusterer (this.map, {
+    //   markers: errorMarkers,
+    //   // styles:[{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"}]
+    //   styles:errorStyles
+    // });
+    // var offlineMarkerClusterer = new BMapLib.MarkerClusterer (this.map, {
+    //   markers: offlineMarkers,
+    //   // styles:[{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"}]
+    //   styles:offlineStyles
+    // });
+
     var markerClusterer = new BMapLib.MarkerClusterer (this.map, {
-      markers: markers,
+      markers: markers
     });
+    // this.addClickClusterer (fineMarkerClusterer);
+    // this.addClickClusterer (errorMarkerClusterer);
+    // this.addClickClusterer (offlineMarkerClusterer);
     this.addClickClusterer (markerClusterer);
     // markerClusterer._clusters[0]._clusterMarker._domElement.addEventListener ('click', function (e) {
     //   debugger

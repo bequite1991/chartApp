@@ -9,24 +9,24 @@ const Elevator_Running_Data_Chart_Options = {
       fontSize: '12px',
     },
   },
-  tooltip: {
-    trigger: 'axis',
-  },
+  // tooltip: {
+  //   trigger: 'axis',
+  // },
   // legend: {
   //   data: ['2019年'],
   // },
-  toolbox: {
-    show: false,
-    feature: {
-      mark: {show: true},
-      dataView: {show: true, readOnly: false},
-      magicType: {show: true, type: ['line', 'bar']},
-      restore: {show: true},
-      saveAsImage: {show: true},
-    },
-  },
-  calculable: true,
-  xAxis: [
+  // toolbox: {
+  //   show: false,
+  //   feature: {
+  //     mark: {show: true},
+  //     dataView: {show: true, readOnly: false},
+  //     magicType: {show: true, type: ['line', 'bar']},
+  //     restore: {show: true},
+  //     saveAsImage: {show: true},
+  //   },
+  // },
+  // calculable: true,
+  yAxis: [
     {
       type: 'value',
       axisLine: {
@@ -36,14 +36,13 @@ const Elevator_Running_Data_Chart_Options = {
       },
     },
   ],
-  yAxis: [
+  xAxis: [
     {
       type: 'category',
       data: ['总运行天数（天）'],
       axisLine: {
         lineStyle: {
           color: '#816BC2',
-          writingMode:"tb-rl"
         },
       },
     },

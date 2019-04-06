@@ -70,7 +70,7 @@ export default class Home extends PureComponent {
 
   render () {
     let charts;
-    if (document.body.clientWidth < 1000) {
+    if (true) {
       charts = (
         <Row>
           <Col span={24}><Map_China /></Col>

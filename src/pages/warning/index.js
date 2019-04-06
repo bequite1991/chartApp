@@ -20,11 +20,11 @@ export default class Home extends React.Component {
     this.state = {
       modalVisible:false
     };
-    // const {sharedData} = this.props;
-    // const warningMessage = sharedData.warningMessage;
-    // if (sharedData.warningMessage) {
-    //   this.openNotification(warningMessage)
-    // }
+    const {sharedData} = this.props;
+    const warningMessage = sharedData.warningMessage;
+    if (sharedData.warningMessage) {
+      this.openNotification(warningMessage)
+    }
     // this.openNotification();
   }
 
@@ -62,7 +62,7 @@ export default class Home extends React.Component {
         <Button className={styles.button} type="primary" size="small" onClick={() => {t.notificationClose(key,t);t.setModalVisible(true);}}>
           故障处理
         </Button>
-        <Button className={styles.button} type="default" size="small" onClick={() => {t.notificationClose(key,t);t.setModalVisible(true);}}>
+        <Button className={styles.button} type="default" size="small" onClick={() => {t.notificationClose(key,t);}}>
           取消
         </Button>
       </div>
@@ -89,7 +89,7 @@ export default class Home extends React.Component {
     const warningMessage = sharedData.warningMessage;
     return (
       <Modal
-        width="100%"
+        width="50%"
         title="故障详情"
         centered
         visible={modalVisible}

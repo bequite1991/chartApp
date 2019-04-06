@@ -4,6 +4,7 @@ import {Icon,Row, Col,Button, notification} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
+import router from 'umi/router';
 
 import {Provider} from 'mobx-react';
 
@@ -59,6 +60,10 @@ export default class Home extends PureComponent {
     window.dispatchEvent (event);
   }
 
+  goBack(){
+    router.go(-1);
+  }
+
   // shouldComponentUpdate (nextProps, nextState) {
   //   if (this.props.option === nextProps.option) {
   //     return false;
@@ -110,7 +115,7 @@ export default class Home extends PureComponent {
     } else {
       charts = (
         <Row>
-          <Col span={5}>
+          <Col span={6}>
             <div className={styles.RunningDataChart}>
               <RunningDataChart />
             </div>
@@ -120,8 +125,8 @@ export default class Home extends PureComponent {
             </div>
             <div className={styles.Installation_Record}><Installation_Record /></div>
           </Col>
-          <Col span={14}><Map_China /></Col>
-          <Col span={5}>
+          <Col span={12}><Map_China /></Col>
+          <Col span={6}>
             <div className={styles.Elevator_Error_Every_Month_Chart}>
               <Elevator_Error_Every_Month_Chart />
             </div>
@@ -139,6 +144,7 @@ export default class Home extends PureComponent {
         <div>
           {charts}
           <Warning />
+          <Button type="dashed" block onClick={this.goBack}>返回上一页</Button>
         </div>
       </Provider>
     );
