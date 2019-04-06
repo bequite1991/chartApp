@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {inject, observer} from 'mobx-react';
 import Debounce from 'lodash-decorators/debounce';
-import {Icon,Row, Col,Button, notification,Modal} from 'antd';
+import {Icon, Row, Col, Button, notification, Modal} from 'antd';
 import styles from './index.less';
 
 import {Provider} from 'mobx-react';
@@ -14,11 +14,11 @@ import Detail_Index from './detail';
 
 @inject ('sharedData')
 @observer
-export default class Home extends React.Component {
+export default class Warning extends React.Component {
   constructor (props) {
     super (props);
     this.state = {
-      modalVisible:false
+      modalVisible: false,
     };
     // const {sharedData} = this.props;
     // const warningMessage = sharedData.warningMessage;
@@ -40,47 +40,67 @@ export default class Home extends React.Component {
   //   }
   // }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps (nextProps) {
     const {sharedData} = nextProps;
     const warningMessage = sharedData.warningMessage;
     if (sharedData.warningMessage) {
-      this.openNotification(warningMessage)
+      this.openNotification (warningMessage);
     }
   }
   //打开通知窗口
-  notificationClose(key,t){
-    console.log('Notification was closed. Either the close button was clicked or duration time elapsed.');
-    notification.close(key);
-  };
+  notificationClose (key, t) {
+    console.log (
+      'Notification was closed. Either the close button was clicked or duration time elapsed.'
+    );
+    notification.close (key);
+  }
   //打开通知
-  openNotification(warningMessage){
+  openNotification (warningMessage) {
     const t = this;
-    const key = `open${Date.now()}`;
+    const key = `open${Date.now ()}`;
     const contents = (
       <div className={styles.notification}>
-        <span className={styles.notificationInfo}>{warningMessage.message}</span>
-        <Button className={styles.button} type="primary" size="small" onClick={() => {t.notificationClose(key,t);t.setModalVisible(true);}}>
+        <span className={styles.notificationInfo}>
+          {warningMessage.message}
+        </span>
+        <Button
+          className={styles.button}
+          type="primary"
+          size="small"
+          onClick={() => {
+            t.notificationClose (key, t);
+            t.setModalVisible (true);
+          }}
+        >
           故障处理
         </Button>
-        <Button className={styles.button} type="default" size="small" onClick={() => {t.notificationClose(key,t);t.setModalVisible(true);}}>
+        <Button
+          className={styles.button}
+          type="default"
+          size="small"
+          onClick={() => {
+            t.notificationClose (key, t);
+            t.setModalVisible (true);
+          }}
+        >
           取消
         </Button>
       </div>
     );
-    notification.open({
-      duration:null,
-      type:"warning",
+    notification.open ({
+      duration: null,
+      type: 'warning',
       message: '故障警报',
-      description:contents,
+      description: contents,
       key,
-      onClose: t.notificationClose(key,t),
-      placement:"bottomRight"
+      onClose: t.notificationClose (key, t),
+      placement: 'bottomRight',
     });
-  };
+  }
 
   //关闭弹窗
-  setModalVisible(param) {
-    this.setState({modalVisible:param});
+  setModalVisible (param) {
+    this.setState ({modalVisible: param});
   }
 
   render () {
@@ -93,10 +113,10 @@ export default class Home extends React.Component {
         title="故障详情"
         centered
         visible={modalVisible}
-        onOk={() => this.setModalVisible(false)}
-        onCancel={() => this.setModalVisible(false)}
+        onOk={() => this.setModalVisible (false)}
+        onCancel={() => this.setModalVisible (false)}
       >
-        <Detail_Index warningMessage={warningMessage}/>
+        <Detail_Index warningMessage={warningMessage} />
       </Modal>
     );
   }

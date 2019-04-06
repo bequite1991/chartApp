@@ -28,38 +28,20 @@ import Maintenance_Record from './maintenanceRecord.js';
 
 //维保记录
 import Warning from '../warning';
+
+import ElevatorInTimeIFrame from './elevatorInTimeIFrame';
 import messageManager from '../../stores/messageManager';
 
 // @inject ('runningData')
 // @observer
-export default class Home extends PureComponent {
+export default class Detail extends PureComponent {
   init = false;
   constructor (props) {
     super (props);
     this.state = {};
-
-    setInterval (() => {}, 2000);
   }
 
   componentWillUnmount () {}
-
-  /* eslint-disable*/
-  @Debounce (600)
-  triggerResizeEvent () {
-    // eslint-disable-line
-    const event = document.createEvent ('HTMLEvents');
-    event.initEvent ('resize', true, false);
-    window.dispatchEvent (event);
-  }
-
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   if (this.props.option === nextProps.option) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
-  //打开通知窗口
 
   render () {
     let charts;
@@ -82,9 +64,7 @@ export default class Home extends PureComponent {
               />
             </div>
             <div className={styles.chartContent}>
-              <Elevator_Log
-                className={styles.Elevator_Log}
-              />
+              <Elevator_Log className={styles.Elevator_Log} />
             </div>
           </Col>
         </Row>
@@ -127,6 +107,7 @@ export default class Home extends PureComponent {
         <div>
           {charts}
           <Warning />
+          <ElevatorInTimeIFrame />
         </div>
       </Provider>
     );

@@ -16,8 +16,10 @@ import QueryString from 'query-string';
 
 @inject ('sharedData', 'messageManager')
 @observer
-export default class SystemCountChart extends React.Component {
+export default class ElevatorErrorConnect extends React.Component {
   uuid = '';
+  isShowFrame = false;
+  url = '';
   constructor (props) {
     super (props);
     this.state = {};
@@ -30,6 +32,7 @@ export default class SystemCountChart extends React.Component {
       cmd: '9007',
       filter: dev_id,
     });
+    this.isShowFrame = false;
   }
 
   componentWillUnmount () {
@@ -40,21 +43,54 @@ export default class SystemCountChart extends React.Component {
   onChartClick (param, echarts) {
     const {sharedData} = this.props;
     const option = sharedData.elevatorConnectOption;
-    console.log (param);
+    //console.log (param);
     router.push (option.url);
   }
 
+  handlePhone = () => {
+    debugger;
+
+    const {sharedData} = this.props;
+    const option = sharedData.elevatorConnectOption;
+    //router.push (option.url);
+    this.url = option.url;
+    if (this.url && this.url.length > 0) {
+      sharedData.emit ('open_iframe', {
+        url: this.url,
+        open: true,
+      });
+    }
+  };
+
+  handleVideo = () => {
+    debugger;
+
+    const {sharedData} = this.props;
+    const option = sharedData.elevatorConnectOption;
+    //router.push (option.url);
+    this.url = option.url;
+    if (this.url && this.url.length > 0) {
+      sharedData.emit ('open_iframe', {
+        url: this.url,
+        open: true,
+      });
+      // sharedData.elevatorInTimeIFrameOption = {
+      //   url: this.url,
+      //   open: true,
+      // };
+    }
+  };
+
   render () {
-    let onEvents = {
-      click: this.onChartClick.bind (this),
-    };
     return (
       <div className={styles.control}>
-        <div className={styles.button}>
-          <Icon type="phone" className={styles.icon} /><span>通话</span>
+        <div className={styles.button} onClick={this.handlePhone}>
+          <Icon type="phone" className={styles.icon} />
+          <span>通话</span>
         </div>
-        <div className={styles.button}>
-          <Icon type="dashboard" className={styles.icon} /><span>监视</span>
+        <div className={styles.button} onClick={this.handleVideo}>
+          <Icon type="dashboard" className={styles.icon} />
+          <span>监视</span>
         </div>
       </div>
     );
