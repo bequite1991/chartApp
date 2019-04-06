@@ -49,11 +49,17 @@ class sharedData extends EventEmitter {
     url: '',
   };
 
+  @observable elevatorInTimeIFrameOptionValue = {
+    url: '',
+    open: false,
+  };
+
   @observable elevatorStatusValue = {};
   @observable elevatorLogValue = {};
 
   sumDay = '50'; // 运行天数
 
+  updateMapMarkers = true;
   //runningDataOption = null;
 
   constructor () {
@@ -364,11 +370,17 @@ class sharedData extends EventEmitter {
               }
             }
           } else {
-            this.emit ('map_markers', rows);
+            if (this.updateMapMarkers == true) {
+              this.emit ('map_markers', rows);
+            }
           }
           //this.mapChinaOptionValue = rows;
         }
       }
+    });
+
+    this.on ('cancel_map_markers', args => {
+      this.updateMapMarkers = false;
     });
 
     messageManager.on ('9009', args => {
@@ -466,6 +478,14 @@ class sharedData extends EventEmitter {
         floors: dynamicInfo.floors ? dynamicInfo.floors : '',
         energy: dynamicInfo.energy,
         signal: signalLevel ? signalLevel : '',
+      };
+    });
+
+    this.on ('open_iframe', args => {
+      debugger;
+      this.elevatorInTimeIFrameOption = {
+        url: args.url,
+        open: args.open,
       };
     });
   }
@@ -654,6 +674,15 @@ class sharedData extends EventEmitter {
 
   set elevatorConnectOption (list) {
     this.elevatorConnectOptionValue = list;
+  }
+
+  //电梯故障联系方式 地址
+  @computed get elevatorInTimeIFrameOption () {
+    return toJS (this.elevatorInTimeIFrameOptionValue);
+  }
+
+  set elevatorInTimeIFrameOption (objOption) {
+    this.elevatorInTimeIFrameOptionValue = objOption;
   }
 
   @computed get dynamicInfoOption () {

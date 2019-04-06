@@ -33,46 +33,78 @@ var data = [
 export default class Map extends Component {
   //let markers = [];
   uuid = '';
+  isQuit = false;
+  devIdlist = '-1';
   constructor (props) {
     super (props);
     this.onEvents = {
       click: this.onChartClick.bind (this),
       legendselectchanged: this.onChartLegendselectchanged.bind (this),
     };
+  }
+
+  componentWillUpdate () {
+    const dev_id_list =
+      QueryString.parse (window.location.search).dev_id_list || '';
+
+    if (dev_id_list == this.devIdlist) {
+      return;
+    }
+
+    this.devIdlist = dev_id_list;
+
+    const {messageManager, sharedData} = this.props;
+
+    if (this.uuid.length > 0) {
+      messageManager.emit ('unregister', {
+        uuid: this.uuid,
+        cmd: '9006',
+      });
+
+      messageManager.emit ('unregister', {
+        uuid: this.uuid,
+        cmd: '9001',
+      });
+    }
 
     this.uuid = uuid.v1 ();
-    const dev_id = QueryString.parse (window.location.search).dev_id || '';
-    const {messageManager, sharedData} = this.props;
+
     messageManager.emit ('register', {
       uuid: this.uuid,
       cmd: '9006',
-      filter: dev_id,
+      filter: dev_id_list,
     });
     messageManager.emit ('register', {
       uuid: this.uuid,
       cmd: '9001',
-      filter: dev_id,
+      filter: dev_id_list,
     });
   }
 
   componentDidMount () {
     const {sharedData} = this.props;
+
     this.initMap ();
+
     sharedData.on ('map_markers', mapData => {
       if (mapData && mapData.length > 0) {
         this.mapUpdate (mapData);
       }
     });
-    setTimeout(()=>{
-      document.getElementsByClassName('anchorBL')[0].innerHTML = "";
-      setTimeout(()=>{
-        document.getElementsByClassName('anchorBL')[1].innerHTML = "";
-      },1500)
-    },500)
+
+    setTimeout (() => {
+      if (this.isQuit == true) {
+        document.getElementsByClassName ('anchorBL')[0].innerHTML = '';
+        setTimeout (() => {
+          document.getElementsByClassName ('anchorBL')[1].innerHTML = '';
+        }, 1500);
+      }
+    }, 500);
   }
+
   componentWillUpdate (nextProps) {}
   componentWillUnmount () {
-    const {messageManager} = this.props;
+    const {messageManager, sharedData} = this.props;
     messageManager.emit ('unregister', {
       uuid: this.uuid,
       cmd: '9006',
@@ -82,6 +114,10 @@ export default class Map extends Component {
       uuid: this.uuid,
       cmd: '9001',
     });
+
+    sharedData.emit ('cancel_map_markers', {});
+
+    this.isQuit = true;
   }
 
   randomData () {
@@ -108,8 +144,8 @@ export default class Map extends Component {
     var map = new BMap.Map ('allmap');
     map.centerAndZoom (new BMap.Point (116.404, 39.915), 5);
     map.enableScrollWheelZoom ();
-    map.setMapStyle({
-      style:'midnight'
+    map.setMapStyle ({
+      style: 'midnight',
     });
     // var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
 
@@ -206,12 +242,12 @@ export default class Map extends Component {
     // markerClusterer._clusters[0]._clusterMarker._domElement.addEventListener ('click', function (e) {
     //   debugger
     // });
-    setTimeout(()=>{
-      document.getElementsByClassName('anchorBL')[0].innerHTML = "";
-      setTimeout(()=>{
-        document.getElementsByClassName('anchorBL')[1].innerHTML = "";
-      },1500)
-    },500)
+    setTimeout (() => {
+      document.getElementsByClassName ('anchorBL')[0].innerHTML = '';
+      setTimeout (() => {
+        document.getElementsByClassName ('anchorBL')[1].innerHTML = '';
+      }, 1500);
+    }, 500);
   }
   //聚合点点击
   addClickClusterer (markerClusterer) {
@@ -266,7 +302,7 @@ export default class Map extends Component {
           if (index == marks.length - 1) {
             const url = '/home?dev_id_list=' + dev_id;
             sharedData.devIdList = ids;
-            router.push(url);
+            router.push (url);
           }
         });
       }
@@ -274,7 +310,7 @@ export default class Map extends Component {
   }
 
   goDetail (content, e) {
-    debugger
+    debugger;
     const url = '/detail?dev_id=' + content.dev_id;
     router.push (url);
   }
