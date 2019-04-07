@@ -57,6 +57,11 @@ class sharedData extends EventEmitter {
   @observable elevatorStatusValue = {};
   @observable elevatorLogValue = {};
 
+  @observable warningMessageValue = {
+    id: -1,
+    message: '',
+  };
+
   sumDay = '50'; // 运行天数
 
   updateMapMarkers = true;
@@ -447,15 +452,12 @@ class sharedData extends EventEmitter {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
-          debugger;
-          let row = rows[0];
-          // let totalInfo = {
-          //   total: row.total ? row.total : '0',
-          //   onLineTotal: row.on_total ? row.on_total : '0',
-          // };
-          // this.totalInfo = totalInfo;
-
-          // console.info('9006 is get data');
+          rows.forEach (item => {
+            this.warningMessage = {
+              id: item.sn,
+              message: item.alertname,
+            };
+          });
         }
       }
     });
