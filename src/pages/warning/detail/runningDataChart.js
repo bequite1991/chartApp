@@ -26,15 +26,7 @@ export default class RunningDataChart extends React.Component {
     this.uuid = uuid.v1 ();
     const dev_id = QueryString.parse (window.location.search).dev_id || '';
     const {messageManager} = this.props;
-    // messageManager.emit ('register', {cmd: '9001'});
-    // messageManager.emit ('register', {cmd: '9002'});
-    // messageManager.emit ('register', {cmd: '9003'});
-    // messageManager.emit ('register', {cmd: '9004'});
-    //messageManager.emit ('register', {cmd: '9006'});
-    // messageManager.emit ('register', {cmd: '9007'});
-    // messageManager.emit ('register', {cmd: '9009'});
-    //messageManager.emit ('register', {cmd: '9010'});
-    //messageManager.emit ('register', {cmd: '9011'});
+
     messageManager.emit ('register', {
       uuid: this.uuid,
       cmd: '9012',

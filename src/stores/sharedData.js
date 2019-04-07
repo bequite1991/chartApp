@@ -395,14 +395,29 @@ class sharedData extends EventEmitter {
             let month = item.month;
             let total = item.mai_total; // 维保总数
             let invalid = item.mai_invalid; // 维保无效
-            categoryArray.push (month);
-            dataTotalArray.push (total);
-            dataInvalidArray.push (invalid);
+
+            if (month) {
+              categoryArray.push (month);
+            }
+
+            if (total) {
+              dataTotalArray.push (total);
+            }
+
+            if (invalid) {
+              dataInvalidArray.push (invalid);
+            }
           });
 
-          this.maintenanceOrdersAndFinishOptionValue.xAxis.data = categoryArray;
-          this.maintenanceOrdersAndFinishOptionValue.series[0].data = dataTotalArray;
-          this.maintenanceOrdersAndFinishOptionValue.series[1].data = dataInvalidArray;
+          if (
+            categoryArray.length > 0 &&
+            dataTotalArray.length > 0 &&
+            dataInvalidArray.length > 0
+          ) {
+            this.maintenanceOrdersAndFinishOptionValue.xAxis.data = categoryArray;
+            this.maintenanceOrdersAndFinishOptionValue.series[0].data = dataTotalArray;
+            this.maintenanceOrdersAndFinishOptionValue.series[1].data = dataInvalidArray;
+          }
         }
       }
     });

@@ -41,9 +41,32 @@ export default class Map extends Component {
       click: this.onChartClick.bind (this),
       legendselectchanged: this.onChartLegendselectchanged.bind (this),
     };
+
+    const dev_id_list =
+      QueryString.parse (window.location.search).dev_id_list || '';
+
+    this.devIdlist = dev_id_list;
+
+    const {messageManager, sharedData} = this.props;
+
+    this.uuid = uuid.v1 ();
+
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9006',
+      filter: dev_id_list,
+    });
+
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9001',
+      filter: dev_id_list,
+    });
   }
 
   componentWillUpdate () {
+    debugger;
+
     const dev_id_list =
       QueryString.parse (window.location.search).dev_id_list || '';
 
@@ -51,11 +74,15 @@ export default class Map extends Component {
       return;
     }
 
+    debugger;
+
     this.devIdlist = dev_id_list;
 
     const {messageManager, sharedData} = this.props;
 
     if (this.uuid.length > 0) {
+      debugger;
+
       messageManager.emit ('unregister', {
         uuid: this.uuid,
         cmd: '9006',
@@ -65,6 +92,8 @@ export default class Map extends Component {
         uuid: this.uuid,
         cmd: '9001',
       });
+
+      this.uuid = '';
     }
 
     this.uuid = uuid.v1 ();
@@ -74,6 +103,7 @@ export default class Map extends Component {
       cmd: '9006',
       filter: dev_id_list,
     });
+
     messageManager.emit ('register', {
       uuid: this.uuid,
       cmd: '9001',
@@ -162,33 +192,40 @@ export default class Map extends Component {
     var markers = new Array ();
     mapData.forEach ((item, i) => {
       var iconImg;
-      if(item.real_info == "0"){
-        iconImg = new BMap.Icon ('Info-Point-yello.png', new BMap.Size (30, 30),{    
-           offset: new BMap.Size(10, 30),      
-           imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
-        });
+      if (item.real_info == '0') {
+        iconImg = new BMap.Icon (
+          'Info-Point-yello.png',
+          new BMap.Size (30, 30),
+          {
+            offset: new BMap.Size (10, 30),
+            imageOffset: new BMap.Size (0, 0), // 设置图片偏移
+          }
+        );
         // offlineMarkers.push (marker);
-      }else if(item.real_info == "1"){
-        iconImg = new BMap.Icon ('Info-Point-green.png', new BMap.Size (30, 30),{    
-           offset: new BMap.Size(10, 30),      
-           imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
-        });
+      } else if (item.real_info == '1') {
+        iconImg = new BMap.Icon (
+          'Info-Point-green.png',
+          new BMap.Size (30, 30),
+          {
+            offset: new BMap.Size (10, 30),
+            imageOffset: new BMap.Size (0, 0), // 设置图片偏移
+          }
+        );
         // fineMarkers.push (marker);
-      }else{
-        iconImg = new BMap.Icon ('Info-Point-red.png', new BMap.Size (30, 30),{    
-           offset: new BMap.Size(10, 30),      
-           imageOffset: new BMap.Size(0, 0)   // 设置图片偏移    
+      } else {
+        iconImg = new BMap.Icon ('Info-Point-red.png', new BMap.Size (30, 30), {
+          offset: new BMap.Size (10, 30),
+          imageOffset: new BMap.Size (0, 0), // 设置图片偏移
         });
         // errorMarkers.push (marker);
       }
       var point = new BMap.Point (item.longitude, item.latitude);
-      var marker = new BMap.Marker (point,{icon: iconImg});
+      var marker = new BMap.Marker (point, {icon: iconImg});
       var content = item.ara_addr_name;
       this.addClickHandler (item, marker); //添加点击事件
       marker.info = item;
-      markers.push(marker);
+      markers.push (marker);
     });
-
 
     // var defaultClusterer = new BMapLib.MarkerClusterer (this.map, {
     //   markers: []
@@ -213,7 +250,6 @@ export default class Map extends Component {
     //   item.url="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png";
     //   offlineStyles.push(item);
     // });
-  
 
     //添加聚合效果。
     // var fineMarkerClusterer = new BMapLib.MarkerClusterer (this.map, {
@@ -233,7 +269,7 @@ export default class Map extends Component {
     // });
 
     var markerClusterer = new BMapLib.MarkerClusterer (this.map, {
-      markers: markers
+      markers: markers,
     });
     // this.addClickClusterer (fineMarkerClusterer);
     // this.addClickClusterer (errorMarkerClusterer);

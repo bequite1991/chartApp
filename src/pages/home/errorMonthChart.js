@@ -40,6 +40,8 @@ export default class ErrorMonthChart extends React.Component {
         uuid: this.uuid,
         cmd: '9007',
       });
+
+      this.uuid = '';
     }
 
     this.uuid = uuid.v1 ();

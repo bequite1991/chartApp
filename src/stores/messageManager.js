@@ -112,15 +112,15 @@ class MessageManager extends EventEmitter {
 
     this.messageEmitterTimer = setInterval (() => {
       this.messageEmitter ();
-    }, 3000);
+    }, 30000);
 
     this.parserLoopTimer = setInterval (() => {
       this.parserLoop ();
-    }, 1000);
+    }, 20000);
 
     this.wsMessageEmitterTimer = setInterval (() => {
       this.wsMessageEmitter ();
-    }, 5000);
+    }, 30000);
   }
 
   wsMessageEmitter () {
@@ -214,12 +214,12 @@ class MessageManager extends EventEmitter {
     let removeUUID = '';
     try {
       if (this.removeUUIDList.length > 0) {
-        debugger;
+        //debugger;
         this.removeUUIDList.forEach (uuidcommand => {
           let command = this.commandMap.get (uuidcommand);
           if (command) {
             this.commandMap.delete (uuidcommand);
-            // console.info ('移除:' + uuidcommand);
+            console.info ('移除:' + uuidcommand);
           }
           removeUUID = uuidcommand;
         });
@@ -264,7 +264,7 @@ class MessageManager extends EventEmitter {
         filter
       );
       // console.info ('topic:' + topic);
-      // console.info ('packet message:' + message);
+      console.info ('packet message:' + message);
       mqttWorker.emit ('session:publish', {topic: topic, message: message});
     }
   }
