@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Icon} from 'antd';
+import {Icon,Modal} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './elevatorInTimeIFrame.less';
@@ -22,21 +22,40 @@ export default class elevatorInTimeIFrame extends React.Component {
   url = '';
   constructor (props) {
     super (props);
-    this.state = {};
+    this.state = {
+      open:props.sharedData.elevatorInTimeIFrameOption.open
+    };
   }
 
   componentWillUnmount () {}
+  componentWillUpdate(){
+    // this.setState({ open:this.props.sharedData.elevatorInTimeIFrameOption.open});
+    this.state.open = this.props.sharedData.elevatorInTimeIFrameOption.open;
+  }
+
+  setModal1Visible(modal1Visible) {
+    debugger
+    this.setState({ open:modal1Visible });
+  }
 
   render () {
     const {sharedData} = this.props;
     const option = sharedData.elevatorInTimeIFrameOption;
-    const url = option.url;
-    const open = option.open;
-    debugger;
-    return open && open == true
-      ? <div className={styles.iframe}>
-          <iframe src={url} width="600px" height="400px" />
-        </div>
-      : <div className={styles.empty} />;
+    let url = option.url;
+    let open = option.open;
+    return (
+      <Modal
+          width="100%"
+          style={{ top: 0,height:'100vh' }}
+          title="通话监视"
+          visible={this.state.open}
+          onOk={() => this.setModal1Visible(false)}
+          onCancel={() => this.setModal1Visible(false)}
+        >
+          <div style={{height:"78vh"}}>
+          <iframe src={url} width="100%" height="100%" />
+          </div>
+        </Modal>
+    )
   }
 }

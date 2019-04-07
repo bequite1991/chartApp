@@ -53,7 +53,7 @@ export default class ElevatorErrorConnect extends React.Component {
     const {sharedData} = this.props;
     const option = sharedData.elevatorConnectOption;
     //router.push (option.url);
-    this.url = option.url;
+    this.url = option.url || "http://www.baidu.com";
     if (this.url && this.url.length > 0) {
       sharedData.emit ('open_iframe', {
         url: this.url,
