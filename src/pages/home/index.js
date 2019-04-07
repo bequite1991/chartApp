@@ -139,12 +139,19 @@ export default class Home extends PureComponent {
       );
     }
 
+    let goBackButton;
+    if(window.location.href.split("dev_id_list").length>1){
+      goBackButton = (<Button type="dashed" block onClick={this.goBack}>返回上一页</Button>)
+    }else{
+      goBackButton = ""
+    }
+
     return (
       <Provider sharedData={sharedData} messageManager={messageManager}>
         <div>
           {charts}
           <Warning />
-          <Button type="dashed" block onClick={this.goBack}>返回上一页</Button>
+          {goBackButton}
         </div>
       </Provider>
     );

@@ -244,47 +244,6 @@ export default class Map extends Component {
       markers.push (marker);
     });
 
-    // var defaultClusterer = new BMapLib.MarkerClusterer (this.map, {
-    //   markers: []
-    // });
-    // var styles = defaultClusterer._styles;
-
-    // var fineStyles = new Array ();
-    // var errorStyles = new Array ();
-    // var offlineStyles = new Array ();
-    // fineStyles.forEach((ele,index)=>{
-    //   var item = ele;
-    //   item.url="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m0.png";
-    //   fineStyles.push(item);
-    // });
-    // errorStyles.forEach((ele,index)=>{
-    //   var item = ele;
-    //   item.url="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png";
-    //   errorStyles.push(item);
-    // });
-    // offlineStyles.forEach((ele,index)=>{
-    //   var item = ele;
-    //   item.url="http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png";
-    //   offlineStyles.push(item);
-    // });
-
-    //添加聚合效果。
-    // var fineMarkerClusterer = new BMapLib.MarkerClusterer (this.map, {
-    //   markers: fineMarkers,
-    //   // styles:[{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m0.png"},{size:{width:56,height:56},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:66,height:66},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:78,height:78},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m3.png"},{size:{width:90,height:90},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m4.png"}]
-    //   styles:fineStyles
-    // });
-    // var errorMarkerClusterer = new BMapLib.MarkerClusterer (this.map, {
-    //   markers: errorMarkers,
-    //   // styles:[{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m2.png"}]
-    //   styles:errorStyles
-    // });
-    // var offlineMarkerClusterer = new BMapLib.MarkerClusterer (this.map, {
-    //   markers: offlineMarkers,
-    //   // styles:[{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"},{size:{width:53,height:53},url:"http://api.map.baidu.com/library/TextIconOverlay/1.2/src/images/m1.png"}]
-    //   styles:offlineStyles
-    // });
-
     var markerClusterer = new BMapLib.MarkerClusterer (this.map, {
       markers: markers,
     });
