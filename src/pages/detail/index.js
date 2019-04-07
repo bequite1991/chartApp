@@ -43,6 +43,10 @@ export default class Detail extends PureComponent {
 
   componentWillUnmount () {}
 
+  goBack(){
+    router.go(-1);
+  }
+
   render () {
     let charts;
     if (document.body.clientWidth < 1000) {
@@ -108,6 +112,7 @@ export default class Detail extends PureComponent {
           {charts}
           <Warning />
           <ElevatorInTimeIFrame />
+          <Button type="dashed" block onClick={this.goBack}>返回上一页</Button>
         </div>
       </Provider>
     );
