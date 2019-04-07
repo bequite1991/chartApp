@@ -62,6 +62,12 @@ export default class Map extends Component {
       cmd: '9001',
       filter: dev_id_list,
     });
+
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9004',
+      filter: dev_id_list,
+    });
   }
 
   componentWillUpdate () {
@@ -109,6 +115,12 @@ export default class Map extends Component {
       cmd: '9001',
       filter: dev_id_list,
     });
+
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9004',
+      filter: dev_id_list,
+    });
   }
 
   componentDidMount () {
@@ -143,6 +155,11 @@ export default class Map extends Component {
     messageManager.emit ('unregister', {
       uuid: this.uuid,
       cmd: '9001',
+    });
+
+    messageManager.emit ('unregister', {
+      uuid: this.uuid,
+      cmd: '9004',
     });
 
     sharedData.emit ('cancel_map_markers', {});

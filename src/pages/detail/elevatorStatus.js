@@ -53,6 +53,12 @@ export default class Map extends Component {
       cmd: '9001',
       filter: dev_id,
     });
+
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9004',
+      filter: dev_id,
+    });
   }
 
   componentDidMount () {
@@ -62,6 +68,7 @@ export default class Map extends Component {
     const {messageManager} = this.props;
     messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9006'});
     messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9001'});
+    messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9004'});
   }
 
   randomData () {
@@ -128,45 +135,45 @@ export default class Map extends Component {
       ? totalInfo.onLineTotal ? totalInfo.onLineTotal : '0'
       : '0';
     let statusText;
-    switch(elevatorStatus){
+    switch (elevatorStatus) {
       case 0:
-        statusText = "离线";
+        statusText = '离线';
         break;
       case 1:
-        statusText = "正常";
+        statusText = '正常';
         break;
       case 2:
-        statusText = "困人";
+        statusText = '困人';
         break;
       case 3:
-        statusText = "正常 通话中 检修中";
+        statusText = '正常 通话中 检修中';
         break;
       case 4:
-        statusText = "正常 通话中 检修中";
+        statusText = '正常 通话中 检修中';
         break;
       case 5:
-        statusText = "正常 通话中";
+        statusText = '正常 通话中';
         break;
       case 6:
-        statusText = "困人 通话中";
+        statusText = '困人 通话中';
         break;
       case 7:
-        statusText = "正常 检修中";
+        statusText = '正常 检修中';
         break;
       case 8:
-        statusText = "困人 检修中";
+        statusText = '困人 检修中';
         break;
       case 9:
-        statusText = "故障";
+        statusText = '故障';
         break;
       case 10:
-        statusText = "故障 通话中 检修中";
+        statusText = '故障 通话中 检修中';
         break;
       case 11:
-        statusText = "故障 通话中";
+        statusText = '故障 通话中';
         break;
       case 12:
-        statusText = "故障 检修中";
+        statusText = '故障 检修中';
         break;
       default:
         statusText = elevatorStatus;
@@ -183,7 +190,7 @@ export default class Map extends Component {
             总安装数量：<span className={styles.detail}>{total}</span>
           </span>
         </div>
-        <div className={styles.elevator1}></div>
+        <div className={styles.elevator1} />
         <div className={styles.statusText}>{statusText}</div>
       </div>
     );

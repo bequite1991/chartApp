@@ -12,7 +12,7 @@ import messageManager from '../../stores/messageManager';
 //电梯故障详情
 import Detail_Index from './detail';
 
-@inject ('sharedData')
+@inject ('sharedData', 'messageManager')
 @observer
 export default class Warning extends React.Component {
   constructor (props) {
@@ -54,10 +54,11 @@ export default class Warning extends React.Component {
     );
     notification.close (key);
   }
+
   //打开通知
   openNotification (warningMessage) {
     const t = this;
-    const key = `open${Date.now ()}`;
+    const key = warningMessage.id; //`open${Date.now ()}`;
     const contents = (
       <div className={styles.notification}>
         <span className={styles.notificationInfo}>
@@ -79,6 +80,7 @@ export default class Warning extends React.Component {
           type="default"
           size="small"
           onClick={() => {
+            t.cancel (key);
             t.notificationClose (key, t);
             t.setModalVisible (true);
           }}
@@ -95,6 +97,19 @@ export default class Warning extends React.Component {
       key,
       onClose: t.notificationClose (key, t),
       placement: 'bottomRight',
+    });
+  }
+
+  cancel (key) {
+    const {messageManager} = this.props;
+    const params =
+      QueryString.parse (window.location.search).dev_id ||
+      QueryString.parse (window.location.search).dev_id_list ||
+      '';
+    messageManager.emit ('send', {
+      cmd: '9008',
+      filter: params,
+      id: key,
     });
   }
 

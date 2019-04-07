@@ -81,6 +81,21 @@ class MessageManager extends EventEmitter {
       this.removeCommand (args);
     });
 
+    this.on ('send', args => {
+      let rows = [];
+      rows.push ({
+        sn: args.id + '',
+        status: '1',
+      });
+
+      let message = {
+        cmd: args.cmd,
+        filter: args.filter,
+        rows: rows,
+      };
+      this.sendCommand (message);
+    });
+
     this.on ('ws-register', args => {
       if (this.isWSInit == false && websocketWorker) {
         this.isWSInit = true;
@@ -241,8 +256,10 @@ class MessageManager extends EventEmitter {
   }
 
   sendCommand (command) {
+    debugger;
     let cmd = command.cmd;
     let filter = command.filter ? command.filter : '';
+    let rows = command.rows ? command.rows : [];
     if (this.hasTopic (cmd)) {
       let topic =
         PROTOCAL_REQUEST[cmd] + '/' + this.serverOptionsValue.userName;
@@ -261,7 +278,8 @@ class MessageManager extends EventEmitter {
         this.serverOptionsValue.passWord,
         new Date ().getTime (),
         message_num,
-        filter
+        filter,
+        rows
       );
       // console.info ('topic:' + topic);
       console.info ('packet message:' + message);
@@ -273,7 +291,7 @@ class MessageManager extends EventEmitter {
     return PROTOCAL_REQUEST[cmd];
   }
 
-  packetMessage (cmd, src, user, salt, timestamp, message_num, filter) {
+  packetMessage (cmd, src, user, salt, timestamp, message_num, filter, rows) {
     let key = '7D13B47CEA2DC5828D6910D3C0FA31DD'; //md5 (salt).toUpperCase ();
     let token = Base64.encode (
       JSON.stringify ({cmd: cmd, key: key, timestamp: timestamp})
@@ -294,7 +312,7 @@ class MessageManager extends EventEmitter {
     let messageIndex = 0;
     let num_id = timestampToTime (timestamp) + message_num;
     num_id = num_id.substring (0, 20);
-    return encode (cmd, num_id, timestamp, src, user, 200, token, filter, []);
+    return encode (cmd, num_id, timestamp, src, user, 200, token, filter, rows);
   }
 
   reset () {
