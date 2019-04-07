@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Icon} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import styles from './index.less';
+import styles from './elevatorLog.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
@@ -15,8 +15,7 @@ const uuid = require ('node-uuid');
 
 @inject ('sharedData', 'messageManager')
 @observer
-export default class OfflineCountEveryMonthChart extends React.Component {
-  uuid = '';
+export default class SystemCountChart extends React.Component {
   constructor (props) {
     super (props);
     this.state = {};
@@ -26,16 +25,13 @@ export default class OfflineCountEveryMonthChart extends React.Component {
     const {messageManager} = this.props;
     messageManager.emit ('register', {
       uuid: this.uuid,
-      cmd: '9003',
+      cmd: '9002',
       filter: dev_id,
     });
   }
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {
-      uuid: this.uuid,
-      cmd: '9003',
-    });
+    messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9002'});
   }
 
   onChartClick (param, echarts) {
@@ -46,16 +42,17 @@ export default class OfflineCountEveryMonthChart extends React.Component {
     let onEvents = {
       click: this.onChartClick.bind (this),
     };
+
     const {sharedData} = this.props;
-    const option = sharedData.offlineCountOption;
+    const elevatorLog = sharedData.elevatorLog;
     return (
-      <ReactEcharts
-        option={option}
-        notMerge={true}
-        lazyUpdate={true}
-        onEvents={onEvents}
-        style={{width: '100%', height: '20vh', minHeight: '100px'}}
-      />
+      <div className={styles.elevatorStatus}>
+        <span className={styles.title}>电梯上下线日志</span>
+        <span>电梯编号：{elevatorLog.dev_id}</span>
+        <span>电梯名称：{elevatorLog.dev_cname}</span>
+        <span>上线时间：{elevatorLog.on_time}</span>
+        <span>下线时间：{elevatorLog.off_time}</span>
+      </div>
     );
   }
 }

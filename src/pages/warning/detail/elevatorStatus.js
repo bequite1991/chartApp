@@ -2,16 +2,16 @@ import React, {Component} from 'react';
 import {Icon} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import styles from './map.less';
+import styles from './elevatorStatus.less';
 import ReactEcharts from 'echarts-for-react';
 import {inject, observer} from 'mobx-react';
 import router from 'umi/router';
 
-require ('echarts/map/js/china.js');
-
 import QueryString from 'query-string';
 
 const uuid = require ('node-uuid');
+
+require ('echarts/map/js/china.js');
 
 var opts = {
   width: 250, // 信息窗口宽度
@@ -38,12 +38,25 @@ export default class Map extends Component {
       legendselectchanged: this.onChartLegendselectchanged.bind (this),
     };
 
-    this.uuid = uuid.v1 ();
     const dev_id = QueryString.parse (window.location.search).dev_id || '';
+
+    this.uuid = uuid.v1 ();
     const {messageManager} = this.props;
     messageManager.emit ('register', {
       uuid: this.uuid,
       cmd: '9006',
+      filter: dev_id,
+    });
+
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9001',
+      filter: dev_id,
+    });
+
+    messageManager.emit ('register', {
+      uuid: this.uuid,
+      cmd: '9004',
       filter: dev_id,
     });
   }
@@ -53,10 +66,9 @@ export default class Map extends Component {
   }
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {
-      uuid: this.uuid,
-      cmd: '9006',
-    });
+    messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9006'});
+    messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9001'});
+    messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9004'});
   }
 
   randomData () {
@@ -115,73 +127,71 @@ export default class Map extends Component {
 
   render () {
     const {sharedData} = this.props;
-    const option = sharedData.mapChinaOption;
+    const elevatorStatus = sharedData.dynamicInfoOption.status;
     const totalInfo = sharedData.totalInfo;
 
     const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';
     const onLineTotal = totalInfo
       ? totalInfo.onLineTotal ? totalInfo.onLineTotal : '0'
       : '0';
+    let statusText;
+    switch (elevatorStatus) {
+      case 0:
+        statusText = '离线';
+        break;
+      case 1:
+        statusText = '正常';
+        break;
+      case 2:
+        statusText = '困人';
+        break;
+      case 3:
+        statusText = '正常 通话中 检修中';
+        break;
+      case 4:
+        statusText = '正常 通话中 检修中';
+        break;
+      case 5:
+        statusText = '正常 通话中';
+        break;
+      case 6:
+        statusText = '困人 通话中';
+        break;
+      case 7:
+        statusText = '正常 检修中';
+        break;
+      case 8:
+        statusText = '困人 检修中';
+        break;
+      case 9:
+        statusText = '故障';
+        break;
+      case 10:
+        statusText = '故障 通话中 检修中';
+        break;
+      case 11:
+        statusText = '故障 通话中';
+        break;
+      case 12:
+        statusText = '故障 检修中';
+        break;
+      default:
+        statusText = elevatorStatus;
+    }
 
-    const arr = [
-      {
-        name: '维保一',
-        phone: '1777777777',
-        area: '上海市晒暖干海带额',
-        location: '上海市晒暖干海',
-      },
-      {
-        name: '维保一',
-        phone: '1777777777',
-        area: '上海市晒暖干海带额',
-        location: '上海市晒暖干海',
-      },
-      {
-        name: '维保一',
-        phone: '1777777777',
-        area: '上海市晒暖干海带额',
-        location: '上海市晒暖干海',
-      },
-      {
-        name: '维保一',
-        phone: '1777777777',
-        area: '上海市晒暖干海带额',
-        location: '上海市晒暖干海',
-      },
-    ];
-    const peopleArr = [];
-
-    arr.forEach ((val, key) => {
-      peopleArr.push (
-        <span key={key} className={styles.peopleList}>
-          姓名：
-          <span>{val.name}</span>
-          手机号：
-          <span>{val.phone}</span>
-          维保区域：
-          <span>{val.area}</span>
-          目前位置：
-          <span>{val.location}</span>
-        </span>
-      );
-    });
     return (
       <div className={styles.mapChina}>
         <p className={styles.title}>慧保电梯管理平台</p>
         <div className={styles.subtitle}>
           <span className={styles.subtitleInfo}>
-            电梯在线数量：<span className={styles.detail}>{total}</span>
+            电梯在线数量：<span className={styles.detail}>{onLineTotal}</span>
           </span>
           <span className={styles.subtitleInfo}>
-            总安装数量：<span className={styles.detail}>{onLineTotal}</span>
+            总安装数量：<span className={styles.detail}>{total}</span>
           </span>
         </div>
-        <div className={styles.elevator1}></div>
-        <div className={styles.peopleListContent}>
-          <p>维保人员：<span>在线</span></p>
-          {peopleArr}
-        </div>
-
+        <div className={styles.elevator1} />
+        <div className={styles.statusText}>{statusText}</div>
       </div>
     );
   }

@@ -26,20 +26,16 @@ export default class RunningDataChart extends React.Component {
     this.uuid = uuid.v1 ();
     const dev_id = QueryString.parse (window.location.search).dev_id || '';
     const {messageManager} = this.props;
-
     messageManager.emit ('register', {
-      uuid: this.uuid,
       cmd: '9012',
+      uuid: this.uuid,
       filter: dev_id,
     });
   }
 
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {
-      uuid: this.uuid,
-      cmd: '9012',
-    });
+    messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9012'});
   }
 
   onRunningDataOptionChange = () => {};
@@ -60,7 +56,7 @@ export default class RunningDataChart extends React.Component {
         notMerge={true}
         lazyUpdate={true}
         onEvents={onEvents}
-        style={{width: '100%', height: '20vh', minHeight: '100px'}}
+        style={{width: '100%', height: '25vh', minHeight: '100px'}}
       />
     );
   }

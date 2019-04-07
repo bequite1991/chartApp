@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Icon} from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import styles from './systemCountChart.less';
+import styles from './dynamicInfo.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
@@ -15,7 +15,8 @@ const uuid = require ('node-uuid');
 
 @inject ('sharedData', 'messageManager')
 @observer
-export default class SystemCountChart extends React.Component {
+export default class DynamicInfo extends React.Component {
+  uuid = '';
   constructor (props) {
     super (props);
     this.state = {};
@@ -23,17 +24,19 @@ export default class SystemCountChart extends React.Component {
     this.uuid = uuid.v1 ();
     const dev_id = QueryString.parse (window.location.search).dev_id || '';
     const {messageManager} = this.props;
-    messageManager.emit ('register', {
+    messageManager.emit ('ws-register', {
       uuid: this.uuid,
-      cmd: '9005',
+      cmd: '1001',
       filter: dev_id,
     });
-    //messageManager.emit("register",{cmd:"9001"})
   }
 
   componentWillUnmount () {
     const {messageManager} = this.props;
-    messageManager.emit ('unregister', {uuid: this.uuid, cmd: '9005'});
+    messageManager.emit ('ws-unregister', {
+      uuid: this.uuid,
+      cmd: '1001',
+    });
   }
 
   onChartClick (param, echarts) {
@@ -46,7 +49,7 @@ export default class SystemCountChart extends React.Component {
     };
 
     const {sharedData} = this.props;
-    const option = sharedData.systemCountOption;
+    const option = sharedData.dynamicInfoOption;
     return (
       <div className={styles.elevatorStatus}>
         <span className={styles.title}>电梯动态信息</span>
