@@ -106,7 +106,7 @@ class MqttWorker extends EventEmitter {
 
     this.client.onMessageArrived = message => {
       message._index = ++i;
-      // console.log ('payloadString:' + message.payloadString);
+      console.log ('payloadString:' + message.payloadString);
       if (
         messageManager &&
         message &&

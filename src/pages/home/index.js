@@ -1,12 +1,12 @@
-import React, {PureComponent} from 'react';
-import {inject, observer} from 'mobx-react';
-import {Icon,Row, Col,Button, notification} from 'antd';
+import React, { PureComponent } from 'react';
+import { inject, observer } from 'mobx-react';
+import { Icon, Row, Col, Button, notification } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 import router from 'umi/router';
 
-import {Provider} from 'mobx-react';
+import { Provider } from 'mobx-react';
 
 import sharedData from '../../stores/sharedData';
 
@@ -21,8 +21,7 @@ import Elevator_Error_Every_Month_Chart from './errorMonthChart.js';
 // 每月电梯故障比例(Elevator Error Ratio)
 import Elevator_Error_Ratio_Chart from './errorRatioChart.js';
 // 维保人员每月派单量和完成量(maintenance Orders And Finish)
-import Maintenance_Orders_And_Finish_Chart
-  from './maintenanceOrdersAndFinishChart.js';
+import Maintenance_Orders_And_Finish_Chart from './maintenanceOrdersAndFinishChart.js';
 // 维保人员每月派单量和完成量(maintenance Orders And Finish)
 import Maintenance_Orders_Month_Chart from './maintenanceOrdersMonthChart.js';
 //首页全国地图
@@ -40,27 +39,25 @@ import messageManager from '../../stores/messageManager';
 // @observer
 export default class Home extends PureComponent {
   init = false;
-  constructor (props) {
-    super (props);
+  constructor(props) {
+    super(props);
     this.state = {};
 
-    setInterval (() => {
-      
-    }, 2000);
+    setInterval(() => {}, 2000);
   }
 
-  componentWillUnmount () {}
+  componentWillUnmount() {}
 
   /* eslint-disable*/
-  @Debounce (600)
-  triggerResizeEvent () {
+  @Debounce(600)
+  triggerResizeEvent() {
     // eslint-disable-line
-    const event = document.createEvent ('HTMLEvents');
-    event.initEvent ('resize', true, false);
-    window.dispatchEvent (event);
+    const event = document.createEvent('HTMLEvents');
+    event.initEvent('resize', true, false);
+    window.dispatchEvent(event);
   }
 
-  goBack(){
+  goBack() {
     router.go(-1);
   }
 
@@ -73,40 +70,54 @@ export default class Home extends PureComponent {
   // }
   //打开通知窗口
 
-  render () {
-    let charts,maintenance,systemCountChart;
+  render() {
+    let charts, maintenance, systemCountChart;
     const isInfo = sharedData.devIdList.length;
-    if(isInfo){
-      maintenance = (<div className={styles.Maintenance_Record}><Maintenance_Record /></div>);
-    }else{
-      maintenance = (<div className={styles.Maintenance_Orders_And_Finish_Chart}>
-              <Maintenance_Orders_And_Finish_Chart />
-            </div>)
-      systemCountChart = (<div className={styles.SystemCountChart}>
-              <SystemCountChart className={styles.SystemCountChart}/>
-            </div>)
+    if (isInfo) {
+      maintenance = (
+        <div className={styles.Maintenance_Record}>
+          <Maintenance_Record />
+        </div>
+      );
+    } else {
+      maintenance = (
+        <div className={styles.Maintenance_Orders_And_Finish_Chart}>
+          <Maintenance_Orders_And_Finish_Chart />
+        </div>
+      );
+      systemCountChart = (
+        <div className={styles.SystemCountChart}>
+          <SystemCountChart className={styles.SystemCountChart} />
+        </div>
+      );
     }
 
     if (document.body.clientWidth < 1000) {
       charts = (
         <Row>
-          <Col span={24}><Map_China /></Col>
+          <Col span={24}>
+            <Map_China />
+          </Col>
           <Col span={24}>
             <div className={styles.RunningDataChart}>
-              <RunningDataChart className={styles.RunningDataChart}/>
+              <RunningDataChart className={styles.RunningDataChart} />
             </div>
             {systemCountChart}
             <div className={styles.chartContent}>
               <Offline_Count_Every_Month_Chart className={styles.Offline_Count_Every_Month_Chart} />
             </div>
-            <div className={styles.chartContent}><Installation_Record className={styles.Installation_Record}/></div>
+            <div className={styles.chartContent}>
+              <Installation_Record className={styles.Installation_Record} />
+            </div>
           </Col>
           <Col span={24}>
             <div className={styles.chartContent}>
-              <Elevator_Error_Every_Month_Chart className={styles.Elevator_Error_Every_Month_Chart}/>
+              <Elevator_Error_Every_Month_Chart
+                className={styles.Elevator_Error_Every_Month_Chart}
+              />
             </div>
             <div className={styles.chartContent}>
-              <Elevator_Error_Ratio_Chart className={styles.Elevator_Error_Ratio_Chart}/>
+              <Elevator_Error_Ratio_Chart className={styles.Elevator_Error_Ratio_Chart} />
             </div>
             {maintenance}
           </Col>
@@ -123,9 +134,13 @@ export default class Home extends PureComponent {
             <div className={styles.Offline_Count_Every_Month_Chart}>
               <Offline_Count_Every_Month_Chart />
             </div>
-            <div className={styles.Installation_Record}><Installation_Record /></div>
+            <div className={styles.Installation_Record}>
+              <Installation_Record />
+            </div>
           </Col>
-          <Col span={12}><Map_China /></Col>
+          <Col span={12}>
+            <Map_China />
+          </Col>
           <Col span={6}>
             <div className={styles.Elevator_Error_Every_Month_Chart}>
               <Elevator_Error_Every_Month_Chart />
@@ -144,7 +159,9 @@ export default class Home extends PureComponent {
         <div>
           {charts}
           <Warning />
-          <Button type="dashed" block onClick={this.goBack}>返回上一页</Button>
+          <Button type="dashed" block onClick={this.goBack}>
+            返回上一页
+          </Button>
         </div>
       </Provider>
     );

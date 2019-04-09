@@ -1,10 +1,10 @@
-import {observable, computed, toJS, autorun} from 'mobx';
+import { observable, computed, toJS, autorun } from 'mobx';
 import EventEmitter from 'events';
-import {randomData} from '../lib/helper.js';
+import { randomData } from '../lib/helper.js';
 
 import messageManager from './messageManager';
 
-import {CONSTANT_CONFIG} from '../datacenter/constantConfig';
+import { CONSTANT_CONFIG } from '../datacenter/constantConfig';
 
 import QueryString from 'query-string';
 
@@ -29,7 +29,8 @@ class sharedData extends EventEmitter {
   @observable mapChinaOptionValue = [];
   @observable elevatorErrorEveryMonthOptionValue = Elevator_Error_Every_Month_Chart_Options;
   @observable elevatorErrorRatioOptionValue = Elevator_Error_Ratio_Chart_Options;
-  @observable maintenanceOrdersAndFinishOptionValue = Elevator_Maintenance_OrdersAndFinish_Chart_Options;
+  @observable
+  maintenanceOrdersAndFinishOptionValue = Elevator_Maintenance_OrdersAndFinish_Chart_Options;
   @observable maintenanceOrdersMonthOptionValue = Elevator_maintenance_Orders_Month_Chart_Options;
   @observable mapInfoValue = Map_Info_Value;
 
@@ -62,13 +63,15 @@ class sharedData extends EventEmitter {
     message: '',
   };
 
+  @observable installRecordDataValue = [];
+
   sumDay = '50'; // 运行天数
 
   updateMapMarkers = true;
   //runningDataOption = null;
 
-  constructor () {
-    super ();
+  constructor() {
+    super();
 
     this.runningDataOptionValue.series[0].data = ['0'];
     this.systemCountOptionValue.series[0].data = ['0'];
@@ -157,13 +160,14 @@ class sharedData extends EventEmitter {
 
     //小区安装记录
     this.installRecordDataValue = [
-      'xxxx小区安装纪律1',
-      'xxxx小区安装纪律2',
-      'xxxx小区安装纪律3',
-      'xxxx小区安装纪律4',
-      'xxxx小区安装纪律5',
-      'xxxx小区安装纪律6',
+      // 'xxxx小区安装纪律1',
+      // 'xxxx小区安装纪律2',
+      // 'xxxx小区安装纪律3',
+      // 'xxxx小区安装纪律4',
+      // 'xxxx小区安装纪律5',
+      // 'xxxx小区安装纪律6',
     ];
+
     //小区维保记录
     this.maintenanceRecordValue = [
       'xxxx小区维保纪律1',
@@ -174,13 +178,13 @@ class sharedData extends EventEmitter {
       'xxxx小区维保纪律6',
     ];
 
-    this.warningMessageValue = {
-      id: 123,
-      message: '浙江省杭州市余杭区 xxx 电梯 xxx故障',
-    };
+    // this.warningMessageValue = {
+    //   id: 123,
+    //   message: '浙江省杭州市余杭区 xxx 电梯 xxx故障',
+    // };
 
-    this.devIdListValue = window.location.search.split ('dev_id_list=')[1]
-      ? window.location.search.split ('dev_id_list=')[1].split (',')
+    this.devIdListValue = window.location.search.split('dev_id_list=')[1]
+      ? window.location.search.split('dev_id_list=')[1].split(',')
       : [];
 
     this.elevatorConnectOptionValue = {
@@ -200,26 +204,27 @@ class sharedData extends EventEmitter {
     //   console.info ('autorun:' + option);
     // });
 
-    messageManager.on ('9012', args => {
+    messageManager.on('9012', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
 
         if (rows && rows.length > 0) {
           let dataArray = [];
 
-          rows.forEach (item => {
+          rows.forEach(item => {
             let data = item.total;
-            dataArray.push (data);
+            dataArray.push(data);
           });
 
+          this.runningDataOptionValue.xAxis[0].data = ['总运行天数（天）'];
           this.runningDataOptionValue.series[0].data = dataArray;
 
-          console.info ('9012 is get data');
+          console.info('9012 is get data');
         }
       }
     });
 
-    messageManager.on ('9005', args => {
+    messageManager.on('9005', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
 
@@ -227,11 +232,11 @@ class sharedData extends EventEmitter {
           let dataArray = [];
           let categoryArray = [];
 
-          rows.forEach (item => {
+          rows.forEach(item => {
             let month = item.month;
             let total = item.total;
-            categoryArray.push (month);
-            dataArray.push (total);
+            categoryArray.push(month);
+            dataArray.push(total);
           });
           this.systemCountOptionValue.xAxis[0].data = categoryArray;
           this.systemCountOptionValue.series[0].data = dataArray;
@@ -239,7 +244,7 @@ class sharedData extends EventEmitter {
       }
     });
 
-    messageManager.on ('9006', args => {
+    messageManager.on('9006', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
@@ -250,12 +255,13 @@ class sharedData extends EventEmitter {
           };
           this.totalInfo = totalInfo;
 
-          console.info ('9006 is get data');
+          console.info('9006 is get data');
         }
       }
     });
 
-    messageManager.on ('9007', args => {
+    messageManager.on('9007', args => {
+      //debugger;
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
@@ -263,13 +269,14 @@ class sharedData extends EventEmitter {
           let categoryArray = [];
           let pieDataArray = [];
 
-          rows.forEach (item => {
-            let title = item.on_total;
-            let total = item.total;
-            categoryArray.push (title);
-            dataArray.push (total);
+          rows.forEach(item => {
+            //
+            let title = item.alertname;
+            let total = item.alarm_num;
+            categoryArray.push(title);
+            dataArray.push(total);
 
-            pieDataArray.push ({
+            pieDataArray.push({
               value: total,
               name: title,
             });
@@ -297,13 +304,12 @@ class sharedData extends EventEmitter {
       }
     });
 
-    messageManager.on ('9002', args => {
+    messageManager.on('9002', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
           let filter = args.filter;
-          const dev_id =
-            QueryString.parse (window.location.search).dev_id || '';
+          const dev_id = QueryString.parse(window.location.search).dev_id || '';
           if (filter != null && filter.length > 0 && dev_id == filter) {
             let item = rows[0];
             if (item) {
@@ -319,19 +325,19 @@ class sharedData extends EventEmitter {
       }
     });
 
-    messageManager.on ('9003', args => {
+    messageManager.on('9003', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
           let dataArray = [];
           let categoryArray = [];
 
-          rows.forEach (item => {
+          rows.forEach(item => {
             let month = item.month;
             let total = item.total;
             if (month) {
-              categoryArray.push (month);
-              dataArray.push (total);
+              categoryArray.push(month);
+              dataArray.push(total);
             }
           });
 
@@ -341,6 +347,12 @@ class sharedData extends EventEmitter {
             {
               name: '离线数量',
               type: 'bar',
+              markPoint: {
+                data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],
+              },
+              markLine: {
+                data: [{ type: 'average', name: '平均值' }],
+              },
               data: dataArray,
               barWidth: 10,
               //颜色
@@ -355,19 +367,18 @@ class sharedData extends EventEmitter {
       }
     });
 
-    messageManager.on ('9001', args => {
+    messageManager.on('9001', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
           let filter = args.filter;
-          const dev_id =
-            QueryString.parse (window.location.search).dev_id || '';
+          const dev_id = QueryString.parse(window.location.search).dev_id || '';
           if (filter != null && filter.length > 0 && dev_id == filter) {
             let item = rows[0];
             if (item) {
               let url = item.url;
               if (url && url.length > 0) {
-                console.log ('url:' + url);
+                console.log('url:' + url);
                 let options = {
                   url: url,
                 };
@@ -376,7 +387,7 @@ class sharedData extends EventEmitter {
             }
           } else {
             if (this.updateMapMarkers == true) {
-              this.emit ('map_markers', rows);
+              this.emit('map_markers', rows);
             }
           }
           //this.mapChinaOptionValue = rows;
@@ -384,11 +395,12 @@ class sharedData extends EventEmitter {
       }
     });
 
-    this.on ('cancel_map_markers', args => {
+    this.on('cancel_map_markers', args => {
       this.updateMapMarkers = false;
     });
 
-    messageManager.on ('9009', args => {
+    messageManager.on('9009', args => {
+      //debugger;
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
@@ -396,21 +408,21 @@ class sharedData extends EventEmitter {
           let dataInvalidArray = [];
           let categoryArray = [];
 
-          rows.forEach (item => {
+          rows.forEach(item => {
             let month = item.month;
             let total = item.mai_total; // 维保总数
             let invalid = item.mai_invalid; // 维保无效
 
             if (month) {
-              categoryArray.push (month);
+              categoryArray.push(month);
             }
 
             if (total) {
-              dataTotalArray.push (total);
+              dataTotalArray.push(total);
             }
 
             if (invalid) {
-              dataInvalidArray.push (invalid);
+              dataInvalidArray.push(invalid);
             }
           });
 
@@ -427,13 +439,13 @@ class sharedData extends EventEmitter {
       }
     });
 
-    messageManager.on ('9010', args => {
+    messageManager.on('9010', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
           let maiUserList = [];
-          rows.forEach (item => {
-            maiUserList.push ({
+          rows.forEach(item => {
+            maiUserList.push({
               name: item.cname ? item.cname : '',
               phone: item.phone ? item.phone : '',
               corp: item.mai_corp_name ? item.mai_corp_name : '',
@@ -448,11 +460,11 @@ class sharedData extends EventEmitter {
       }
     });
 
-    messageManager.on ('9004', args => {
+    messageManager.on('9004', args => {
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
-          rows.forEach (item => {
+          rows.forEach(item => {
             this.warningMessage = {
               id: item.sn,
               message: item.alertname,
@@ -462,11 +474,32 @@ class sharedData extends EventEmitter {
       }
     });
 
-    messageManager.on ('1002', args => {
-      console.info ('subId:' + args.id);
+    messageManager.on('9013', args => {
+      //debugger;
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let rowsArray = [];
+          rows.forEach(item => {
+            //debugger;
+            let use_corp = item.use_corp ? item.use_corp : '';
+            let total = item.total ? item.total : '0';
+            let alarm_cnt = item.alarm_cnt ? item.alarm_cnt : '0';
+            rowsArray.push(use_corp + ' 电梯安装数:' + total + ' 故障数:' + alarm_cnt);
+          });
+
+          if (rowsArray.length > 0) {
+            this.installRecordData = rowsArray;
+          }
+        }
+      }
     });
 
-    messageManager.on ('1003', args => {
+    messageManager.on('1002', args => {
+      console.info('subId:' + args.id);
+    });
+
+    messageManager.on('1003', args => {
       let currentFloor = args.currentFloor;
       let energy = args.batteryLevel;
       let dynamicInfo = this.dynamicInfoOption;
@@ -484,7 +517,7 @@ class sharedData extends EventEmitter {
       };
     });
 
-    messageManager.on ('1004', args => {
+    messageManager.on('1004', args => {
       let elevatorState = args.elevatorState;
       let signalLevel = args.signalLevel;
       let dynamicInfo = this.dynamicInfoOption;
@@ -498,7 +531,7 @@ class sharedData extends EventEmitter {
       };
     });
 
-    this.on ('open_iframe', args => {
+    this.on('open_iframe', args => {
       debugger;
       this.elevatorInTimeIFrameOption = {
         url: args.url,
@@ -507,11 +540,11 @@ class sharedData extends EventEmitter {
     });
   }
 
-  @computed get runningDataOption () {
-    return toJS (this.runningDataOptionValue);
+  @computed get runningDataOption() {
+    return toJS(this.runningDataOptionValue);
   }
 
-  set runningDataOption (value) {
+  set runningDataOption(value) {
     var option = this.runningDataOptionValue;
     this.sumDay = value;
     if (this.sumDay && this.sumDay.length > 0) {
@@ -520,11 +553,11 @@ class sharedData extends EventEmitter {
     this.runningDataOptionValue = option;
   }
 
-  @computed get systemCountOption () {
-    return toJS (this.systemCountOptionValue);
+  @computed get systemCountOption() {
+    return toJS(this.systemCountOptionValue);
   }
 
-  set systemCountOption (value) {
+  set systemCountOption(value) {
     var option = this.systemCountOptionValue;
     this.sumDay = value;
     if (this.sumDay && this.sumDay.length > 0) {
@@ -533,22 +566,22 @@ class sharedData extends EventEmitter {
     this.systemCountOptionValue = option;
   }
 
-  @computed get offlineCountOption () {
-    return toJS (this.offlineCountOptionValue);
+  @computed get offlineCountOption() {
+    return toJS(this.offlineCountOptionValue);
   }
 
-  set offlineCountOption (value) {
+  set offlineCountOption(value) {
     var option = this.offlineCountOptionValue;
     option.xAxis[0].data = value.categoryArray;
     option.series[0].data = value.dataArray;
     this.offlineCountOptionValue = option;
   }
 
-  @computed get mapChinaOption () {
-    return toJS (this.mapChinaOptionValue);
+  @computed get mapChinaOption() {
+    return toJS(this.mapChinaOptionValue);
   }
 
-  set mapChinaOption (value) {
+  set mapChinaOption(value) {
     var option = this.mapChinaOptionValue;
     this.sumDay = value;
     if (this.sumDay && this.sumDay.length > 0) {
@@ -557,11 +590,11 @@ class sharedData extends EventEmitter {
     this.mapChinaOptionValue = option;
   }
 
-  @computed get elevatorErrorEveryMonthOption () {
-    return toJS (this.elevatorErrorEveryMonthOptionValue);
+  @computed get elevatorErrorEveryMonthOption() {
+    return toJS(this.elevatorErrorEveryMonthOptionValue);
   }
 
-  set elevatorErrorEveryMonthOption (value) {
+  set elevatorErrorEveryMonthOption(value) {
     var option = this.elevatorErrorEveryMonthOptionValue;
     this.sumDay = value;
     if (this.sumDay && this.sumDay.length > 0) {
@@ -570,11 +603,11 @@ class sharedData extends EventEmitter {
     this.elevatorErrorEveryMonthOptionValue = option;
   }
 
-  @computed get elevatorErrorRatioOption () {
-    return toJS (this.elevatorErrorRatioOptionValue);
+  @computed get elevatorErrorRatioOption() {
+    return toJS(this.elevatorErrorRatioOptionValue);
   }
 
-  set elevatorErrorRatioOption (value) {
+  set elevatorErrorRatioOption(value) {
     var option = this.elevatorErrorRatioOptionValue;
     this.sumDay = value;
     if (this.sumDay && this.sumDay.length > 0) {
@@ -583,11 +616,11 @@ class sharedData extends EventEmitter {
     this.elevatorErrorRatioOptionValue = option;
   }
 
-  @computed get maintenanceOrdersAndFinishOption () {
-    return toJS (this.maintenanceOrdersAndFinishOptionValue);
+  @computed get maintenanceOrdersAndFinishOption() {
+    return toJS(this.maintenanceOrdersAndFinishOptionValue);
   }
 
-  set maintenanceOrdersAndFinishOption (value) {
+  set maintenanceOrdersAndFinishOption(value) {
     var option = this.maintenanceOrdersAndFinishOptionValue;
     this.sumDay = value;
     if (this.sumDay && this.sumDay.length > 0) {
@@ -596,11 +629,11 @@ class sharedData extends EventEmitter {
     this.maintenanceOrdersAndFinishOptionValue = option;
   }
 
-  @computed get maintenanceOrdersMonthOption () {
-    return toJS (this.maintenanceOrdersMonthOptionValue);
+  @computed get maintenanceOrdersMonthOption() {
+    return toJS(this.maintenanceOrdersMonthOptionValue);
   }
 
-  set maintenanceOrdersMonthOption (value) {
+  set maintenanceOrdersMonthOption(value) {
     var option = this.maintenanceOrdersMonthOptionValue;
     this.sumDay = value;
     if (this.sumDay && this.sumDay.length > 0) {
@@ -609,126 +642,126 @@ class sharedData extends EventEmitter {
     this.maintenanceOrdersMonthOptionValue = option;
   }
 
-  @computed get totalInfo () {
+  @computed get totalInfo() {
     let totalInfo = {
       total: this.totalValue,
       onLineTotal: this.onLineTotalValue,
     };
-    return toJS (totalInfo);
+    return toJS(totalInfo);
   }
 
-  set totalInfo (value) {
+  set totalInfo(value) {
     this.totalValue = value.total;
     this.onLineTotalValue = value.onLineTotal;
   }
 
-  @computed get mapInfo () {
+  @computed get mapInfo() {
     const t = this;
-    const load = function (val) {
+    const load = function(val) {
       val.pingyin = val.pingyin || 'zhejiang';
-      let data1 = require (`echarts/map/js/province/${val.pingyin}`);
-      console.log ('1');
+      let data1 = require(`echarts/map/js/province/${val.pingyin}`);
+      console.log('1');
     };
-    async function computeMapData (val) {
-      await load (val);
-      console.log ('2');
-      return toJS (t.mapInfoValue);
+    async function computeMapData(val) {
+      await load(val);
+      console.log('2');
+      return toJS(t.mapInfoValue);
     }
-    computeMapData (toJS (t.mapInfoValue));
+    computeMapData(toJS(t.mapInfoValue));
     // const mapData =  computeMapData(this.mapInfoValue);
-    console.log ('3');
-    return toJS (this.mapInfoValue);
+    console.log('3');
+    return toJS(this.mapInfoValue);
   }
-  set mapInfo (value) {
+  set mapInfo(value) {
     this.mapInfoValue = value;
   }
 
-  @computed get installRecordData () {
-    return toJS (this.installRecordDataValue);
+  @computed get installRecordData() {
+    return toJS(this.installRecordDataValue);
   }
 
-  set installRecordData (value) {
+  set installRecordData(value) {
     this.installRecordDataValue = value;
   }
 
-  @computed get maintenanceRecordData () {
-    return toJS (this.maintenanceRecordValue);
+  @computed get maintenanceRecordData() {
+    return toJS(this.maintenanceRecordValue);
   }
 
-  set maintenanceRecordData (value) {
+  set maintenanceRecordData(value) {
     this.maintenanceRecordValue = value;
   }
 
-  @computed get warningMessage () {
-    return toJS (this.warningMessageValue);
+  @computed get warningMessage() {
+    return toJS(this.warningMessageValue);
   }
 
-  set warningMessage (value) {
+  set warningMessage(value) {
     this.warningMessageValue = value;
   }
 
-  @computed get maiUserInfo () {
-    return toJS (this.maiUserInfoList);
+  @computed get maiUserInfo() {
+    return toJS(this.maiUserInfoList);
   }
 
-  set maiUserInfo (list) {
+  set maiUserInfo(list) {
     this.maiUserInfoList = list;
   }
 
   //设备id维护
-  @computed get devIdList () {
-    return toJS (this.devIdListValue);
+  @computed get devIdList() {
+    return toJS(this.devIdListValue);
   }
 
-  set devIdList (list) {
+  set devIdList(list) {
     this.devIdListValue = list;
   }
 
   //电梯故障联系方式 地址
-  @computed get elevatorConnectOption () {
-    return toJS (this.elevatorConnectOptionValue);
+  @computed get elevatorConnectOption() {
+    return toJS(this.elevatorConnectOptionValue);
   }
 
-  set elevatorConnectOption (list) {
+  set elevatorConnectOption(list) {
     this.elevatorConnectOptionValue = list;
   }
 
   //电梯故障联系方式 地址
-  @computed get elevatorInTimeIFrameOption () {
-    return toJS (this.elevatorInTimeIFrameOptionValue);
+  @computed get elevatorInTimeIFrameOption() {
+    return toJS(this.elevatorInTimeIFrameOptionValue);
   }
 
-  set elevatorInTimeIFrameOption (objOption) {
+  set elevatorInTimeIFrameOption(objOption) {
     this.elevatorInTimeIFrameOptionValue = objOption;
   }
 
-  @computed get dynamicInfoOption () {
-    return toJS (this.dynamicInfoOptionValue);
+  @computed get dynamicInfoOption() {
+    return toJS(this.dynamicInfoOptionValue);
   }
 
-  set dynamicInfoOption (value) {
+  set dynamicInfoOption(value) {
     this.dynamicInfoOptionValue = value;
   }
 
   //单个电梯状态
-  @computed get elevatorStatus () {
-    return toJS (this.elevatorStatusValue);
+  @computed get elevatorStatus() {
+    return toJS(this.elevatorStatusValue);
   }
 
-  set elevatorStatus (value) {
+  set elevatorStatus(value) {
     this.elevatorStatusValue = value;
   }
 
-  @computed get elevatorLog () {
-    return toJS (this.elevatorLogValue);
+  @computed get elevatorLog() {
+    return toJS(this.elevatorLogValue);
   }
 
-  set elevatorLog (value) {
+  set elevatorLog(value) {
     this.elevatorLogValue = value;
   }
 }
 
-export default new sharedData ();
+export default new sharedData();
 
 //console.log (runningData.runningDataOption);
 //recompute fullname

@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
-import {inject, observer} from 'mobx-react';
+import React, { PureComponent } from 'react';
+import { inject, observer } from 'mobx-react';
 import Debounce from 'lodash-decorators/debounce';
-import {Icon, Row, Col, Button, notification, Modal} from 'antd';
+import { Icon, Row, Col, Button, notification, Modal } from 'antd';
 import styles from './index.less';
 
-import {Provider} from 'mobx-react';
+import { Provider } from 'mobx-react';
 
 import sharedData from '../../stores/sharedData';
 import messageManager from '../../stores/messageManager';
@@ -12,11 +12,11 @@ import messageManager from '../../stores/messageManager';
 //电梯故障详情
 import Detail_Index from './detail';
 
-@inject ('sharedData', 'messageManager')
+@inject('sharedData', 'messageManager')
 @observer
 export default class Warning extends React.Component {
-  constructor (props) {
-    super (props);
+  constructor(props) {
+    super(props);
     this.state = {
       modalVisible: false,
     };
@@ -28,7 +28,7 @@ export default class Warning extends React.Component {
     // this.openNotification();
   }
 
-  componentWillUnmount () {}
+  componentWillUnmount() {}
 
   /* eslint-disable*/
 
@@ -40,37 +40,35 @@ export default class Warning extends React.Component {
   //   }
   // }
 
-  componentWillReceiveProps (nextProps) {
-    const {sharedData} = nextProps;
+  componentWillReceiveProps(nextProps) {
+    const { sharedData } = nextProps;
     const warningMessage = sharedData.warningMessage;
-    if (sharedData.warningMessage) {
-      this.openNotification (warningMessage);
+    if (warningMessage && warningMessage.id > 0) {
+      this.openNotification(warningMessage);
     }
   }
   //打开通知窗口
-  notificationClose (key, t) {
-    console.log (
+  notificationClose(key, t) {
+    console.log(
       'Notification was closed. Either the close button was clicked or duration time elapsed.'
     );
-    notification.close (key);
+    notification.close(key);
   }
 
   //打开通知
-  openNotification (warningMessage) {
+  openNotification(warningMessage) {
     const t = this;
     const key = warningMessage.id; //`open${Date.now ()}`;
     const contents = (
       <div className={styles.notification}>
-        <span className={styles.notificationInfo}>
-          {warningMessage.message}
-        </span>
+        <span className={styles.notificationInfo}>{warningMessage.message}</span>
         <Button
           className={styles.button}
           type="primary"
           size="small"
           onClick={() => {
-            t.notificationClose (key, t);
-            t.setModalVisible (true);
+            t.notificationClose(key, t);
+            t.setModalVisible(true);
           }}
         >
           故障处理
@@ -80,33 +78,33 @@ export default class Warning extends React.Component {
           type="default"
           size="small"
           onClick={() => {
-            t.cancel (key);
-            t.notificationClose (key, t);
-            t.setModalVisible (true);
+            t.cancel(key);
+            t.notificationClose(key, t);
+            t.setModalVisible(true);
           }}
         >
           取消
         </Button>
       </div>
     );
-    notification.open ({
+    notification.open({
       duration: null,
       type: 'warning',
       message: '故障警报',
       description: contents,
       key,
-      onClose: t.notificationClose (key, t),
+      onClose: t.notificationClose(key, t),
       placement: 'bottomRight',
     });
   }
 
-  cancel (key) {
-    const {messageManager} = this.props;
+  cancel(key) {
+    const { messageManager } = this.props;
     const params =
-      QueryString.parse (window.location.search).dev_id ||
-      QueryString.parse (window.location.search).dev_id_list ||
+      QueryString.parse(window.location.search).dev_id ||
+      QueryString.parse(window.location.search).dev_id_list ||
       '';
-    messageManager.emit ('send', {
+    messageManager.emit('send', {
       cmd: '9008',
       filter: params,
       id: key,
@@ -114,13 +112,13 @@ export default class Warning extends React.Component {
   }
 
   //关闭弹窗
-  setModalVisible (param) {
-    this.setState ({modalVisible: param});
+  setModalVisible(param) {
+    this.setState({ modalVisible: param });
   }
 
-  render () {
-    const {modalVisible} = this.state;
-    const {sharedData} = this.props;
+  render() {
+    const { modalVisible } = this.state;
+    const { sharedData } = this.props;
     const warningMessage = sharedData.warningMessage;
     return (
       <Modal
@@ -128,8 +126,8 @@ export default class Warning extends React.Component {
         title="故障详情"
         centered
         visible={modalVisible}
-        onOk={() => this.setModalVisible (false)}
-        onCancel={() => this.setModalVisible (false)}
+        onOk={() => this.setModalVisible(false)}
+        onCancel={() => this.setModalVisible(false)}
       >
         <Detail_Index warningMessage={warningMessage} />
       </Modal>

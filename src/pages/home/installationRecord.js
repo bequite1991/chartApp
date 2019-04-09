@@ -1,38 +1,77 @@
-import React, {PureComponent} from 'react';
-import {Icon} from 'antd';
+import React, { PureComponent } from 'react';
+import { Icon } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
-import {inject, observer} from 'mobx-react';
-import {debug} from 'util';
+import QueryString from 'query-string';
 
-@inject ('sharedData')
+const uuid = require('node-uuid');
+
+import { inject, observer } from 'mobx-react';
+import { debug } from 'util';
+
+@inject('sharedData', 'messageManager')
 @observer
-export default class MaintenanceOrdersAndFinishChart extends React.Component {
-  constructor (props) {
-    super (props);
+export default class InstallationRecord extends React.Component {
+  uuid = '';
+  devIdlist = '-1';
+  constructor(props) {
+    super(props);
     this.state = {};
-  }
-  componentWillUnmount () {}
 
-  onChartClick (param, echarts) {
-    console.log (param);
+    const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
+
+    const { messageManager } = this.props;
+
+    this.devIdlist = dev_id_list;
+
+    this.uuid = uuid.v1();
+
+    messageManager.emit('register', { uuid: this.uuid, cmd: '9013', filter: dev_id_list }); //filter: '2019-02',
   }
 
-  render () {
+  componentWillUpdate() {
+    const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
+
+    if (dev_id_list == this.devIdlist) {
+      return;
+    }
+
+    this.devIdlist = dev_id_list;
+
+    if (this.uuid.length > 0) {
+      messageManager.emit('unregister', { uuid: this.uuid, cmd: '9013' });
+    }
+
+    this.uuid = uuid.v1();
+
+    messageManager.emit('register', { uuid: this.uuid, cmd: '9013', filter: dev_id_list }); //filter: '2019-02',
+  }
+
+  componentWillUnmount() {}
+
+  onChartClick(param, echarts) {
+    console.log(param);
+  }
+
+  render() {
     let onEvents = {
-      click: this.onChartClick.bind (this),
+      click: this.onChartClick.bind(this),
     };
 
-    const {sharedData} = this.props;
+    const { sharedData } = this.props;
     const installRecordDatas = sharedData.installRecordData;
     let arr = [];
-    if(sharedData.installRecordData){
-      sharedData.installRecordData.forEach((ele,key)=>{
-        arr.push(<span key={key} className={styles.installRecordDetail}>{ele}</span>)
+    if (sharedData.installRecordData) {
+      sharedData.installRecordData.forEach((ele, key) => {
+        arr.push(
+          <span key={key} className={styles.installRecordDetail}>
+            {ele}
+          </span>
+        );
       });
     }
 

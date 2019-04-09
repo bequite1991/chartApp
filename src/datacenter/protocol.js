@@ -11,6 +11,7 @@ const PROTOCAL_REQUEST = {
   '9010': 'inshn_dtimao/huibao/req/mai_user_info', // 维保人员信息接口
   '9011': 'inshn_dtimao/huibao/req/mai_dev_info', // 电梯维保记录查询接口
   '9012': 'inshn_dtimao/huibao/req/dev_run_day/user', // 电梯安装日期到当前日期的总天数查询接口
+  '9013': 'inshn_dtimao/huibao/req/use_corp_dev_cnt/user', // 小区安装记录接口
 };
 
 const PROTOCAL_RESPONSE = {
@@ -21,11 +22,11 @@ const PROTOCAL_RESPONSE = {
   '9005': 'inshn_dtimao/huibao/resp/month_dev_num', // 电梯安装数量获取
   '9006': 'inshn_dtimao/huibao/resp/month_dev_status', // 电梯总在线、离线数获取
   '9007': 'inshn_dtimao/huibao/resp/dev_alarm_num', // 电梯故障数量查看接口
-
   '9009': 'inshn_dtimao/huibao/resp/mai_dev_num', // 每月维保审核数目接口
   '9010': 'inshn_dtimao/huibao/resp/mai_user_info', // 维保人员信息接口
   '9011': 'inshn_dtimao/huibao/resp/mai_dev_info', // 电梯维保记录查询接口
   '9012': 'inshn_dtimao/huibao/resp/dev_run_day/user', // 电梯安装日期到当前日期的总天数查询接口
+  '9013': 'inshn_dtimao/huibao/resp/use_corp_dev_cnt/user', // 小区安装记录接口
 };
 
-export {PROTOCAL_REQUEST, PROTOCAL_RESPONSE};
+export { PROTOCAL_REQUEST, PROTOCAL_RESPONSE };

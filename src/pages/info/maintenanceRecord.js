@@ -1,37 +1,41 @@
-import React, {PureComponent} from 'react';
-import {Icon} from 'antd';
+import React, { PureComponent } from 'react';
+import { Icon } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
-import {inject, observer} from 'mobx-react';
-import {debug} from 'util';
+import { inject, observer } from 'mobx-react';
+import { debug } from 'util';
 
-@inject ('sharedData')
+@inject('sharedData')
 @observer
-export default class MaintenanceOrdersAndFinishChart extends React.Component {
-  constructor (props) {
-    super (props);
+export default class InstallationRecord extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {};
   }
-  componentWillUnmount () {}
+  componentWillUnmount() {}
 
-  onChartClick (param, echarts) {
-    console.log (param);
+  onChartClick(param, echarts) {
+    console.log(param);
   }
 
-  render () {
+  render() {
     let onEvents = {
-      click: this.onChartClick.bind (this),
+      click: this.onChartClick.bind(this),
     };
 
-    const {sharedData} = this.props;
+    const { sharedData } = this.props;
     let arr = [];
-    if(sharedData.maintenanceRecordData){
-      sharedData.maintenanceRecordData.forEach((ele,key)=>{
-        arr.push(<span key={key} className={styles.maintenanceRecordDetail}>{ele}</span>)
+    if (sharedData.maintenanceRecordData) {
+      sharedData.maintenanceRecordData.forEach((ele, key) => {
+        arr.push(
+          <span key={key} className={styles.maintenanceRecordDetail}>
+            {ele}
+          </span>
+        );
       });
     }
 

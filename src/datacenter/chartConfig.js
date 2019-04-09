@@ -5,54 +5,60 @@ const Elevator_Running_Data_Chart_Options = {
     subtext: '',
     textStyle: {
       fontWeight: 'normal', //标题颜色
-      color: '#2bdadb',
+      color: '#2dd8db',
       fontSize: '12px',
     },
   },
-  // tooltip: {
-  //   trigger: 'axis',
-  // },
+  tooltip: {
+    trigger: 'axis',
+  },
   // legend: {
-  //   data: ['2019年'],
+  //   data: ['次数', '月份'],
   // },
-  // toolbox: {
-  //   show: false,
-  //   feature: {
-  //     mark: {show: true},
-  //     dataView: {show: true, readOnly: false},
-  //     magicType: {show: true, type: ['line', 'bar']},
-  //     restore: {show: true},
-  //     saveAsImage: {show: true},
-  //   },
-  // },
-  // calculable: true,
+  toolbox: {
+    show: false,
+    feature: {
+      mark: { show: true },
+      dataView: { show: true, readOnly: false },
+      magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+      restore: { show: true },
+      saveAsImage: { show: true },
+    },
+  },
+  calculable: true,
+  xAxis: [
+    {
+      type: 'category',
+      data: [],
+      axisLine: {
+        lineStyle: {
+          color: '#96cbe4',
+        },
+      },
+    },
+  ],
   yAxis: [
     {
       type: 'value',
       axisLine: {
         lineStyle: {
-          color: '#816BC2',
-        },
-      },
-    },
-  ],
-  xAxis: [
-    {
-      type: 'category',
-      data: ['总运行天数（天）'],
-      axisLine: {
-        lineStyle: {
-          color: '#816BC2',
+          color: '#96cbe4',
         },
       },
     },
   ],
   series: [
     {
-      name: '2019年',
+      name: '总数',
       type: 'bar',
       barWidth: 30,
       data: [],
+      markPoint: {
+        data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],
+      },
+      markLine: {
+        data: [{ type: 'average', name: '平均值' }],
+      },
       //颜色
       itemStyle: {
         normal: {
@@ -88,11 +94,11 @@ const Elevator_System_Count_Chart_Options = {
   toolbox: {
     show: false,
     feature: {
-      mark: {show: true},
-      dataView: {show: true, readOnly: false},
-      magicType: {show: true, type: ['line', 'bar']},
-      restore: {show: true},
-      saveAsImage: {show: true},
+      mark: { show: true },
+      dataView: { show: true, readOnly: false },
+      magicType: { show: true, type: ['line', 'bar'] },
+      restore: { show: true },
+      saveAsImage: { show: true },
     },
   },
   calculable: true,
@@ -123,10 +129,10 @@ const Elevator_System_Count_Chart_Options = {
       type: 'bar',
       data: [],
       markPoint: {
-        data: [{type: 'max', name: '最大值'}, {type: 'min', name: '最小值'}],
+        data: [{ type: 'max', name: '最大值' }, { type: 'min', name: '最小值' }],
       },
       markLine: {
-        data: [{type: 'average', name: '平均值'}],
+        data: [{ type: 'average', name: '平均值' }],
       },
       barWidth: 30,
       //颜色
@@ -159,11 +165,11 @@ const Elevator_Offline_Count_Every_Month_Chart_Option = {
   toolbox: {
     show: false,
     feature: {
-      mark: {show: true},
-      dataView: {show: true, readOnly: false},
-      magicType: {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-      restore: {show: true},
-      saveAsImage: {show: true},
+      mark: { show: true },
+      dataView: { show: true, readOnly: false },
+      magicType: { show: true, type: ['line', 'bar', 'stack', 'tiled'] },
+      restore: { show: true },
+      saveAsImage: { show: true },
     },
   },
   calculable: true,
@@ -240,7 +246,7 @@ const Elevator_Map_China_Options = {
     left: 'right',
     top: 'center',
     feature: {
-      dataView: {readOnly: false},
+      dataView: { readOnly: false },
       restore: {},
       saveAsImage: {},
     },
@@ -342,16 +348,7 @@ const Elevator_Error_Ratio_Chart_Options = {
       fontSize: '12px',
     },
   },
-  color: [
-    '#2cdad6',
-    '#836cbf',
-    '#f98428',
-    '#2ea32e',
-    'red',
-    'green',
-    'yellow',
-    'blueviolet',
-  ],
+  color: ['#2cdad6', '#836cbf', '#f98428', '#2ea32e', 'red', 'green', 'yellow', 'blueviolet'],
   tooltip: {
     trigger: 'item',
     formatter: '{a} <br/>{b} : {c} ({d}%)',

@@ -1,14 +1,16 @@
-import React, {PureComponent} from 'react';
-import {inject, observer} from 'mobx-react';
-import {Icon, Row, Col, Button, notification} from 'antd';
+import React, { PureComponent } from 'react';
+import { inject, observer } from 'mobx-react';
+import { Icon, Row, Col, Button, notification } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 
-import {Provider} from 'mobx-react';
+import { Provider } from 'mobx-react';
 
 import sharedDataDetail from '../../stores/sharedDataDetail.js';
 import sharedData from '../../stores/sharedData';
+
+import router from 'umi/router';
 
 // 电梯运行数据(Elevator Running Data)
 import RunningDataChart from './runningDataChart';
@@ -36,23 +38,25 @@ import messageManager from '../../stores/messageManager';
 // @observer
 export default class Detail extends PureComponent {
   init = false;
-  constructor (props) {
-    super (props);
+  constructor(props) {
+    super(props);
     this.state = {};
   }
 
-  componentWillUnmount () {}
+  componentWillUnmount() {}
 
-  goBack(){
+  goBack() {
     router.go(-1);
   }
 
-  render () {
+  render() {
     let charts;
     if (document.body.clientWidth < 1000) {
       charts = (
         <Row>
-          <Col span={24}><Elevator_Status /></Col>
+          <Col span={24}>
+            <Elevator_Status />
+          </Col>
           <Col span={24}>
             <div className={styles.RunningDataChart}>
               <RunningDataChart className={styles.RunningDataChart} />
@@ -63,9 +67,7 @@ export default class Detail extends PureComponent {
           </Col>
           <Col span={24}>
             <div className={styles.chartContent}>
-              <Elevator_Error_Connect
-                className={styles.Elevator_Error_Connect}
-              />
+              <Elevator_Error_Connect className={styles.Elevator_Error_Connect} />
             </div>
             <div className={styles.chartContent}>
               <Elevator_Log className={styles.Elevator_Log} />
@@ -112,7 +114,9 @@ export default class Detail extends PureComponent {
           {charts}
           <Warning />
           <ElevatorInTimeIFrame />
-          <Button type="dashed" block onClick={this.goBack}>返回上一页</Button>
+          <Button type="dashed" block onClick={this.goBack}>
+            返回上一页
+          </Button>
         </div>
       </Provider>
     );
