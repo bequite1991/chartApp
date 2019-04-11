@@ -7,6 +7,8 @@ import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 import router from 'umi/router';
 
+import classNames from 'classnames';
+
 import { inject, observer } from 'mobx-react';
 import { debug } from 'util';
 
@@ -78,14 +80,23 @@ export default class ElevatorErrorConnect extends React.Component {
   };
 
   render() {
+    const { sharedData } = this.props;
+    const option = sharedData.elevatorConnectOption;
+    //router.push (option.url);
+    let url = option.url;
+    let active = false;
+    if (url && url.length > 0) {
+      active = true;
+    }
+
     return (
       <div className={styles.control}>
         <div className={styles.button} onClick={this.handlePhone}>
-          <Icon type="phone" className={styles.icon} />
+          <Icon type="phone" className={active == true ? styles.icon_active : styles.icon} />
           <span>通话</span>
         </div>
         <div className={styles.button} onClick={this.handleVideo}>
-          <Icon type="dashboard" className={styles.icon} />
+          <Icon type="dashboard" className={active == true ? styles.icon_active : styles.icon} />
           <span>监视</span>
         </div>
       </div>
