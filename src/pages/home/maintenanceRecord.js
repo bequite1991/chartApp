@@ -18,15 +18,16 @@ export default class MaintenanceRecord extends React.Component {
   }
   componentWillUnmount() {}
 
+  componentWillReceiveProps(nextProps) {
+    const { sharedData } = this.props;
+    sharedData.maintenanceRecordData = [];
+  }
+
   onChartClick(param, echarts) {
     console.log(param);
   }
 
   render() {
-    let onEvents = {
-      click: this.onChartClick.bind(this),
-    };
-
     const { sharedData } = this.props;
     let arr = [];
     let list = sharedData.maintenanceRecordData ? sharedData.maintenanceRecordData : [];

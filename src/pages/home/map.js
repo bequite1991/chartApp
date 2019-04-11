@@ -286,8 +286,9 @@ export default class Map extends Component {
           if (index == marks.length - 1) {
             const url = '/home?dev_id_list=' + dev_id;
             sharedData.devIdList = ids;
-            window.location.href = url;
-            //router.push(url);
+            //window.location.href = url;
+            sharedData.maiUserInfo = [];
+            router.push(url);
           }
         });
       }
@@ -308,11 +309,11 @@ export default class Map extends Component {
     const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';
     const onLineTotal = totalInfo ? (totalInfo.onLineTotal ? totalInfo.onLineTotal : '0') : '0';
 
-    const isInfo = sharedData.devIdList.length;
+    const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
     let maintenance;
     const peopleArr = [];
     let list = [];
-    if (isInfo) {
+    if (dev_id_list && dev_id_list.length > 0) {
       list = sharedData.maintenanceInformation ? sharedData.maintenanceInformation : [];
       if (list) {
         list.forEach((ele, key) => {
@@ -362,7 +363,6 @@ export default class Map extends Component {
           <span className={styles.title}>维保记录</span>
           <div className={styles.maintenanceInfomation}>{peopleArr}</div>
         </div>
-        ;
       </div>
     );
   }

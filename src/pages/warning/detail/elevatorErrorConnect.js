@@ -46,8 +46,6 @@ export default class ElevatorErrorConnect extends React.Component {
   }
 
   handlePhone = () => {
-    debugger;
-
     const { sharedData } = this.props;
     const option = sharedData.elevatorConnectOption;
     //router.push (option.url);

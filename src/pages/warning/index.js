@@ -84,7 +84,7 @@ export default class Warning extends React.Component {
           type="default"
           size="small"
           onClick={() => {
-            t.cancel(key);
+            //t.cancel(key);
             t.notificationClose(key, t);
             //t.setModalVisible(true);
           }}
@@ -134,14 +134,16 @@ export default class Warning extends React.Component {
 
     return (
       <Modal
-        width="100%"
+        width="60%"
+        style={{ top: 0, height: '78vh' }}
         title="故障详情"
-        centered
         visible={modalVisible}
         onOk={() => this.setModalVisible(false)}
         onCancel={() => this.setModalVisible(false)}
       >
-        <Detail_Index warningMessage={warningMessage} />
+        <div style={{ overflow: 'scroll', height: '68vh' }}>
+          <Detail_Index warningMessage={warningMessage} />
+        </div>
       </Modal>
     );
   }

@@ -37,6 +37,8 @@ import Installation_Record_Information from './installationRecordInformation.js'
 import Warning from '../warning';
 import messageManager from '../../stores/messageManager';
 
+import QueryString from 'query-string';
+
 // @inject ('runningData')
 // @observer
 export default class Home extends PureComponent {
@@ -76,8 +78,8 @@ export default class Home extends PureComponent {
   render() {
     let charts, maintenance, systemCountChart;
     let installationRecord = '';
-    const isInfo = sharedData.devIdList.length;
-    if (isInfo) {
+    const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
+    if (dev_id_list && dev_id_list.length > 0) {
       installationRecord = (
         <div className={styles.Maintenance_Record}>
           <Installation_Record_Information />
