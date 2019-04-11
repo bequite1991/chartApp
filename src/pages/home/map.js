@@ -313,6 +313,7 @@ export default class Map extends Component {
     let maintenance;
     const peopleArr = [];
     let list = [];
+    let title = '';
     if (dev_id_list && dev_id_list.length > 0) {
       list = sharedData.maintenanceInformation ? sharedData.maintenanceInformation : [];
       if (list) {
@@ -324,6 +325,7 @@ export default class Map extends Component {
           );
         });
       }
+      title = '维保记录';
     } else {
       list = sharedData.maiUserInfo ? sharedData.maiUserInfo : [];
       list.forEach((val, key) => {
@@ -346,6 +348,8 @@ export default class Map extends Component {
           </span>
         );
       });
+
+      title = '维保人员信息'; //
     }
     return (
       <div className={styles.mapChina}>
@@ -360,7 +364,7 @@ export default class Map extends Component {
         </div>
         <div className={styles.allmap} id="allmap" />
         <div className={styles.peopleListContent}>
-          <span className={styles.title}>维保记录</span>
+          <span className={styles.title}>{title}</span>
           <div className={styles.maintenanceInfomation}>{peopleArr}</div>
         </div>
       </div>

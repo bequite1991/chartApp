@@ -541,19 +541,19 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('9004', args => {
-      debugger;
+      //debugger;
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows.length > 0) {
           rows.forEach(item => {
-            debugger;
+            //debugger;
             this.warningMessage = {
               dev_id: item.id,
               id: item.sn,
               message: item.alertname,
             };
           });
-        } 
+        }
         // else {
         //   debugger;
         //   this.warningMessage = {

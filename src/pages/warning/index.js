@@ -135,14 +135,14 @@ export default class Warning extends React.Component {
     return (
       <Modal
         width="60%"
-        style={{ top: 0, height: '78vh' }}
+        style={{ top: '5vh', height: '78vh' }}
         title="故障详情"
         visible={modalVisible}
         onOk={() => this.setModalVisible(false)}
         onCancel={() => this.setModalVisible(false)}
       >
         <div style={{ overflow: 'scroll', height: '68vh' }}>
-          <Detail_Index warningMessage={warningMessage} />
+          <Detail_Index className="styles.content" warningMessage={warningMessage} />
         </div>
       </Modal>
     );
