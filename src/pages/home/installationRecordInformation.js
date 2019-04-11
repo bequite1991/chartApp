@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Icon } from 'antd';
+import { Icon, List } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
@@ -15,19 +15,15 @@ import { debug } from 'util';
 
 @inject('sharedData', 'messageManager')
 @observer
-export default class MaintenanceRecord extends React.Component {
+export default class InstallationRecordInformation extends React.Component {
   uuid = '';
+  devIdlist = '-1';
   constructor(props) {
     super(props);
-    this.uuid = uuid.v1();
-    const dev_id = this.props.devId || '';
-    const { messageManager } = this.props;
-    messageManager.emit('register', { uuid: this.uuid, cmd: '9011', filter: dev_id });
+    this.state = {};
   }
-  componentWillUnmount() {
-    const { messageManager } = this.props;
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9011' });
-  }
+
+  componentWillUnmount() {}
 
   onChartClick(param, echarts) {
     console.log(param);
@@ -37,13 +33,14 @@ export default class MaintenanceRecord extends React.Component {
     let onEvents = {
       click: this.onChartClick.bind(this),
     };
+
     const { sharedData } = this.props;
     let arr = [];
-    let list = sharedData.maintenanceRecordData ? sharedData.maintenanceRecordData : [];
+    let list = sharedData.installRecordInformation ? sharedData.installRecordInformation : [];
     if (list) {
       list.forEach((ele, key) => {
         arr.push(
-          <span key={key} className={styles.maintenanceRecordDetail}>
+          <span key={key} className={styles.installationRecordInformationDetail}>
             {ele}
           </span>
         );
@@ -51,9 +48,9 @@ export default class MaintenanceRecord extends React.Component {
     }
 
     return (
-      <div className={styles.maintenanceRecord}>
-        <span className={styles.title}>电梯维保记录</span>
-        <div className={styles.maintenanceRecordContent}>{arr}</div>
+      <div className={styles.installationRecordInformation}>
+        <span className={styles.title}>电梯安装记录</span>
+        <div className={styles.installationRecordInformationContent}>{arr}</div>
       </div>
     );
   }

@@ -403,7 +403,7 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('9001', args => {
-      this.warningMessage = { dev_id: '19876543212345678909', id: '28774535', message: '平层困人' };
+      //this.warningMessage = { dev_id: '19876543212345678909', id: '28774535', message: '平层困人' };
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
@@ -553,14 +553,15 @@ class sharedData extends EventEmitter {
               message: item.alertname,
             };
           });
-        } else {
-          debugger;
-          this.warningMessage = {
-            dev_id: '19876543212345678909',
-            id: '28774535',
-            message: '平层困人',
-          };
-        }
+        } 
+        // else {
+        //   debugger;
+        //   this.warningMessage = {
+        //     dev_id: '19876543212345678909',
+        //     id: '28774535',
+        //     message: '平层困人',
+        //   };
+        // }
       }
     });
 
