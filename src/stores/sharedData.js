@@ -56,7 +56,7 @@ class sharedData extends EventEmitter {
   };
 
   @observable elevatorStatusValue = {};
-  @observable elevatorLogValue = {};
+  @observable elevatorLogValue = [];
 
   @observable warningMessageValue = {
     id: -1,
@@ -64,6 +64,14 @@ class sharedData extends EventEmitter {
   };
 
   @observable installRecordDataValue = [];
+
+  @observable maintenanceRecordValue = [];
+
+  @observable elevatorDevInfoValue = {};
+
+  @observable installRecordInformationValue = [];
+
+  @observable maintenanceInformationValue = [];
 
   sumDay = '50'; // 运行天数
 
@@ -126,7 +134,7 @@ class sharedData extends EventEmitter {
       {
         name: '完成量',
         type: 'line',
-        stack: '总量',
+        //stack: '总量',
         label: {
           normal: {
             show: true,
@@ -138,7 +146,7 @@ class sharedData extends EventEmitter {
       {
         name: '未成量',
         type: 'line',
-        stack: '总量',
+        //stack: '总量',
         label: {
           normal: {
             show: true,
@@ -170,12 +178,12 @@ class sharedData extends EventEmitter {
 
     //小区维保记录
     this.maintenanceRecordValue = [
-      'xxxx小区维保纪律1',
-      'xxxx小区维保纪律2',
-      'xxxx小区维保纪律3',
-      'xxxx小区维保纪律4',
-      'xxxx小区维保纪律5',
-      'xxxx小区维保纪律6',
+      // 'xxxx小区维保纪律1',
+      // 'xxxx小区维保纪律2',
+      // 'xxxx小区维保纪律3',
+      // 'xxxx小区维保纪律4',
+      // 'xxxx小区维保纪律5',
+      // 'xxxx小区维保纪律6',
     ];
 
     // this.warningMessageValue = {
@@ -193,7 +201,7 @@ class sharedData extends EventEmitter {
     };
     //单个电梯状态
     this.elevatorStatusValue = {};
-    this.elevatorLogValue = {};
+    this.elevatorLogValue = [];
 
     // const optionValueWatcher = computed (() => {
     //   return this.optionValue;
@@ -311,15 +319,42 @@ class sharedData extends EventEmitter {
           let filter = args.filter;
           const dev_id = QueryString.parse(window.location.search).dev_id || '';
           if (filter != null && filter.length > 0 && dev_id == filter) {
-            let item = rows[0];
-            if (item) {
-              this.elevatorLog = {
-                dev_id: item.dev_id,
-                dev_cname: item.dev_cname,
-                on_time: item.on_time,
-                off_time: item.off_time,
-              };
+            if (rows && rows.length > 0) {
+              let dataArray = [];
+              let dev_name = '';
+              rows.forEach(item => {
+                let ondate = item.ondate;
+                let offdate = item.offdate;
+                let time_length = '';
+
+                if (dev_name.length == 0) {
+                  dev_name = item.dev_cname;
+                }
+
+                let message =
+                  '上线时间:' + ondate + ' 下线时间:' + offdate + ' 时长:' + time_length;
+                //debugger;
+                dataArray.push(message);
+              });
+
+              if (dataArray.length > 0) {
+                this.elevatorLog = dataArray;
+              }
+
+              if (dev_name.length > 0) {
+                this.elevatorDevInfo = { name: dev_name };
+              }
             }
+            // debugger;
+            // let item = rows[0];
+            // if (item) {
+            //   this.elevatorLog = {
+            //     dev_id: item.dev_id,
+            //     dev_cname: item.dev_cname,
+            //     on_time: item.on_time,
+            //     off_time: item.off_time,
+            //   };
+            // }
           }
         }
       }
@@ -368,21 +403,65 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('9001', args => {
+      this.warningMessage = { dev_id: '19876543212345678909', id: '28774535', message: '平层困人' };
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
           let filter = args.filter;
           const dev_id = QueryString.parse(window.location.search).dev_id || '';
-          if (filter != null && filter.length > 0 && dev_id == filter) {
-            let item = rows[0];
-            if (item) {
-              let url = item.url;
-              if (url && url.length > 0) {
-                console.log('url:' + url);
-                let options = {
-                  url: url,
-                };
-                this.elevatorConnectOption = options;
+          const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
+          if (filter != null && filter.length > 0) {
+            if (dev_id == filter) {
+              let item = rows[0];
+              if (item) {
+                let url = item.url;
+                if (url && url.length > 0) {
+                  console.log('url:' + url);
+                  let options = {
+                    url: url,
+                  };
+                  this.elevatorConnectOption = options;
+                }
+              }
+            } else if (dev_id_list && dev_id_list.length > 0) {
+              let installRecordInformationArray = [];
+              let maintenanceInformationArray = [];
+
+              rows.forEach(item => {
+                let use_corp_name = item.use_corp_name;
+                let dev_cname = item.dev_cname;
+                let createdate = item.createdate;
+                let mai_period = item.mai_period;
+                let mai_curdate = item.mai_curdate ? item.mai_curdate : ' ';
+                let mai_curoper = item.mai_curoper ? item.mai_curoper : ' ';
+                let message =
+                  '电梯名称:' +
+                  dev_cname +
+                  '，使用单位:' +
+                  use_corp_name +
+                  '，安装时间:' +
+                  createdate;
+                let message2 =
+                  '电梯名称:' +
+                  dev_cname +
+                  '，使用单位:' +
+                  use_corp_name +
+                  '，维保周期:' +
+                  mai_period +
+                  '，当前维保时间:' +
+                  mai_curdate +
+                  '，当前维保人:' +
+                  mai_curoper;
+                installRecordInformationArray.push(message);
+                maintenanceInformationArray.push(message2);
+              });
+
+              if (installRecordInformationArray && installRecordInformationArray.length > 0) {
+                this.installRecordInformation = installRecordInformationArray;
+              }
+
+              if (maintenanceInformationArray && maintenanceInformationArray.length > 0) {
+                this.maintenanceInformation = maintenanceInformationArray;
               }
             }
           } else {
@@ -412,6 +491,7 @@ class sharedData extends EventEmitter {
             let month = item.month;
             let total = item.mai_total; // 维保总数
             let invalid = item.mai_invalid; // 维保无效
+            //debugger;
 
             if (month) {
               categoryArray.push(month);
@@ -461,20 +541,50 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('9004', args => {
+      debugger;
       if (args && args.resp == '200') {
         let rows = args.rows;
-        if (rows && rows.length > 0) {
+        if (rows.length > 0) {
           rows.forEach(item => {
+            debugger;
             this.warningMessage = {
+              dev_id: item.id,
               id: item.sn,
               message: item.alertname,
             };
           });
+        } else {
+          debugger;
+          this.warningMessage = {
+            dev_id: '19876543212345678909',
+            id: '28774535',
+            message: '平层困人',
+          };
         }
       }
     });
 
     messageManager.on('9013', args => {
+      if (args && args.resp == '200') {
+        let rows = args.rows;
+        if (rows && rows.length > 0) {
+          let rowsArray = [];
+          rows.forEach(item => {
+            //debugger;
+            let user_corp = item.user_corp ? item.user_corp : '';
+            let total = item.total ? item.total : '0';
+            let alarm_cnt = item.alarm_cnt ? item.alarm_cnt : '0';
+            rowsArray.push(user_corp + ' 电梯安装数:' + total + ' 故障数:' + alarm_cnt);
+          });
+
+          if (rowsArray.length > 0) {
+            this.installRecordData = rowsArray;
+          }
+        }
+      }
+    });
+
+    messageManager.on('9011', args => {
       //debugger;
       if (args && args.resp == '200') {
         let rows = args.rows;
@@ -482,14 +592,37 @@ class sharedData extends EventEmitter {
           let rowsArray = [];
           rows.forEach(item => {
             //debugger;
-            let use_corp = item.use_corp ? item.use_corp : '';
-            let total = item.total ? item.total : '0';
-            let alarm_cnt = item.alarm_cnt ? item.alarm_cnt : '0';
-            rowsArray.push(use_corp + ' 电梯安装数:' + total + ' 故障数:' + alarm_cnt);
+            let dev_id = item.id ? item.id : '';
+            let mai_oper_name = item.mai_oper_name ? item.mai_oper_name : '';
+            let mai_time = item.mai_time ? item.mai_time : '';
+            let mai_etime = item.mai_etime ? item.mai_etime : '';
+            let mai_content = item.mai_content ? item.mai_content : '';
+            let content = '未知';
+            switch (mai_content) {
+              case '0':
+                content = '半月维保';
+                break;
+              case '1':
+                content = '季度维保';
+                break;
+              case '2':
+                content = '半年维保';
+                break;
+              case '3':
+                content = '年度维保';
+                break;
+              default:
+                content = '未知';
+                break;
+            }
+
+            rowsArray.push(
+              dev_id + ' ' + mai_oper_name + ' ' + mai_time + '' + mai_etime + ' ' + content
+            );
           });
 
           if (rowsArray.length > 0) {
-            this.installRecordData = rowsArray;
+            this.maintenanceRecordData = rowsArray;
           }
         }
       }
@@ -504,16 +637,25 @@ class sharedData extends EventEmitter {
       let energy = args.batteryLevel;
       let dynamicInfo = this.dynamicInfoOption;
       let runningState = args.runningState;
-
+      let elevatorCode = args.elevatorCode ? args.elevatorCode : '';
+      let isDoorOpen = args.isDoorOpen ? args.isDoorOpen : '-1';
+      let floorDisplaying = args.floorDisplaying ? args.floorDisplaying : '未知';
+      let isAnyone = args.isAnyone ? args.isAnyone : '-1';
+      //debugger;
       this.elevatorStatus = {
         runningState: runningState,
       };
 
       this.dynamicInfoOption = {
+        elevatorCode: elevatorCode,
+        isDoorOpen: isDoorOpen,
+        floorDisplaying: floorDisplaying,
         status: dynamicInfo.status ? dynamicInfo.status : '',
+        isAnyone: isAnyone,
         floors: currentFloor ? currentFloor : '',
         energy: energy,
         signal: dynamicInfo.signal,
+        regtelType: dynamicInfo.regtelType,
       };
     });
 
@@ -521,13 +663,20 @@ class sharedData extends EventEmitter {
       let elevatorState = args.elevatorState;
       let signalLevel = args.signalLevel;
       let dynamicInfo = this.dynamicInfoOption;
+      let regtelType = args.regtelType;
 
+      //debugger;
       let status = CONSTANT_CONFIG[elevatorState];
       this.dynamicInfoOption = {
+        elevatorCode: dynamicInfo.elevatorCode ? dynamicInfo.elevatorCode : '',
+        isDoorOpen: dynamicInfo.isDoorOpen ? dynamicInfo.isDoorOpen : '-1',
+        floorDisplaying: dynamicInfo.floorDisplaying,
         status: status,
+        isAnyone: dynamicInfo.isAnyone,
         floors: dynamicInfo.floors ? dynamicInfo.floors : '',
         energy: dynamicInfo.energy,
         signal: signalLevel ? signalLevel : '',
+        regtelType: regtelType,
       };
     });
 
@@ -758,6 +907,30 @@ class sharedData extends EventEmitter {
 
   set elevatorLog(value) {
     this.elevatorLogValue = value;
+  }
+
+  @computed get elevatorDevInfo() {
+    return toJS(this.elevatorDevInfoValue);
+  }
+
+  set elevatorDevInfo(value) {
+    this.elevatorDevInfoValue = value;
+  }
+
+  @computed get installRecordInformation() {
+    return toJS(this.installRecordInformationValue);
+  }
+
+  set installRecordInformation(value) {
+    this.installRecordInformationValue = value;
+  }
+
+  @computed get maintenanceInformation() {
+    return toJS(this.maintenanceInformationValue);
+  }
+
+  set maintenanceInformation(value) {
+    this.maintenanceInformationValue = value;
   }
 }
 

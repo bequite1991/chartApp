@@ -171,20 +171,70 @@
 }
 
 .maintenanceRecord {
+  width: 100%;
+  height: 100%;
+  padding: 0px 10px 20px 10px;
+
   .title {
-    display: block;
+    text-align: center;
+    width: 100%;
+    font-size: 12px;
+    color: #23a5b8;
+    margin-top: 10px;
+    margin-bottom: 14px;
+  }
+
+  .maintenanceRecordContent {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100px;
   }
 
   .maintenanceRecordDetail {
     display: block;
     font-size: 12px;
+    color: #23a5b8;
   }
 }
+
+.maintenanceInfomation {
+  overflow-y: scroll;
+  width: 100%;
+  height: 100px;
+}
+
+.installationRecordInformation {
+  width: 100%;
+  height: 100%;
+  padding: 0px 10px 20px 10px;
+
+  .title {
+    text-align: center;
+    width: 100%;
+    font-size: 12px;
+    color: #23a5b8;
+    margin-top: 10px;
+    margin-bottom: 14px;
+  }
+
+  .installationRecordInformationContent {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100px;
+  }
+
+  .installationRecordInformationDetail {
+    display: block;
+    font-size: 12px;
+    color: #23a5b8;
+  }
+}
+
 
 .notification {
   .notificationInfo {
     margin-bottom: 20px;
-    display: inline-block;
+    display: block;
   }
 
   .button {
@@ -246,6 +296,35 @@
 .Maintenance_Record {
   background-image: url("../../../public/bg/27.png");
   background-size: 100% 100%;
-  padding: 50px;
+  //padding: 50px;
   margin: 0 10px 50px 10px;
+}
+
+
+.Back_Home2 {
+  position: fixed;
+  bottom: 5%;
+  right: 0%;
+  z-index: 888;
+  width: 100%;
+  height: 20px;
+
+  button {
+    background: #ff9900;
+    color: white;
+  }
+}
+
+.Back_Home {
+  position: fixed;
+  bottom: 10%;
+  right: 8%;
+  z-index: 888;
+  width: 100px;
+  height: 20px;
+
+  button {
+    background: #ff9900;
+    color: white;
+  }
 }

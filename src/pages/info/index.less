@@ -19,6 +19,7 @@
   padding: 0 0 0 24px;
   cursor: pointer;
   font-size: 20px;
+
   img {
     display: inline-block;
     vertical-align: middle;
@@ -29,6 +30,7 @@
   :global(.anticon) {
     margin-right: 8px;
   }
+
   :global(.ant-dropdown-menu-item) {
     min-width: 160px;
   }
@@ -39,7 +41,8 @@
   height: @layout-header-height;
   cursor: pointer;
   transition: all 0.3s, padding 0s;
-  padding: ~'calc((@{layout-header-height} - 20px) / 2)' 24px;
+  padding:~'calc((@{layout-header-height} - 20px) / 2)'24px;
+
   &:hover {
     background: @pro-header-hover-bg;
   }
@@ -49,32 +52,39 @@
   float: right;
   height: 100%;
   overflow: hidden;
+
   .action {
     cursor: pointer;
     padding: 0 12px;
     display: inline-block;
     transition: all 0.3s;
     height: 100%;
-    > i {
+
+    >i {
       vertical-align: middle;
       color: @text-color;
     }
+
     &:hover {
       background: @pro-header-hover-bg;
     }
+
     &:global(.opened) {
       background: @pro-header-hover-bg;
     }
   }
+
   .search {
     padding: 0 12px;
+
     &:hover {
       background: transparent;
     }
   }
+
   .account {
     .avatar {
-      margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
+      margin:~'calc((@{layout-header-height} - 24px) / 2)'0;
       margin-right: 8px;
       color: @primary-color;
       background: rgba(255, 255, 255, 0.85);
@@ -85,15 +95,19 @@
 
 .dark {
   height: @layout-header-height;
+
   .action {
     color: rgba(255, 255, 255, 0.85);
-    > i {
+
+    >i {
       color: rgba(255, 255, 255, 0.85);
     }
+
     &:hover,
     &:global(.opened) {
       background: @primary-color;
     }
+
     :global(.ant-badge) {
       color: rgba(255, 255, 255, 0.85);
     }
@@ -105,22 +119,27 @@
     :global(.ant-divider-vertical) {
       vertical-align: unset;
     }
+
     .name {
       display: none;
     }
+
     i.trigger {
       padding: 22px 12px;
     }
+
     .logo {
       padding-left: 12px;
       padding-right: 12px;
       position: relative;
     }
+
     .right {
       position: absolute;
       right: 12px;
       top: 0;
       background: #fff;
+
       .account {
         .avatar {
           margin-right: 0;
@@ -130,25 +149,41 @@
   }
 }
 
-.chartContent{
-  padding-bottom:50px; 
-  margin:0 10px 50px 10px;
+.chartContent {
+  padding-bottom: 50px;
+  margin: 0 10px 50px 10px;
   border-bottom: 1px dashed #dddddd;
 }
-.installRecord{
-  .title{
+
+.installRecord {
+  .title {
     display: block;
   }
-  .installRecordDetail{
+
+  .installRecordDetail {
     display: block;
     font-size: 12px;
   }
+
+  .installRecordContent {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100px;
+  }
 }
-.maintenanceRecord{
-  .title{
+
+.maintenanceRecord {
+  .title {
     display: block;
   }
-  .maintenanceRecordDetail{
+
+  .maintenanceRecordContent {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100px;
+  }
+
+  .maintenanceRecordDetail {
     display: block;
     font-size: 12px;
   }

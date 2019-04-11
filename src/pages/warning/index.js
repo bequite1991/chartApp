@@ -6,6 +6,8 @@ import styles from './index.less';
 
 import { Provider } from 'mobx-react';
 
+import QueryString from 'query-string';
+
 import sharedData from '../../stores/sharedData';
 import messageManager from '../../stores/messageManager';
 
@@ -40,13 +42,16 @@ export default class Warning extends React.Component {
   //   }
   // }
 
-  componentWillReceiveProps(nextProps) {
-    const { sharedData } = nextProps;
-    const warningMessage = sharedData.warningMessage;
-    if (warningMessage && warningMessage.id > 0) {
-      this.openNotification(warningMessage);
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const { sharedData } = nextProps;
+  //   const warningMessage = sharedData.warningMessage;
+  //   debugger;
+  //   console.info('open: warningMessage:' + warningMessage.id);
+  //   if (warningMessage && warningMessage.id > 0) {
+  //     this.openNotification(warningMessage);
+  //   }
+  // }
+
   //打开通知窗口
   notificationClose(key, t) {
     console.log(
@@ -67,6 +72,7 @@ export default class Warning extends React.Component {
           type="primary"
           size="small"
           onClick={() => {
+            //t.cancel(key);
             t.notificationClose(key, t);
             t.setModalVisible(true);
           }}
@@ -80,7 +86,7 @@ export default class Warning extends React.Component {
           onClick={() => {
             t.cancel(key);
             t.notificationClose(key, t);
-            t.setModalVisible(true);
+            //t.setModalVisible(true);
           }}
         >
           取消
@@ -120,6 +126,12 @@ export default class Warning extends React.Component {
     const { modalVisible } = this.state;
     const { sharedData } = this.props;
     const warningMessage = sharedData.warningMessage;
+    console.info('open: warningMessage:' + warningMessage.id);
+    if (warningMessage && warningMessage.id > 0) {
+      //debugger;
+      this.openNotification(warningMessage);
+    }
+
     return (
       <Modal
         width="100%"

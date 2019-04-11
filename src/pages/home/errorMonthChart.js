@@ -36,7 +36,7 @@ export default class ErrorMonthChart extends React.Component {
     });
   }
 
-  componentWillUpdate() {
+  componentWillReceiveProps(nextProps) {
     const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
 
     if (dev_id_list == this.devIdlist) {

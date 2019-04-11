@@ -46,7 +46,7 @@ export default class Detail extends PureComponent {
   componentWillUnmount() {}
 
   goBack() {
-    router.go(-1);
+    window.location.href = '/home';
   }
 
   render() {
@@ -61,7 +61,7 @@ export default class Detail extends PureComponent {
             <div className={styles.RunningDataChart}>
               <RunningDataChart className={styles.RunningDataChart} />
             </div>
-            <div className={styles.chartContent}>
+            <div className={styles.elevatorContent}>
               <DynamicInfo className={styles.SystemCountChart} />
             </div>
           </Col>
@@ -71,6 +71,11 @@ export default class Detail extends PureComponent {
             </div>
             <div className={styles.chartContent}>
               <Elevator_Log className={styles.Elevator_Log} />
+            </div>
+            <div className={styles.Back_Home2}>
+              <Button block onClick={this.goBack}>
+                回到首页
+              </Button>
             </div>
           </Col>
         </Row>
@@ -82,7 +87,7 @@ export default class Detail extends PureComponent {
             <div className={styles.RunningDataChart}>
               <RunningDataChart />
             </div>
-            <div className={styles.SystemCountChart}>
+            <div className={styles.elevatorContent2}>
               <DynamicInfo />
             </div>
           </Col>
@@ -99,6 +104,11 @@ export default class Detail extends PureComponent {
             <div className={styles.Elevator_Log}>
               <Elevator_Log />
             </div>
+            <div className={styles.Back_Home}>
+              <Button block onClick={this.goBack}>
+                回到首页
+              </Button>
+            </div>
           </Col>
         </Row>
       );
@@ -114,9 +124,6 @@ export default class Detail extends PureComponent {
           {charts}
           <Warning />
           <ElevatorInTimeIFrame />
-          <Button type="dashed" block onClick={this.goBack}>
-            返回上一页
-          </Button>
         </div>
       </Provider>
     );

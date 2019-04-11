@@ -38,16 +38,25 @@ export default class Detail extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
+    debugger;
   }
 
   componentWillUnmount() {}
 
+  componentWillReceiveProps(nextProps) {
+    //debugger;
+  }
+
   goBack() {
-    router.go(-1);
+    window.location.href = '/home';
   }
 
   render() {
     let charts;
+    const props = this.props;
+
+    const dev_id = this.props.warningMessage.dev_id ? this.props.warningMessage.dev_id : '';
+
     if (document.body.clientWidth < 1000) {
       charts = (
         <Row>
@@ -56,18 +65,18 @@ export default class Detail extends PureComponent {
           </Col>
           <Col span={24}>
             <div className={styles.RunningDataChart}>
-              <RunningDataChart className={styles.RunningDataChart} />
+              <RunningDataChart className={styles.RunningDataChart} devId={dev_id} />
             </div>
             <div className={styles.chartContent}>
-              <DynamicInfo className={styles.SystemCountChart} />
+              <DynamicInfo className={styles.SystemCountChart} devId={dev_id} />
             </div>
           </Col>
           <Col span={24}>
             <div className={styles.chartContent}>
-              <Elevator_Error_Connect className={styles.Elevator_Error_Connect} />
+              <Elevator_Error_Connect className={styles.Elevator_Error_Connect} devId={dev_id} />
             </div>
             <div className={styles.chartContent}>
-              <Elevator_Log className={styles.Elevator_Log} />
+              <Elevator_Log className={styles.Elevator_Log} devId={dev_id} />
             </div>
           </Col>
         </Row>
@@ -77,24 +86,24 @@ export default class Detail extends PureComponent {
         <Row>
           <Col span={6}>
             <div className={styles.RunningDataChart}>
-              <RunningDataChart />
+              <RunningDataChart devId={dev_id} />
             </div>
             <div className={styles.SystemCountChart}>
-              <DynamicInfo />
+              <DynamicInfo devId={dev_id} />
             </div>
           </Col>
           <Col span={12}>
             <Elevator_Status />
             <div className={styles.Maintenance_Record}>
-              <Maintenance_Record />
+              <Maintenance_Record devId={dev_id} />
             </div>
           </Col>
           <Col span={6}>
             <div className={styles.Elevator_Error_Connect}>
-              <Elevator_Error_Connect />
+              <Elevator_Error_Connect devId={dev_id} />
             </div>
             <div className={styles.Elevator_Log}>
-              <Elevator_Log />
+              <Elevator_Log devId={dev_id} />
             </div>
           </Col>
         </Row>

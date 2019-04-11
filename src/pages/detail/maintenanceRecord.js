@@ -1,68 +1,59 @@
-import React, {PureComponent} from 'react';
-import {Icon} from 'antd';
+import React, { PureComponent } from 'react';
+import { Icon } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import echarts from 'echarts';
 
-import {inject, observer} from 'mobx-react';
-import {debug} from 'util';
+import QueryString from 'query-string';
 
-@inject ('sharedData')
+const uuid = require('node-uuid');
+
+import { inject, observer } from 'mobx-react';
+import { debug } from 'util';
+
+@inject('sharedData', 'messageManager')
 @observer
-export default class MaintenanceOrdersAndFinishChart extends React.Component {
-  constructor (props) {
-    super (props);
+export default class MaintenanceRecord extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {};
+    this.uuid = uuid.v1();
+    const dev_id = QueryString.parse(window.location.search).dev_id || '';
+    const { messageManager } = this.props;
+    messageManager.emit('register', { uuid: this.uuid, cmd: '9011', filter: dev_id });
   }
-  componentWillUnmount () {}
-
-  onChartClick (param, echarts) {
-    console.log (param);
+  componentWillUnmount() {
+    const { messageManager } = this.props;
+    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9011' });
   }
 
-  render () {
+  onChartClick(param, echarts) {
+    console.log(param);
+  }
+
+  render() {
     let onEvents = {
-      click: this.onChartClick.bind (this),
+      click: this.onChartClick.bind(this),
     };
-    const {sharedData} = this.props;
-    const elevatorStatus = sharedData.elevatorStatus;
-    const totalInfo = sharedData.totalInfo;
-
-    const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';
-    const onLineTotal = totalInfo
-      ? totalInfo.onLineTotal ? totalInfo.onLineTotal : '0'
-      : '0';
-
-    const arr = sharedData.maiUserInfo ? sharedData.maiUserInfo : [];
-    const peopleArr = [];
-
-    arr.forEach ((val, key) => {
-      peopleArr.push (
-        <div key={key} className={styles.peopleList}>
-          姓名：
-          <span>{val.name}</span>
-            手机号：
-          <span>{val.phone}</span>
-            维保单位：
-          <span>{val.corp}</span>
-            维保区域：
-          <span>{val.area}</span>
-            目前位置：
-          <span>{val.location}</span>
-            维保时间：
-          <span>{val.time}</span>
-            维保人员：
-          <span>{val.status == 0 ? '离线' : '在线'}</span>
-        </div>
-      );
-    });
+    const { sharedData } = this.props;
+    let arr = [];
+    let list = sharedData.maintenanceRecordData ? sharedData.maintenanceRecordData : [];
+    if (list) {
+      list.forEach((ele, key) => {
+        arr.push(
+          <span key={key} className={styles.maintenanceRecordDetail}>
+            {ele}
+          </span>
+        );
+      });
+    }
 
     return (
       <div className={styles.maintenanceRecord}>
-        <span className={styles.title}>维保历史记录</span>
-        {peopleArr}
+        <span className={styles.title}>电梯维保记录</span>
+        <div className={styles.maintenanceRecordContent}>{arr}</div>
       </div>
     );
   }

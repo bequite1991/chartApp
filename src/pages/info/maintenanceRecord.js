@@ -42,7 +42,7 @@ export default class InstallationRecord extends React.Component {
     return (
       <div className={styles.maintenanceRecord}>
         <span className={styles.title}>小区安装记录</span>
-        {arr}
+        <div className={styles.maintenanceRecordContent}>{arr}</div>
       </div>
     );
   }

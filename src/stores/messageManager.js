@@ -25,6 +25,8 @@ class MessageManager extends EventEmitter {
 
   commandMap = new Map();
 
+  commandImmediatelyMap = new Map();
+
   commandUUIDList = [];
 
   subscribe = [];
@@ -85,6 +87,7 @@ class MessageManager extends EventEmitter {
     });
 
     this.on('send', args => {
+      debugger;
       let rows = [];
       rows.push({
         sn: args.id + '',
@@ -96,7 +99,7 @@ class MessageManager extends EventEmitter {
         filter: args.filter,
         rows: rows,
       };
-      this.sendCommand(message);
+      this.addImmediatelyCommand(message);
     });
 
     this.on('ws-register', args => {
@@ -119,7 +122,7 @@ class MessageManager extends EventEmitter {
     });
 
     this.on('ws-unregister', args => {
-      debugger;
+      //debugger;
       // console.info ('取消注册消息:' + args.cmd);
       this.removeWsCommand(args);
     });
@@ -278,6 +281,14 @@ class MessageManager extends EventEmitter {
       }
     }
 
+    if (this.commandImmediatelyMap.size > 0) {
+      debugger;
+      this.commandImmediatelyMap.forEach(command => {
+        this.sendCommand(command);
+      });
+      this.commandImmediatelyMap.clear();
+    }
+
     if (this.removeUUIDList.length > 0) {
       this.removeUUIDList = [];
     }
@@ -369,6 +380,10 @@ class MessageManager extends EventEmitter {
       this.commandMap.set(command.uuid + '-' + command.cmd, command);
       this.commandUUIDList.push(command.uuid + '-' + command.cmd);
     }
+  }
+
+  addImmediatelyCommand(command) {
+    this.commandImmediatelyMap.set(command.uuid + '-' + command.cmd, command);
   }
 
   removeCommand({ uuid, cmd }) {

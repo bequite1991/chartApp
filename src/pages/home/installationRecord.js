@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Icon } from 'antd';
+import { Icon, List } from 'antd';
 import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
 import styles from './index.less';
@@ -33,7 +33,7 @@ export default class InstallationRecord extends React.Component {
     messageManager.emit('register', { uuid: this.uuid, cmd: '9013', filter: dev_id_list }); //filter: '2019-02',
   }
 
-  componentWillUpdate() {
+  componentWillReceiveProps(nextProps) {
     const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
 
     if (dev_id_list == this.devIdlist) {
@@ -41,6 +41,8 @@ export default class InstallationRecord extends React.Component {
     }
 
     this.devIdlist = dev_id_list;
+
+    const { messageManager } = this.props;
 
     if (this.uuid.length > 0) {
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9013' });

@@ -26,8 +26,6 @@ export default class RunningDataChart extends React.Component {
 
     const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
 
-    debugger;
-
     const { messageManager } = this.props;
 
     this.devIdlist = dev_id_list;
@@ -57,7 +55,7 @@ export default class RunningDataChart extends React.Component {
     });
   }
 
-  componentWillUpdate() {
+  componentWillReceiveProps(nextProps) {
     const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
 
     if (dev_id_list == this.devIdlist) {

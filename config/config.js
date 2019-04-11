@@ -44,7 +44,7 @@ export default {
     {
       path: '/user',
       component: '../layouts/UserLayout',
-      routes: [{ path: '/user', component: './Welcome' }],
+      routes: [{ path: '/user', component: './welcome' }],
     },
     {
       path: '/index',
@@ -63,7 +63,8 @@ export default {
           icon: 'block',
         },
       ],
-    },{
+    },
+    {
       path: '/',
       component: '../layouts/BasicLayout',
       routes: [
@@ -80,12 +81,14 @@ export default {
           name: 'welcome',
           icon: 'smile',
           component: './welcome',
-        },{
+        },
+        {
           path: '/info',
           name: 'info',
           icon: 'smile',
           component: './info',
-        },{
+        },
+        {
           path: '/detail',
           name: 'detail',
           icon: 'smile',
