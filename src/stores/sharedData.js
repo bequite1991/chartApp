@@ -403,7 +403,12 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('9001', args => {
-      //this.warningMessage = { dev_id: '19876543212345678909', id: '28774535', message: '平层困人' };
+      this.warningMessage = { dev_id: '12345678909876543212', id: '28774536', message: '平层困人' };
+      this.warningMessage = {
+        dev_id: '31103307822016010044',
+        id: '28774535',
+        message: '平层困人2',
+      };
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
@@ -630,7 +635,7 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('1002', args => {
-      console.info('subId:' + args.id);
+      //console.info('subId:' + args.id);
     });
 
     messageManager.on('1003', args => {

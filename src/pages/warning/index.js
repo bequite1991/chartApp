@@ -14,6 +14,8 @@ import messageManager from '../../stores/messageManager';
 //电梯故障详情
 import Detail_Index from './detail';
 
+import Hello from '../../components/Hello/index';
+
 @inject('sharedData', 'messageManager')
 @observer
 export default class Warning extends React.Component {
@@ -21,7 +23,9 @@ export default class Warning extends React.Component {
     super(props);
     this.state = {
       modalVisible: false,
+      key: '-1',
     };
+
     // const {sharedData} = this.props;
     // const warningMessage = sharedData.warningMessage;
     // if (sharedData.warningMessage) {
@@ -63,7 +67,8 @@ export default class Warning extends React.Component {
   //打开通知
   openNotification(warningMessage) {
     const t = this;
-    const key = warningMessage.id; //`open${Date.now ()}`;
+    const key = warningMessage.id;
+    console.info('openNotification key:' + key);
     const contents = (
       <div className={styles.notification}>
         <span className={styles.notificationInfo}>{warningMessage.message}</span>
@@ -73,8 +78,9 @@ export default class Warning extends React.Component {
           size="small"
           onClick={() => {
             //t.cancel(key);
+            console.info('key:' + key);
             t.notificationClose(key, t);
-            t.setModalVisible(true);
+            t.setModalVisible(true, key);
           }}
         >
           故障处理
@@ -84,6 +90,7 @@ export default class Warning extends React.Component {
           type="default"
           size="small"
           onClick={() => {
+            console.info('cancel key:' + key);
             //t.cancel(key);
             t.notificationClose(key, t);
             //t.setModalVisible(true);
@@ -118,8 +125,8 @@ export default class Warning extends React.Component {
   }
 
   //关闭弹窗
-  setModalVisible(param) {
-    this.setState({ modalVisible: param });
+  setModalVisible(param, key) {
+    this.setState({ modalVisible: param, key: key });
   }
 
   render() {
@@ -132,17 +139,49 @@ export default class Warning extends React.Component {
       this.openNotification(warningMessage);
     }
 
+    let title = '故障详情';
+
+    /* 
+    <Hello name="TypeScript" enthusiasmLevel={10} />
+     background-image: url("../../../public/bg1.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+
+       <div
+          style={{
+            overflow: 'scroll',
+            height: '68vh',
+            'background-image': 'url("../../../public/bg.png")',
+            'background-repeat': 'no-repeat',
+            'background-size': 'cover',
+          }}
+        >
+          <Detail_Index warningMessage={warningMessage} />
+        </div>
+     */
+
+    const { key } = this.state;
+
     return (
       <Modal
         width="60%"
         style={{ top: '5vh', height: '78vh' }}
-        title="故障详情"
+        title={title}
+        key={key}
         visible={modalVisible}
-        onOk={() => this.setModalVisible(false)}
-        onCancel={() => this.setModalVisible(false)}
+        onOk={() => this.setModalVisible(false, '')}
+        onCancel={() => this.setModalVisible(false, '')}
       >
-        <div style={{ overflow: 'scroll', height: '68vh' }}>
-          <Detail_Index className="styles.content" warningMessage={warningMessage} />
+        <div
+          style={{
+            overflow: 'scroll',
+            height: '68vh',
+            'background-image': 'url("../../../public/bg.png")',
+            'background-repeat': 'no-repeat',
+            'background-size': 'cover',
+          }}
+        >
+          <Detail_Index warningMessage={warningMessage} />
         </div>
       </Modal>
     );
