@@ -7,9 +7,11 @@ import ReactEcharts from 'echarts-for-react';
 import { inject, observer } from 'mobx-react';
 import router from 'umi/router';
 
+import eventProxy from '../../../lib/eventProxy';
+
 import QueryString from 'query-string';
 
-const uuid = require('node-uuid');
+const nodeUUID = require('node-uuid');
 
 require('echarts/map/js/china.js');
 
@@ -27,49 +29,93 @@ var data = [
   { mapy: '33.148780', mapx: '116.494390', time: '13:30' },
 ];
 
-@inject('sharedData', 'messageManager')
+@inject('warningManager')
 @observer
 export default class elevatorStatus extends Component {
-  uuid = '';
   constructor(props) {
     super(props);
-    const dev_id = this.props.devId || '';
+    debugger;
+    const { warningManager } = this.props;
+    const uuid_ = nodeUUID.v1();
+    const devId = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId, uuid: uuid_ };
+    warningManager.emit('register', { uuid: uuid_, cmd: '9006', filter: devId });
 
-    this.uuid = uuid.v1();
-    const { messageManager } = this.props;
-    messageManager.emit('register', {
-      uuid: this.uuid,
-      cmd: '9006',
-      filter: dev_id,
+    eventProxy.on('msg-9006-' + devId, msg => {
+      const { elevatorDevInfo, totalInfo, devId, uuid } = this.state;
+
+      let totalInfo_ = msg.totalInfo;
+      if (!totalInfo_) {
+        totalInfo_ = totalInfo;
+      }
+
+      let elevatorDevInfo_ = msg.elevatorDevInfo;
+      if (!elevatorDevInfo_) {
+        elevatorDevInfo_ = elevatorDevInfo;
+      }
+
+      this.setState({
+        totalInfo: totalInfo_,
+        elevatorDevInfo: elevatorDevInfo_,
+        devId: devId,
+        uuid: uuid,
+      });
     });
+  }
 
-    messageManager.emit('register', {
-      uuid: this.uuid,
-      cmd: '9001',
-      filter: dev_id,
-    });
+  componentWillReceiveProps(nextProps) {
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9006' });
+    eventProxy.off('msg-9006-' + devId);
 
-    messageManager.emit('register', {
-      uuid: this.uuid,
-      cmd: '9004',
-      filter: dev_id,
+    let uuid2 = nodeUUID.v1();
+    let devId2 = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId2, uuid: uuid2 };
+    warningManager.emit('register', { uuid: uuid2, cmd: '9006', filter: devId2 });
+
+    eventProxy.on('msg-9006-' + devId2, msg => {
+      const { elevatorDevInfo, totalInfo, devId, uuid } = this.state;
+
+      let totalInfo_ = msg.totalInfo;
+      if (!totalInfo_) {
+        totalInfo_ = totalInfo;
+      }
+
+      let elevatorDevInfo_ = msg.elevatorDevInfo;
+      if (!elevatorDevInfo_) {
+        elevatorDevInfo_ = elevatorDevInfo;
+      }
+
+      this.setState({
+        totalInfo: totalInfo_,
+        elevatorDevInfo: elevatorDevInfo_,
+        devId: devId,
+        uuid: uuid,
+      });
     });
   }
 
   componentWillUnmount() {
-    const { messageManager } = this.props;
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9006' });
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9001' });
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9004' });
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9006' });
+    eventProxy.off('msg-9006-' + devId);
+    //warningManager.emit('unregister', { uuid: this.uuid, cmd: '9001' });
+    //warningManager.emit('unregister', { uuid: this.uuid, cmd: '9004' });
   }
 
   render() {
-    const { sharedData } = this.props;
-    const elevatorStatus = sharedData.dynamicInfoOption.status;
-    const totalInfo = sharedData.totalInfo;
-    const dev_info = sharedData.elevatorDevInfo;
+    const { warningManager } = this.props;
 
-    const runningState = sharedData.elevatorStatus.runningState;
+    const { totalInfo, elevatorDevInfo } = this.state;
+
+    const elevatorStatus = 0; //warningManager.dynamicInfoOption.status;
+    //const totalInfo = null; //warningManager.totalInfo;
+    const dev_info = elevatorDevInfo; //warningManager.elevatorDevInfo;
+    const dev_name = dev_info ? dev_info.name : '';
+
+    const runningState = '1'; //warningManager.elevatorStatus.runningState;
 
     const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';
     const onLineTotal = totalInfo ? (totalInfo.onLineTotal ? totalInfo.onLineTotal : '0') : '0';
@@ -135,7 +181,7 @@ export default class elevatorStatus extends Component {
 
     return (
       <div className={styles.mapChina}>
-        <p className={styles.title}>{dev_info.name}</p>
+        <p className={styles.title}>{dev_name}</p>
         <div className={styles.subtitle}>
           <p className={styles.title}>状态:{statusText}</p>
         </div>

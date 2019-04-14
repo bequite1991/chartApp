@@ -23,16 +23,13 @@ import Elevator_Log from './elevatorLog.js';
 
 // 电梯状态(Elevator Error Ratio)
 import Elevator_Status from './elevatorStatus.js';
-// //安装记录
-// import Installation_Record from './installationRecord.js';
 //维保记录
 import Maintenance_Record from './maintenanceRecord.js';
 
 import ElevatorInTimeIFrame from './elevatorInTimeIFrame';
 import messageManager from '../../../stores/messageManager';
+import warningManager from '../../../stores/warningManager';
 
-// @inject ('runningData')
-// @observer
 export default class Detail extends PureComponent {
   init = false;
   constructor(props) {
@@ -93,7 +90,7 @@ export default class Detail extends PureComponent {
             </div>
           </Col>
           <Col span={12}>
-            <Elevator_Status />
+            <Elevator_Status devId={dev_id} />
             <div className={styles.Maintenance_Record}>
               <Maintenance_Record devId={dev_id} />
             </div>
@@ -109,17 +106,13 @@ export default class Detail extends PureComponent {
         </Row>
       );
     }
-
+    warningManager.setCurrFiter(dev_id);
     return (
-      <Provider
-        sharedData={sharedData}
-        sharedDataDetail={sharedDataDetail}
-        messageManager={messageManager}
-      >
+      <Provider warningManager={warningManager}>
         <div className={styles.content}>
           <span>{dev_id}</span>
           {charts}
-          <ElevatorInTimeIFrame />
+          <ElevatorInTimeIFrame devId={dev_id} />
         </div>
       </Provider>
     );

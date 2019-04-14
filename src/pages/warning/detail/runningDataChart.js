@@ -11,29 +11,68 @@ import { debug } from 'util';
 
 import QueryString from 'query-string';
 
-const uuid = require('node-uuid');
+const nodeUUID = require('node-uuid');
 
-@inject('sharedData', 'messageManager')
+import eventProxy from '../../../lib/eventProxy';
+
+import {
+  Elevator_Running_Data_Chart_Options,
+  Elevator_System_Count_Chart_Options,
+  Elevator_Offline_Count_Every_Month_Chart_Option,
+  Elevator_Map_China_Options,
+  Elevator_Error_Every_Month_Chart_Options,
+  Elevator_Error_Ratio_Chart_Options,
+  Elevator_Maintenance_OrdersAndFinish_Chart_Options,
+  Elevator_maintenance_Orders_Month_Chart_Options,
+  Map_Info_Value,
+} from '../../../datacenter/chartConfig';
+
+@inject('warningManager')
 @observer
 export default class RunningDataChart extends React.Component {
-  flagReceive = false;
-  uuid = '';
   constructor(props) {
     super(props);
-    this.flagReceive = false;
-    this.uuid = uuid.v1();
-    const dev_id = this.props.devId || '';
-    const { messageManager } = this.props;
-    messageManager.emit('register', {
+    //debugger;
+    const { warningManager } = this.props;
+    const uuid_ = nodeUUID.v1();
+    const devId = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId, uuid: uuid_ };
+
+    warningManager.emit('register', {
       cmd: '9012',
-      uuid: this.uuid,
-      filter: dev_id,
+      uuid: uuid_,
+      filter: devId,
+    });
+
+    eventProxy.on('msg-9012-' + devId, msg => {
+      //debugger;
+      const { uuid, devId } = this.state;
+      this.setState({ runningDataOption: msg.runningDataOption, devId: devId, uuid: uuid });
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9012' });
+    eventProxy.off('msg-9012-' + devId);
+
+    let uuid2 = nodeUUID.v1();
+    let devId2 = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId2, uuid: uuid2 };
+    warningManager.emit('register', { cmd: '9012', uuid: uuid2, filter: devId2 });
+    eventProxy.on('msg-9012-' + devId2, msg => {
+      debugger;
+      const { uuid, devId } = this.state;
+      this.setState({ runningDataOption: msg.runningDataOption, devId: devId, uuid: uuid });
     });
   }
 
   componentWillUnmount() {
-    const { messageManager } = this.props;
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9012' });
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9012' });
+    eventProxy.off('msg-9012-' + devId);
   }
 
   onRunningDataOptionChange = () => {};
@@ -46,8 +85,14 @@ export default class RunningDataChart extends React.Component {
     let onEvents = {
       click: this.onChartClick.bind(this),
     };
-    const { sharedData } = this.props;
-    const option = sharedData.runningDataOption;
+
+    const { runningDataOption } = this.state;
+
+    let option = runningDataOption;
+    if (option == null) {
+      option = Elevator_Running_Data_Chart_Options;
+    }
+
     return (
       <ReactEcharts
         option={option}

@@ -25,36 +25,9 @@ export default class Warning extends React.Component {
       modalVisible: false,
       key: '-1',
     };
-
-    // const {sharedData} = this.props;
-    // const warningMessage = sharedData.warningMessage;
-    // if (sharedData.warningMessage) {
-    //   this.openNotification(warningMessage)
-    // }
-    // this.openNotification();
   }
 
   componentWillUnmount() {}
-
-  /* eslint-disable*/
-
-  // shouldComponentUpdate (nextProps, nextState) {
-  //   if (this.props.option === nextProps.option) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const { sharedData } = nextProps;
-  //   const warningMessage = sharedData.warningMessage;
-  //   debugger;
-  //   console.info('open: warningMessage:' + warningMessage.id);
-  //   if (warningMessage && warningMessage.id > 0) {
-  //     this.openNotification(warningMessage);
-  //   }
-  // }
 
   //打开通知窗口
   notificationClose(key, t) {
@@ -68,6 +41,7 @@ export default class Warning extends React.Component {
   openNotification(warningMessage) {
     const t = this;
     const key = warningMessage.id;
+    const warningInfo = warningMessage;
     console.info('openNotification key:' + key);
     const contents = (
       <div className={styles.notification}>
@@ -80,7 +54,10 @@ export default class Warning extends React.Component {
             //t.cancel(key);
             console.info('key:' + key);
             t.notificationClose(key, t);
-            t.setModalVisible(true, key);
+            const dev_id = QueryString.parse(window.location.search).dev_id || '';
+            if (dev_id.length == 0 || (dev_id.length > 0 && warningInfo.id != dev_id)) {
+              t.setModalVisible(true, warningInfo);
+            }
           }}
         >
           故障处理
@@ -93,7 +70,6 @@ export default class Warning extends React.Component {
             console.info('cancel key:' + key);
             //t.cancel(key);
             t.notificationClose(key, t);
-            //t.setModalVisible(true);
           }}
         >
           取消
@@ -125,12 +101,11 @@ export default class Warning extends React.Component {
   }
 
   //关闭弹窗
-  setModalVisible(param, key) {
-    this.setState({ modalVisible: param, key: key });
+  setModalVisible(modalVisible, warningInfo) {
+    this.setState({ modalVisible: modalVisible, warningInfo: warningInfo });
   }
 
   render() {
-    const { modalVisible } = this.state;
     const { sharedData } = this.props;
     const warningMessage = sharedData.warningMessage;
     console.info('open: warningMessage:' + warningMessage.id);
@@ -140,28 +115,8 @@ export default class Warning extends React.Component {
     }
 
     let title = '故障详情';
-
-    /* 
-    <Hello name="TypeScript" enthusiasmLevel={10} />
-     background-image: url("../../../public/bg1.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-
-       <div
-          style={{
-            overflow: 'scroll',
-            height: '68vh',
-            'background-image': 'url("../../../public/bg.png")',
-            'background-repeat': 'no-repeat',
-            'background-size': 'cover',
-          }}
-        >
-          <Detail_Index warningMessage={warningMessage} />
-        </div>
-     */
-
-    const { key } = this.state;
-
+    const { modalVisible, warningInfo } = this.state;
+    const key = warningInfo ? warningInfo.key : '-1';
     return (
       <Modal
         width="60%"
@@ -169,19 +124,16 @@ export default class Warning extends React.Component {
         title={title}
         key={key}
         visible={modalVisible}
-        onOk={() => this.setModalVisible(false, '')}
-        onCancel={() => this.setModalVisible(false, '')}
+        onOk={() => this.setModalVisible(false, {})}
+        onCancel={() => this.setModalVisible(false, {})}
       >
         <div
           style={{
             overflow: 'scroll',
             height: '68vh',
-            'background-image': 'url("../../../public/bg.png")',
-            'background-repeat': 'no-repeat',
-            'background-size': 'cover',
           }}
         >
-          <Detail_Index warningMessage={warningMessage} />
+          <Detail_Index warningMessage={warningInfo} />
         </div>
       </Modal>
     );

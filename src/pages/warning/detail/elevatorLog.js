@@ -11,27 +11,56 @@ import { debug } from 'util';
 
 import QueryString from 'query-string';
 
-const uuid = require('node-uuid');
+const nodeUUID = require('node-uuid');
 
-@inject('sharedData', 'messageManager')
+import eventProxy from '../../../lib/eventProxy';
+
+@inject('warningManager')
 @observer
 export default class SystemCountChart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    debugger;
+    const { warningManager } = this.props;
+    const uuid_ = nodeUUID.v1();
+    const devId = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId, uuid: uuid_ };
 
-    this.uuid = uuid.v1();
-    const dev_id = this.props.devId || '';
-    const { messageManager } = this.props;
-    messageManager.emit('register', {
-      uuid: this.uuid,
-      cmd: '9002',
-      filter: dev_id,
+    warningManager.emit('register', { uuid: uuid_, cmd: '9002', filter: devId });
+
+    eventProxy.on('msg-9002-' + devId, msg => {
+      const { devId, uuid } = this.state;
+      this.setState({
+        elevatorLog: msg.elevatorLog,
+        devId: devId,
+        uuid: uuid,
+      });
     });
   }
+
+  componentWillReceiveProps(nextProps) {
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9002' });
+    eventProxy.off('msg-9002-' + devId);
+
+    let uuid2 = nodeUUID.v1();
+    let devId2 = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId2, uuid: uuid2 };
+
+    warningManager.emit('register', { uuid: uuid2, cmd: '9002', filter: devId2 });
+
+    eventProxy.on('msg-9002-' + devId2, msg => {
+      const { devId, uuid } = this.state;
+      this.setState({ elevatorLog: msg.elevatorLog, devId: devId, uuid: uuid });
+    });
+  }
+
   componentWillUnmount() {
-    const { messageManager } = this.props;
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9002' });
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9002' });
+    eventProxy.off('msg-9002-' + devId);
   }
 
   onChartClick(param, echarts) {
@@ -39,10 +68,12 @@ export default class SystemCountChart extends React.Component {
   }
 
   render() {
-    let onEvents = { click: this.onChartClick.bind(this) };
+    // let onEvents = { click: this.onChartClick.bind(this) };
 
-    const { sharedData } = this.props;
-    const elevatorLog = sharedData.elevatorLog;
+    // const { warningManager } = this.props;
+
+    const { elevatorLog } = this.state;
+    //const elevatorLog = null; // = warningManager.elevatorLog;
 
     let arr = [];
     let list = elevatorLog ? elevatorLog : [];
@@ -55,13 +86,6 @@ export default class SystemCountChart extends React.Component {
         );
       });
     }
-
-    /**
-     * <span>电梯编号：{elevatorLog.dev_id}</span>
-        <span>电梯名称：{elevatorLog.dev_cname}</span>
-        <span>上线时间：{elevatorLog.on_time}</span>
-        <span>下线时间：{elevatorLog.off_time}</span>
-     */
     return (
       <div className={styles.elevatorLog}>
         <span className={styles.title}>电梯上下线日志</span>

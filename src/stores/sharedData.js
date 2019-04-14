@@ -226,8 +226,6 @@ class sharedData extends EventEmitter {
 
           this.runningDataOptionValue.xAxis[0].data = ['总运行天数（天）'];
           this.runningDataOptionValue.series[0].data = dataArray;
-
-          console.info('9012 is get data');
         }
       }
     });
@@ -403,7 +401,7 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('9001', args => {
-      this.warningMessage = { dev_id: '12345678909876543212', id: '28774536', message: '平层困人' };
+      this.warningMessage = { dev_id: '33483334833348333483', id: '28774536', message: '平层困人' };
       this.warningMessage = {
         dev_id: '31103307822016010044',
         id: '28774535',

@@ -18,6 +18,8 @@ import { encode, timestampToTime } from '../lib/helper.js';
 
 import QueryString from 'query-string';
 
+import warningManager from './warningManager';
+
 let Base64 = require('js-base64').Base64;
 
 class MessageManager extends EventEmitter {
@@ -73,6 +75,10 @@ class MessageManager extends EventEmitter {
       // console.info ('注册消息:' + args.cmd + ' uuid:' + args.uuid);
 
       if (args.uuid && args.uuid.length > 0) {
+        if (args.filter.length == 0) {
+          //debugger;
+        }
+
         this.addCommand({
           uuid: args.uuid ? args.uuid : '',
           cmd: args.cmd,
@@ -191,12 +197,61 @@ class MessageManager extends EventEmitter {
 
   addMessage(message) {
     if (message) {
-      this.messageList.push(message);
+      const dev_id = QueryString.parse(window.location.search).dev_id || '';
+      if (dev_id.length > 0) {
+        //debugger;
+        if (dev_id == message.filter) {
+          this.messageList.push(message);
+        } else {
+          if (warningManager) {
+            warningManager.addMessage(message);
+          }
+        }
+      } else {
+        if (dev_id.length == 0) {
+          if (message.filter.length == 0) {
+            this.messageList.push(message);
+          } else {
+            const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
+            if (dev_id_list.length == 0) {
+              if (message.filter.length == 0) {
+                this.messageList.push(message);
+              } else {
+                if (warningManager) {
+                  warningManager.addMessage(message);
+                }
+              }
+            } else {
+              if (dev_id_list != message.filter && message.filter.length > 0) {
+                if (warningManager) {
+                  warningManager.addMessage(message);
+                }
+              } else {
+                this.messageList.push(message);
+              }
+            }
+          }
+        } else {
+          if (dev_id.length > 0 && dev_id != message.filter && message.filter.length > 0) {
+            if (warningManager) {
+              warningManager.addMessage(message);
+            }
+          }
+        }
+      }
     }
   }
 
   addWSMessage(message) {
+    //debugger;
     if (message) {
+      const dev_id = QueryString.parse(window.location.search).dev_id || '';
+      // if (dev_id) {
+      //   debugger;
+      //   if (dev_id.length == 0 || dev_id == message.filter) {
+      //     this.wsMessageList.push(message);
+      //   }
+      // }
       this.wsMessageList.push(message);
     }
   }

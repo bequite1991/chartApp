@@ -8,25 +8,64 @@ import echarts from 'echarts';
 
 import QueryString from 'query-string';
 
-const uuid = require('node-uuid');
+const nodeUUID = require('node-uuid');
+
+import eventProxy from '../../../lib/eventProxy';
 
 import { inject, observer } from 'mobx-react';
 import { debug } from 'util';
 
-@inject('sharedData', 'messageManager')
+@inject('warningManager')
 @observer
 export default class MaintenanceRecord extends React.Component {
   uuid = '';
   constructor(props) {
     super(props);
-    this.uuid = uuid.v1();
-    const dev_id = this.props.devId || '';
-    const { messageManager } = this.props;
-    messageManager.emit('register', { uuid: this.uuid, cmd: '9011', filter: dev_id });
+    //debugger;
+    const { warningManager } = this.props;
+    const uuid_ = nodeUUID.v1();
+    const devId = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId, uuid: uuid_ };
+    warningManager.emit('register', { uuid: uuid_, cmd: '9011', filter: devId });
+
+    eventProxy.on('msg-9011-' + devId, msg => {
+      debugger;
+      const { uuid, devId } = this.state;
+      this.setState({
+        maintenanceRecordData: msg.maintenanceRecordData,
+        devId: devId,
+        uuid: uuid,
+      });
+    });
   }
+
+  componentWillReceiveProps(nextProps) {
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9011' });
+    eventProxy.off('msg-9011-' + devId);
+
+    let uuid2 = nodeUUID.v1();
+    let devId2 = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId2, uuid: uuid2 };
+    warningManager.emit('register', { uuid: uuid2, cmd: '9011', filter: devId2 });
+
+    eventProxy.on('msg-9011-' + devId2, msg => {
+      debugger;
+      const { uuid, devId } = this.state;
+      this.setState({
+        maintenanceRecordData: msg.maintenanceRecordData,
+        devId: devId,
+        uuid: uuid,
+      });
+    });
+  }
+
   componentWillUnmount() {
-    const { messageManager } = this.props;
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9011' });
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9011' });
+    eventProxy.off('msg-9011-' + devId);
   }
 
   onChartClick(param, echarts) {
@@ -34,12 +73,11 @@ export default class MaintenanceRecord extends React.Component {
   }
 
   render() {
-    let onEvents = {
-      click: this.onChartClick.bind(this),
-    };
-    const { sharedData } = this.props;
+    //const { warningManager } = this.props;
+    const { maintenanceRecordData } = this.state;
+
     let arr = [];
-    let list = sharedData.maintenanceRecordData ? sharedData.maintenanceRecordData : [];
+    let list = maintenanceRecordData ? maintenanceRecordData : [];
     if (list) {
       list.forEach((ele, key) => {
         arr.push(

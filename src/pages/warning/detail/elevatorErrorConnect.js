@@ -9,14 +9,16 @@ import router from 'umi/router';
 
 import classNames from 'classnames';
 
+import eventProxy from '../../../lib/eventProxy';
+
 import { inject, observer } from 'mobx-react';
 import { debug } from 'util';
 
-const uuid = require('node-uuid');
+const nodeUUID = require('node-uuid');
 
 import QueryString from 'query-string';
 
-@inject('sharedData', 'messageManager')
+@inject('warningManager')
 @observer
 export default class ElevatorErrorConnect extends React.Component {
   uuid = '';
@@ -24,66 +26,98 @@ export default class ElevatorErrorConnect extends React.Component {
   url = '';
   constructor(props) {
     super(props);
-    this.uuid = uuid.v1();
-    const dev_id = this.props.devId || '';
-    const { messageManager } = this.props;
-    messageManager.emit('register', {
-      uuid: this.uuid,
-      cmd: '9007',
-      filter: dev_id,
+    //debugger;
+    const { warningManager } = this.props;
+    const uuid_ = nodeUUID.v1();
+    const devId = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId, uuid: uuid_ };
+
+    warningManager.emit('register', { uuid: uuid_, cmd: '9001', filter: devId });
+
+    eventProxy.on('msg-9001-' + devId, msg => {
+      debugger;
+      const { uuid, devId } = this.state;
+      this.setState({
+        elevatorConnectOption: msg.elevatorConnectOption,
+        devId: devId,
+        uuid: uuid,
+      });
     });
+
     this.isShowFrame = false;
   }
 
+  componentWillReceiveProps(nextProps) {
+    debugger;
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    eventProxy.off('msg-9001-' + devId);
+
+    let uuid2 = nodeUUID.v1();
+    let devId2 = warningManager.getCurrFiter() || '';
+    this.state = { devId: devId2, uuid: uuid2 };
+
+    warningManager.emit('register', { uuid: uuid2, cmd: '9001', filter: devId2 });
+
+    eventProxy.on('msg-9001-' + devId2, msg => {
+      debugger;
+      const { uuid, devId } = this.state;
+      this.setState({
+        elevatorConnectOption: msg.elevatorConnectOption,
+        devId: devId,
+        uuid: uuid,
+      });
+    });
+  }
+
   componentWillUnmount() {
-    const { messageManager } = this.props;
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9007' });
+    const { warningManager } = this.props;
+    const { uuid, devId } = this.state;
+    warningManager.emit('unregister', { uuid: uuid, cmd: '9001' });
+    eventProxy.off('msg-9001-' + devId);
   }
 
   onChartClick(param, echarts) {
-    const { sharedData } = this.props;
-    const option = sharedData.elevatorConnectOption;
+    const { elevatorConnectOption } = this.state;
+    const option = elevatorConnectOption;
     //console.log (param);
-    router.push(option.url);
+    if (option) {
+      router.push(option.url);
+    }
   }
 
   handlePhone = () => {
-    const { sharedData } = this.props;
-    const option = sharedData.elevatorConnectOption;
-    //router.push (option.url);
-    this.url = option.url;
-    if (this.url && this.url.length > 0) {
-      sharedData.emit('open_iframe', {
-        url: this.url,
-        open: true,
-      });
+    debugger;
+    const { warningManager } = this.props;
+    const { elevatorConnectOption, devId } = this.state;
+    const option = elevatorConnectOption;
+    if (option) {
+      debugger;
+      let url = option.url;
+      if (url && url.length > 0) {
+        warningManager.emit('open_iframe', { devId: devId, url: url, open: true });
+      }
     }
   };
 
   handleVideo = () => {
     debugger;
-
-    const { sharedData } = this.props;
-    const option = sharedData.elevatorConnectOption;
-    //router.push (option.url);
-    this.url = option.url;
-    if (this.url && this.url.length > 0) {
-      sharedData.emit('open_iframe', {
-        url: this.url,
-        open: true,
-      });
-      // sharedData.elevatorInTimeIFrameOption = {
-      //   url: this.url,
-      //   open: true,
-      // };
+    const { warningManager } = this.props;
+    const { elevatorConnectOption, devId } = this.state;
+    const option = elevatorConnectOption;
+    if (option) {
+      debugger;
+      let url = option.url;
+      if (url && url.length > 0) {
+        warningManager.emit('open_iframe', { devId: devId, url: url, open: true });
+      }
     }
   };
 
   render() {
-    const { sharedData } = this.props;
-    const option = sharedData.elevatorConnectOption;
-    //router.push (option.url);
-    let url = option.url;
+    const { elevatorConnectOption } = this.state;
+    const option = elevatorConnectOption;
+    let url = option ? (option.url ? option.url : '') : '';
     let active = false;
     if (url && url.length > 0) {
       active = true;
