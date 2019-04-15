@@ -38,6 +38,7 @@ export default class ElevatorErrorConnect extends React.Component {
   componentWillUnmount() {
     const { messageManager } = this.props;
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9007' });
+    this.uuid = '';
   }
 
   onChartClick(param, echarts) {

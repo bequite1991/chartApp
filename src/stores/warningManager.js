@@ -53,6 +53,8 @@ class WarningManager extends EventEmitter {
 
   curFiter = '';
 
+  dynamicInfoOption = {};
+
   constructor() {
     super();
 
@@ -77,7 +79,7 @@ class WarningManager extends EventEmitter {
     });
 
     this.on('ws-register', args => {
-      //debugger;
+      debugger;
       if (websocketWorker && websocketWorker.isWSConnected() == false) {
         let key =
           'eyJpZCI6InllIiwia2V5IjoiNDZDQzQ1QTcyN0JFQzdERTk3RjlFNzM4QUQ0MjgxNTMiLCJwcm9qZWN0Q29kZSI6Imh1aWJhbyIsInRpbWVzdGFtcCI6IjIwMTcxMTA2MTgxNDA2In0=';
@@ -101,18 +103,6 @@ class WarningManager extends EventEmitter {
       this.removeWsCommand(args);
     });
 
-    this.messageEmitterTimer = setInterval(() => {
-      this.messageEmitter();
-    }, 5000);
-
-    this.parserLoopTimer = setInterval(() => {
-      this.parserLoop();
-    }, 2000);
-
-    this.wsMessageEmitterTimer = setInterval(() => {
-      this.wsMessageEmitter();
-    }, 5000);
-
     this.on('9001', args => {
       //debugger;
       if (args && args.resp == '200') {
@@ -126,52 +116,12 @@ class WarningManager extends EventEmitter {
               if (url && url.length > 0) {
                 console.log('url:' + url);
                 let options = { url: url };
-                debugger;
+                //debugger;
                 //this.elevatorConnectOption = options;
                 //this.elevatorConnectOption = options;
                 eventProxy.trigger('msg-9001-' + args.filter, {
                   elevatorConnectOption: options,
                 });
-              }
-            } else if (dev_id_list && dev_id_list.length > 0) {
-              let installRecordInformationArray = [];
-              let maintenanceInformationArray = [];
-
-              rows.forEach(item => {
-                let use_corp_name = item.use_corp_name;
-                let dev_cname = item.dev_cname;
-                let createdate = item.createdate;
-                let mai_period = item.mai_period;
-                let mai_curdate = item.mai_curdate ? item.mai_curdate : ' ';
-                let mai_curoper = item.mai_curoper ? item.mai_curoper : ' ';
-                let message =
-                  '电梯名称:' +
-                  dev_cname +
-                  '，使用单位:' +
-                  use_corp_name +
-                  '，安装时间:' +
-                  createdate;
-                let message2 =
-                  '电梯名称:' +
-                  dev_cname +
-                  '，使用单位:' +
-                  use_corp_name +
-                  '，维保周期:' +
-                  mai_period +
-                  '，当前维保时间:' +
-                  mai_curdate +
-                  '，当前维保人:' +
-                  mai_curoper;
-                installRecordInformationArray.push(message);
-                maintenanceInformationArray.push(message2);
-              });
-
-              if (installRecordInformationArray && installRecordInformationArray.length > 0) {
-                //this.installRecordInformation = installRecordInformationArray;
-              }
-
-              if (maintenanceInformationArray && maintenanceInformationArray.length > 0) {
-                //this.maintenanceInformation = maintenanceInformationArray;
               }
             }
           }
@@ -352,13 +302,76 @@ class WarningManager extends EventEmitter {
       }
     });
 
-    this.on('open_iframe', args => {
+    this.on('1002', args => {
+      //console.info('subId:' + args.id);
+    });
+
+    this.on('1003', args => {
       debugger;
+      let currentFloor = args.currentFloor;
+      let energy = args.batteryLevel;
+      let dynamicInfo = this.dynamicInfoOption;
+      let runningState = args.runningState;
+      let elevatorCode = args.elevatorCode ? args.elevatorCode : '';
+      let isDoorOpen = args.isDoorOpen ? args.isDoorOpen : '-1';
+      let floorDisplaying = args.floorDisplaying ? args.floorDisplaying : '未知';
+      let isAnyone = args.isAnyone ? args.isAnyone : '-1';
+      //debugger;
+      let elevatorStatus = { runningState: runningState };
+
+      this.dynamicInfoOption = {
+        elevatorCode: elevatorCode,
+        isDoorOpen: isDoorOpen,
+        floorDisplaying: floorDisplaying,
+        status: dynamicInfo.status ? dynamicInfo.status : '',
+        isAnyone: isAnyone,
+        floors: currentFloor ? currentFloor : '',
+        energy: energy,
+        signal: dynamicInfo.signal,
+        regtelType: dynamicInfo.regtelType,
+      };
+    });
+
+    this.on('1004', args => {
+      debugger;
+      let elevatorState = args.elevatorState;
+      let signalLevel = args.signalLevel;
+      let dynamicInfo = this.dynamicInfoOption;
+      let regtelType = args.regtelType;
+      //debugger;
+      let status = CONSTANT_CONFIG[elevatorState];
+      this.dynamicInfoOption = {
+        elevatorCode: dynamicInfo.elevatorCode ? dynamicInfo.elevatorCode : '',
+        isDoorOpen: dynamicInfo.isDoorOpen ? dynamicInfo.isDoorOpen : '-1',
+        floorDisplaying: dynamicInfo.floorDisplaying,
+        status: status,
+        isAnyone: dynamicInfo.isAnyone,
+        floors: dynamicInfo.floors ? dynamicInfo.floors : '',
+        energy: dynamicInfo.energy,
+        signal: signalLevel ? signalLevel : '',
+        regtelType: regtelType,
+      };
+    });
+
+    this.on('open_iframe', args => {
+      //debugger;
       eventProxy.trigger('msg-open-iframe-' + args.devId, {
         elevatorInTimeIFrameOption: { url: args.url, open: args.open },
       });
       //this.elevatorInTimeIFrameOption = { url: args.url, open: args.open };
     });
+
+    this.messageEmitterTimer = setInterval(() => {
+      this.messageEmitter();
+    }, 5000);
+
+    this.parserLoopTimer = setInterval(() => {
+      this.parserLoop();
+    }, 2000);
+
+    this.wsMessageEmitterTimer = setInterval(() => {
+      this.wsMessageEmitter();
+    }, 5000);
   }
 
   addMessage(message) {
@@ -370,13 +383,6 @@ class WarningManager extends EventEmitter {
   addWSMessage(message) {
     debugger;
     if (message) {
-      const dev_id = QueryString.parse(window.location.search).dev_id || '';
-      // if (dev_id) {
-      //   debugger;
-      //   if (dev_id.length == 0 || dev_id == message.filter) {
-      //     this.wsMessageList.push(message);
-      //   }
-      // }
       this.wsMessageList.push(message);
     }
   }
@@ -393,7 +399,6 @@ class WarningManager extends EventEmitter {
     if (!this.isMessageListEmpty()) {
       let message = this.messageList[0];
       if (message) {
-        //debugger;
         this.emit(message.cmd, message);
         delete this.messageList[0];
         this.messageList.splice(0, 1);
@@ -401,10 +406,11 @@ class WarningManager extends EventEmitter {
     }
 
     if (!this.isWSMessageListEmpty()) {
+      debugger;
       let message = this.wsMessageList[0];
       if (message) {
-        debugger;
-        //this.emit(message.cmd, message);
+        //debugger;
+        this.emit(message.cmd, message);
         delete this.wsMessageList[0];
         this.wsMessageList.splice(0, 1);
       }

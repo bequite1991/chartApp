@@ -107,10 +107,10 @@ export default class Detail extends PureComponent {
       );
     }
     warningManager.setCurrFiter(dev_id);
+    // <span>{dev_id}</span>
     return (
       <Provider warningManager={warningManager}>
         <div className={styles.content}>
-          <span>{dev_id}</span>
           {charts}
           <ElevatorInTimeIFrame devId={dev_id} />
         </div>

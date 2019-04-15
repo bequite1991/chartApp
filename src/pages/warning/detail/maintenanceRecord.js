@@ -25,7 +25,7 @@ export default class MaintenanceRecord extends React.Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.state = { devId: devId, uuid: uuid_ };
+    this.setState({ devId: devId, uuid: uuid_ });
     warningManager.emit('register', { uuid: uuid_, cmd: '9011', filter: devId });
 
     eventProxy.on('msg-9011-' + devId, msg => {
@@ -47,7 +47,7 @@ export default class MaintenanceRecord extends React.Component {
 
     let uuid2 = nodeUUID.v1();
     let devId2 = warningManager.getCurrFiter() || '';
-    this.state = { devId: devId2, uuid: uuid2 };
+    this.setState({ devId: devId2, uuid: uuid2 });
     warningManager.emit('register', { uuid: uuid2, cmd: '9011', filter: devId2 });
 
     eventProxy.on('msg-9011-' + devId2, msg => {

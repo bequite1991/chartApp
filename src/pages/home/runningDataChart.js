@@ -71,6 +71,7 @@ export default class RunningDataChart extends React.Component {
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9010' });
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9011' });
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9012' });
+      this.uuid = '';
     }
 
     this.uuid = uuid.v1();
@@ -80,7 +81,6 @@ export default class RunningDataChart extends React.Component {
       cmd: '9009', //filter: '2019-02',
       filter: dev_id_list,
     });
-
     messageManager.emit('register', {
       uuid: this.uuid,
       cmd: '9010',
@@ -104,6 +104,7 @@ export default class RunningDataChart extends React.Component {
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9010' });
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9011' });
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9012' });
+    this.uuid = '';
   }
 
   onRunningDataOptionChange = () => {};

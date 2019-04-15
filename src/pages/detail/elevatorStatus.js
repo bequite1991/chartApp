@@ -58,11 +58,11 @@ export default class ElevatorStatus extends Component {
   }
 
   componentWillUnmount() {
-    debugger;
     const { messageManager } = this.props;
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9006' });
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9001' });
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9004' });
+    this.uuid = '';
   }
 
   render() {

@@ -70,6 +70,7 @@ export default class SystemCountChart extends React.Component {
   componentWillUnmount() {
     const { messageManager } = this.props;
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9005' });
+    this.uuid = '';
   }
 
   onChartClick(param, echarts) {

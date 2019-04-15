@@ -46,6 +46,7 @@ export default class InstallationRecord extends React.Component {
 
     if (this.uuid.length > 0) {
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9013' });
+      this.uuid = '';
     }
 
     this.uuid = uuid.v1();

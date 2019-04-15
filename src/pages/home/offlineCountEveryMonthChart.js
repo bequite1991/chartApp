@@ -33,6 +33,7 @@ export default class OfflineCountEveryMonthChart extends React.Component {
         uuid: this.uuid,
         cmd: '9003',
       });
+      this.uuid = '';
     }
 
     this.uuid = uuid.v1();
@@ -60,6 +61,7 @@ export default class OfflineCountEveryMonthChart extends React.Component {
         uuid: this.uuid,
         cmd: '9003',
       });
+      this.uuid = '';
     }
 
     this.uuid = uuid.v1();
@@ -77,6 +79,7 @@ export default class OfflineCountEveryMonthChart extends React.Component {
       uuid: this.uuid,
       cmd: '9003',
     });
+    this.uuid = '';
   }
 
   onChartClick(param, echarts) {

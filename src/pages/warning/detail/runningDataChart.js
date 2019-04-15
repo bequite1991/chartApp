@@ -36,7 +36,7 @@ export default class RunningDataChart extends React.Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.state = { devId: devId, uuid: uuid_ };
+    this.setState({ devId: devId, uuid: uuid_ });
 
     warningManager.emit('register', {
       cmd: '9012',
@@ -59,7 +59,7 @@ export default class RunningDataChart extends React.Component {
 
     let uuid2 = nodeUUID.v1();
     let devId2 = warningManager.getCurrFiter() || '';
-    this.state = { devId: devId2, uuid: uuid2 };
+    this.setState({ devId: devId2, uuid: uuid2 });
     warningManager.emit('register', { cmd: '9012', uuid: uuid2, filter: devId2 });
     eventProxy.on('msg-9012-' + devId2, msg => {
       debugger;

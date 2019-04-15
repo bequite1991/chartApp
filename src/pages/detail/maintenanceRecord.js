@@ -27,6 +27,7 @@ export default class MaintenanceRecord extends React.Component {
   componentWillUnmount() {
     const { messageManager } = this.props;
     messageManager.emit('unregister', { uuid: this.uuid, cmd: '9011' });
+    this.uuid = '';
   }
 
   onChartClick(param, echarts) {

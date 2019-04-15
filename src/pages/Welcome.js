@@ -8,9 +8,9 @@
 //   </p>
 // );
 
-import React, {PureComponent} from 'react';
-import {Button, Radio, Icon, Input, Table, Divider, Tag, Progress} from 'antd';
-require ('../services/utils/mqttws31');
+import React, { PureComponent } from 'react';
+import { Button, Radio, Icon, Input, Table, Divider, Tag, Progress } from 'antd';
+require('../services/utils/mqttws31');
 
 export default class TodaySpec extends PureComponent {
   client = null;
@@ -43,9 +43,9 @@ export default class TodaySpec extends PureComponent {
 
   toClose = false;
 
-  constructor (props) {
-    super (props);
-    this.state = {
+  constructor(props) {
+    super(props);
+    this.setState({
       newTopic: '',
       newMessage: '',
       connectStatus: 0,
@@ -68,50 +68,46 @@ export default class TodaySpec extends PureComponent {
         },
       ],
       tableData: [],
-    };
+    });
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const t = this;
     //this.getInfo ();
     this.client = null;
     //this.username = '';
     //this.password = '';
 
-    this.clientId = 'MQTTHelper-' + Math.floor (10000 + Math.random () * 90000);
+    this.clientId = 'MQTTHelper-' + Math.floor(10000 + Math.random() * 90000);
 
     this.server = this.defaultServer;
     this.port = this.defaultPort;
     //this.useSSL = true;
   }
 
-  connect () {
+  connect() {
     const t = this;
     try {
-      t.client = new Paho.MQTT.Client (
-        t.server,
-        parseFloat (t.port),
-        t.clientId
-      );
+      t.client = new Paho.MQTT.Client(t.server, parseFloat(t.port), t.clientId);
     } catch (error) {
-      alert ('Error:' + error);
+      alert('Error:' + error);
     }
 
-    t.client.onMessageArrived = function (msg) {
+    t.client.onMessageArrived = function(msg) {
       var topic = msg.destinationName;
       var payload = msg.payloadString;
-      var qos = msg._getQos ();
-      var retained = msg._getRetained ();
+      var qos = msg._getQos();
+      var retained = msg._getRetained();
 
       var qosStr = qos > 0 ? '[qos ' + qos + ']' : '';
       var retainedStr = retained ? '[retained]' : '';
 
-      t.showMessage (topic, payload, qosStr);
+      t.showMessage(topic, payload, qosStr);
     };
 
     t.client.onConnectionLost = t.onConnectionLost.bind(this);
 
-    var connectOptions = new Object ();
+    var connectOptions = new Object();
     connectOptions.useSSL = false;
     connectOptions.cleanSession = true;
     if (t.username) {
@@ -121,7 +117,7 @@ export default class TodaySpec extends PureComponent {
       connectOptions.password = t.password;
     }
     //if (t.noCleanSession) {
-      connectOptions.cleanSession = false;
+    connectOptions.cleanSession = false;
     //}
     if (t.useSSL) {
       connectOptions.useSSL = true;
@@ -133,28 +129,28 @@ export default class TodaySpec extends PureComponent {
     connectOptions.keepAliveInterval = 3600; // if no activity after one hour, disconnect
     connectOptions.timeout = 5;
 
-    connectOptions.onSuccess = function () {
-      console.info ('Connected to ' + t.server + ':' + t.port);
-      t.setState ({connectStatus: 100});
+    connectOptions.onSuccess = function() {
+      console.info('Connected to ' + t.server + ':' + t.port);
+      t.setState({ connectStatus: 100 });
       if (t.autoSubscribe) {
         var time = 500;
         for (var i in t.subTopics) {
-          setTimeout (
-            (function (topic) {
-              return function () {};
-            }) (t.subTopics[i]),
+          setTimeout(
+            (function(topic) {
+              return function() {};
+            })(t.subTopics[i]),
             time
           );
           time += 100;
         }
       }
       if (t.autoPublish) {
-        setTimeout (function () {}, 500);
+        setTimeout(function() {}, 500);
       }
     };
 
-    connectOptions.onFailure = function (error) {
-      console.info (
+    connectOptions.onFailure = function(error) {
+      console.info(
         'Failed to connect to ' +
           t.server +
           ':' +
@@ -166,53 +162,50 @@ export default class TodaySpec extends PureComponent {
       );
 
       if (!t.toClose) {
-        setTimeout (function () {
-          t.connect ();
+        setTimeout(function() {
+          t.connect();
         }, 2000);
       }
     };
-    connectOptions.onSuccess.bind (t);
-    connectOptions.onFailure.bind (t);
+    connectOptions.onSuccess.bind(t);
+    connectOptions.onFailure.bind(t);
     // debugger
     t.connectOptions = connectOptions;
-    t.client.connect (connectOptions);
+    t.client.connect(connectOptions);
   }
 
-  getUrlVars () {
+  getUrlVars() {
     var vars = {};
-    var parts = window.location.href.replace (
-      /[?&]+([^=&]+)=([^&]*)/gi,
-      function (m, key, value) {
-        vars[key] = value;
-      }
-    );
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+      vars[key] = value;
+    });
     return vars;
   }
 
-  showMessage (topic, message, qos) {
-    const {tableData} = this.state;
-    const newTableData = [].concat (tableData);
+  showMessage(topic, message, qos) {
+    const { tableData } = this.state;
+    const newTableData = [].concat(tableData);
 
-    newTableData.forEach ((ele, key) => {
+    newTableData.forEach((ele, key) => {
       if (ele.key == topic) {
         ele.res = message + ':' + qos;
       }
     });
-    this.setState ({
+    this.setState({
       tableData: newTableData,
     });
   }
 
-  onMessage (msg) {
+  onMessage(msg) {
     var topic = msg.destinationName;
     var payload = msg.payloadString;
-    var qos = msg._getQos ();
-    var retained = msg._getRetained ();
+    var qos = msg._getQos();
+    var retained = msg._getRetained();
 
     var qosStr = qos > 0 ? '[qos ' + qos + ']' : '';
     var retainedStr = retained ? '[retained]' : '';
 
-    console.info (
+    console.info(
       "<span class='logRCV'>RCV [<span class='logTopic'>" +
         topic +
         '</span>]' +
@@ -224,31 +217,27 @@ export default class TodaySpec extends PureComponent {
     );
   }
 
-  unsubscribe (topic) {
+  unsubscribe(topic) {
     const t = this;
-    t.client.unsubscribe (topic, {
-      onSuccess: function () {
+    t.client.unsubscribe(topic, {
+      onSuccess: function() {
         //subsList[topic] = null;
         //var elem = document.getElementById (topic);
         //elem.parentNode.removeChild (elem);
-        console.info (
-          "Unsubscribed from [<span class='logTopic'>" + topic + '</span>]'
-        );
+        console.info("Unsubscribed from [<span class='logTopic'>" + topic + '</span>]');
       },
-      onFailure: function () {
-        console.info (
-          "Unsubscribe failed: [<span class='logTopic'>" + topic + '</span>]'
-        );
+      onFailure: function() {
+        console.info("Unsubscribe failed: [<span class='logTopic'>" + topic + '</span>]');
       },
     });
   }
 
-  publish (topic, message, qos, retained) {
+  publish(topic, message, qos, retained) {
     const t = this;
-    const {tableData} = this.state;
-    const newTableData = [].concat (tableData);
+    const { tableData } = this.state;
+    const newTableData = [].concat(tableData);
 
-    var msgObj = new Paho.MQTT.Message (message);
+    var msgObj = new Paho.MQTT.Message(message);
     msgObj.destinationName = topic;
     if (qos) {
       msgObj.qos = qos;
@@ -257,21 +246,21 @@ export default class TodaySpec extends PureComponent {
       msgObj.retained = retained;
     }
 
-    newTableData.forEach ((ele, key) => {
+    newTableData.forEach((ele, key) => {
       if (ele.key == topic) {
         ele.req = message;
       }
     });
-    t.setState ({
+    t.setState({
       tableData: newTableData,
     });
 
-    t.client.send (msgObj);
+    t.client.send(msgObj);
 
     var qosStr = qos > 0 ? '[qos ' + qos + ']' : '';
     var retainedStr = retained ? '[retained]' : '';
 
-    console.info (
+    console.info(
       "<span class='logPUB'>PUB [<span class='logTopic'>" +
         topic +
         '</topic>]' +
@@ -283,10 +272,10 @@ export default class TodaySpec extends PureComponent {
     );
   }
 
-  onConnectionLost (error) {
+  onConnectionLost(error) {
     const t = this;
-    console.log (error);
-    console.info (
+    console.log(error);
+    console.info(
       'Disconnected from ' +
         t.server +
         ':' +
@@ -299,104 +288,81 @@ export default class TodaySpec extends PureComponent {
     t.subsList = {};
 
     if (!t.toClose) {
-      setTimeout (function () {
-        t.connect ();
+      setTimeout(function() {
+        t.connect();
       }, 2000);
     }
   }
 
-  closeConnect () {
+  closeConnect() {
     this.toClose = true;
-    this.client.disconnect ();
+    this.client.disconnect();
   }
 
-  subscribe (topic, qos) {
+  subscribe(topic, qos) {
     const t = this;
-    const {tableData} = this.state;
-    const newTableData = [].concat (tableData);
-    newTableData.push ({
+    const { tableData } = this.state;
+    const newTableData = [].concat(tableData);
+    newTableData.push({
       key: topic,
       topic: topic,
       req: '',
       res: '',
     });
-    this.setState ({
+    this.setState({
       tableData: newTableData,
     });
-    this.subTopics.push (topic);
-    this.client.subscribe (topic, {
+    this.subTopics.push(topic);
+    this.client.subscribe(topic, {
       qos: qos,
-      onSuccess: function () {
-        console.info (
-          "Subscribed to [<span class='logTopic'>" +
-            topic +
-            '</span>][qos ' +
-            qos +
-            ']'
+      onSuccess: function() {
+        console.info(
+          "Subscribed to [<span class='logTopic'>" + topic + '</span>][qos ' + qos + ']'
         );
         if (!this.subsList[topic]) {
           this.subsList[topic] = true;
         }
       },
-      onFailure: function (err) {
-        console.info ('Subscription failed: [' + topic + '][qos ' + qos + ']');
+      onFailure: function(err) {
+        console.info('Subscription failed: [' + topic + '][qos ' + qos + ']');
       },
     });
   }
 
-  topicChange = function (value) {
-    this.setState ({newTopic: value.target.value});
+  topicChange = function(value) {
+    this.setState({ newTopic: value.target.value });
   };
 
-  messageChange = function (value) {
-    this.setState ({newMessage: value.target.value});
+  messageChange = function(value) {
+    this.setState({ newMessage: value.target.value });
   };
 
-  render () {
-    const {
-      subTopics,
-      newTopic,
-      newMessage,
-      tableData,
-      columns,
-      connectStatus,
-    } = this.state;
+  render() {
+    const { subTopics, newTopic, newMessage, tableData, columns, connectStatus } = this.state;
     let newtableData = [];
     if (tableData.length > 30) {
-      newtableData = tableData.slice (1);
+      newtableData = tableData.slice(1);
     } else {
       newtableData = tableData;
     }
     return (
       <div>
         <Progress type="circle" percent={connectStatus} />
-        <Button
-          onClick={this.connect.bind (this)}
-          type="primary"
-          size="default"
-        >
+        <Button onClick={this.connect.bind(this)} type="primary" size="default">
           链接服务器
         </Button>
-        <Input
-          placeholder="填写主题"
-          value={newTopic}
-          onChange={this.topicChange.bind (this)}
-        />
-        <Button
-          onClick={this.subscribe.bind (this, newTopic, 1)}
-          type="primary"
-          size="default"
-        >
+        <Input placeholder="填写主题" value={newTopic} onChange={this.topicChange.bind(this)} />
+        <Button onClick={this.subscribe.bind(this, newTopic, 1)} type="primary" size="default">
           订阅主题
         </Button>
         <span>{subTopics}</span>
         <Input
           placeholder="填写消息内容"
           value={newMessage}
-          onChange={this.messageChange.bind (this)}
+          onChange={this.messageChange.bind(this)}
         />
         <Button
-          onClick={this.publish.bind (this, newTopic, newMessage, 1, false)}
+          onClick={this.publish.bind(this, newTopic, newMessage, 1, false)}
           type="primary"
           size="default"
         >

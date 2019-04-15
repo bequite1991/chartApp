@@ -71,6 +71,7 @@ class WebsocketWorker extends EventEmitter {
 
     this.webSocket.onopen = event => {
       this.isOpen = true;
+      this.isConnected = true;
       if (messageManager) {
         messageManager.emit('ws-open', { isOpen: this.isOpen });
       }
@@ -89,10 +90,12 @@ class WebsocketWorker extends EventEmitter {
 
     this.webSocket.onclose = event => {
       this.isOpen = false;
+      this.isConnected = false;
     };
 
     this.webSocket.onerror = event => {
       console.log(event);
+      this.isConnected = false;
     };
   }
 

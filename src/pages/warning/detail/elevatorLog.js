@@ -24,7 +24,7 @@ export default class SystemCountChart extends React.Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.state = { devId: devId, uuid: uuid_ };
+    this.setState({ devId: devId, uuid: uuid_ });
 
     warningManager.emit('register', { uuid: uuid_, cmd: '9002', filter: devId });
 
@@ -46,7 +46,7 @@ export default class SystemCountChart extends React.Component {
 
     let uuid2 = nodeUUID.v1();
     let devId2 = warningManager.getCurrFiter() || '';
-    this.state = { devId: devId2, uuid: uuid2 };
+    this.setState({ devId: devId2, uuid: uuid2 });
 
     warningManager.emit('register', { uuid: uuid2, cmd: '9002', filter: devId2 });
 

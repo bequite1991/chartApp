@@ -28,11 +28,11 @@ export default class elevatorInTimeIFrame extends React.Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.state = {
+    this.setState({
       elevatorInTimeIFrameOption: { open: false, url: '' },
       devId: devId,
       uuid: uuid_,
-    };
+    });
 
     //warningManager.emit('register', { uuid: uuid_, cmd: '9001', filter: devId });
 
@@ -54,11 +54,11 @@ export default class elevatorInTimeIFrame extends React.Component {
     const { warningManager } = this.props;
     let uuid2 = nodeUUID.v1();
     let devId2 = warningManager.getCurrFiter() || '';
-    this.state = {
+    this.setState({
       elevatorInTimeIFrameOption: { open: false, url: '' },
       devId: devId2,
       uuid: uuid2,
-    };
+    });
 
     eventProxy.on('msg-open-iframe-' + devId2, msg => {
       debugger;

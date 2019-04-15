@@ -52,7 +52,6 @@ export default class ErrorMonthChart extends React.Component {
         uuid: this.uuid,
         cmd: '9007',
       });
-
       this.uuid = '';
     }
 
@@ -71,6 +70,7 @@ export default class ErrorMonthChart extends React.Component {
       uuid: this.uuid,
       cmd: '9007',
     });
+    this.uuid = '';
   }
 
   onChartClick(param, echarts) {

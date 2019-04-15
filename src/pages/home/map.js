@@ -84,23 +84,16 @@ export default class Map extends Component {
     const { messageManager, sharedData } = this.props;
 
     if (this.uuid.length > 0) {
-      debugger;
-
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9006' });
-
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9001' });
-
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9004' });
-
       this.uuid = '';
     }
 
     this.uuid = uuid.v1();
 
     messageManager.emit('register', { uuid: this.uuid, cmd: '9006', filter: dev_id_list });
-
     messageManager.emit('register', { uuid: this.uuid, cmd: '9001', filter: dev_id_list });
-
     messageManager.emit('register', { uuid: this.uuid, cmd: '9004', filter: dev_id_list });
   }
 
@@ -132,20 +125,16 @@ export default class Map extends Component {
       uuid: this.uuid,
       cmd: '9006',
     });
-
     messageManager.emit('unregister', {
       uuid: this.uuid,
       cmd: '9001',
     });
-
-    debugger;
     messageManager.emit('unregister', {
       uuid: this.uuid,
       cmd: '9004',
     });
-
+    this.uuid = '';
     sharedData.emit('cancel_map_markers', {});
-
     this.isQuit = true;
   }
 

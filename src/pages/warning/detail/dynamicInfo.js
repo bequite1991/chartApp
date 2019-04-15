@@ -24,7 +24,7 @@ export default class DynamicInfo extends React.Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.state = {
+    this.setState({
       devId: devId,
       uuid: uuid_,
       option: {
@@ -38,7 +38,7 @@ export default class DynamicInfo extends React.Component {
         energy: '',
         signal: '',
       },
-    };
+    });
 
     eventProxy.on('msg-1001-' + devId, msg => {
       const { uuid, devId } = this.state;

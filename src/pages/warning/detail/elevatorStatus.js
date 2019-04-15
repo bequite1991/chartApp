@@ -38,7 +38,7 @@ export default class elevatorStatus extends Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.state = { devId: devId, uuid: uuid_ };
+    this.setState({ devId: devId, uuid: uuid_ });
     warningManager.emit('register', { uuid: uuid_, cmd: '9006', filter: devId });
 
     eventProxy.on('msg-9006-' + devId, msg => {
@@ -71,7 +71,7 @@ export default class elevatorStatus extends Component {
 
     let uuid2 = nodeUUID.v1();
     let devId2 = warningManager.getCurrFiter() || '';
-    this.state = { devId: devId2, uuid: uuid2 };
+    this.setState({ devId: devId2, uuid: uuid2 });
     warningManager.emit('register', { uuid: uuid2, cmd: '9006', filter: devId2 });
 
     eventProxy.on('msg-9006-' + devId2, msg => {
