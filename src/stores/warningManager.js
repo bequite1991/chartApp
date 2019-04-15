@@ -114,7 +114,7 @@ class WarningManager extends EventEmitter {
     }, 5000);
 
     this.on('9001', args => {
-      debugger;
+      //debugger;
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
