@@ -30,7 +30,7 @@ export default class ElevatorErrorConnect extends React.Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.setState({ devId: devId, uuid: uuid_ });
+    this.state = { devId: devId, uuid: uuid_ };
 
     warningManager.emit('register', { uuid: uuid_, cmd: '9001', filter: devId });
 

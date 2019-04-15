@@ -5,4 +5,4 @@ const CONSTANT_CONFIG = {
   '3': '安装',
 };
 
-export {CONSTANT_CONFIG};
+export { CONSTANT_CONFIG };

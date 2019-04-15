@@ -1,10 +1,10 @@
 import EventEmitter from 'events';
 
-import messageManager from './messageManager';
+import messageManager from './warningManager';
 
-let websocketWorker;
+let websocketWorker2;
 
-class WebsocketWorker extends EventEmitter {
+class WebsocketWorker2 extends EventEmitter {
   webSocket = null;
   messageList = [];
   options = null;
@@ -15,8 +15,8 @@ class WebsocketWorker extends EventEmitter {
   constructor() {
     super();
 
-    if (websocketWorker) {
-      return websocketWorker;
+    if (websocketWorker2) {
+      return websocketWorker2;
     }
 
     this.on('ws-connect', options => {
@@ -53,7 +53,7 @@ class WebsocketWorker extends EventEmitter {
       }
     });
 
-    websocketWorker = this;
+    websocketWorker2 = this;
   }
 
   isWSConnected() {
@@ -116,6 +116,6 @@ class WebsocketWorker extends EventEmitter {
   }
 }
 
-websocketWorker = new WebsocketWorker();
+websocketWorker2 = new WebsocketWorker2();
 
-export default websocketWorker;
+export default websocketWorker2;

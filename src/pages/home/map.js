@@ -104,6 +104,7 @@ export default class Map extends Component {
 
     sharedData.on('map_markers', mapData => {
       if (mapData && mapData.length > 0) {
+        debugger;
         this.mapUpdate(mapData);
       }
     });
@@ -273,6 +274,7 @@ export default class Map extends Component {
           }
           ids.push(mark.info.dev_id);
           if (index == marks.length - 1) {
+            console.info('点击聚合点');
             const url = '/home?dev_id_list=' + dev_id;
             sharedData.devIdList = ids;
             //window.location.href = url;

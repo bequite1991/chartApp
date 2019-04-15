@@ -253,9 +253,9 @@ class MessageManager extends EventEmitter {
       //   }
       // }
 
-      if (warningManager) {
-        warningManager.addWSMessage(message);
-      }
+      // if (warningManager) {
+      //   warningManager.addWSMessage(message);
+      // }
       this.wsMessageList.push(message);
     }
   }

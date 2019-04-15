@@ -4,7 +4,7 @@ import EventEmitter from 'events';
 
 import mqttWorker from './mqttWorker';
 
-import websocketWorker from './websocketWorker';
+import websocketWorker from './websocketWorker2';
 
 import mqttMessage from './mqttMessage';
 
@@ -33,6 +33,8 @@ import {
 } from '../datacenter/chartConfig';
 
 import eventProxy from '../lib/eventProxy';
+
+import { CONSTANT_CONFIG } from '../datacenter/constantConfig';
 
 class WarningManager extends EventEmitter {
   wsCommandMap = new Map();
@@ -79,7 +81,7 @@ class WarningManager extends EventEmitter {
     });
 
     this.on('ws-register', args => {
-      debugger;
+      //debugger;
       if (websocketWorker && websocketWorker.isWSConnected() == false) {
         let key =
           'eyJpZCI6InllIiwia2V5IjoiNDZDQzQ1QTcyN0JFQzdERTk3RjlFNzM4QUQ0MjgxNTMiLCJwcm9qZWN0Q29kZSI6Imh1aWJhbyIsInRpbWVzdGFtcCI6IjIwMTcxMTA2MTgxNDA2In0=';
@@ -307,7 +309,7 @@ class WarningManager extends EventEmitter {
     });
 
     this.on('1003', args => {
-      debugger;
+      //debugger;
       let currentFloor = args.currentFloor;
       let energy = args.batteryLevel;
       let dynamicInfo = this.dynamicInfoOption;
@@ -317,8 +319,9 @@ class WarningManager extends EventEmitter {
       let floorDisplaying = args.floorDisplaying ? args.floorDisplaying : '未知';
       let isAnyone = args.isAnyone ? args.isAnyone : '-1';
       //debugger;
-      let elevatorStatus = { runningState: runningState };
+      //let elevatorStatus = { runningState: runningState };
 
+      //elevatorStatus
       this.dynamicInfoOption = {
         elevatorCode: elevatorCode,
         isDoorOpen: isDoorOpen,
@@ -329,11 +332,16 @@ class WarningManager extends EventEmitter {
         energy: energy,
         signal: dynamicInfo.signal,
         regtelType: dynamicInfo.regtelType,
+        runningState: runningState,
       };
+
+      eventProxy.trigger('msg-1003-' + args.elevatorCode, {
+        dynamicInfoOption: this.dynamicInfoOption,
+      });
     });
 
     this.on('1004', args => {
-      debugger;
+      //debugger;
       let elevatorState = args.elevatorState;
       let signalLevel = args.signalLevel;
       let dynamicInfo = this.dynamicInfoOption;
@@ -350,7 +358,12 @@ class WarningManager extends EventEmitter {
         energy: dynamicInfo.energy,
         signal: signalLevel ? signalLevel : '',
         regtelType: regtelType,
+        runningState: dynamicInfo.runningState ? dynamicInfo.runningState : '-1',
       };
+
+      eventProxy.trigger('msg-1004', {
+        dynamicInfoOption: this.dynamicInfoOption,
+      });
     });
 
     this.on('open_iframe', args => {
@@ -381,7 +394,7 @@ class WarningManager extends EventEmitter {
   }
 
   addWSMessage(message) {
-    debugger;
+    //debugger;
     if (message) {
       this.wsMessageList.push(message);
     }
@@ -396,8 +409,9 @@ class WarningManager extends EventEmitter {
   }
 
   parserLoop() {
+    let message = null;
     if (!this.isMessageListEmpty()) {
-      let message = this.messageList[0];
+      message = this.messageList[0];
       if (message) {
         this.emit(message.cmd, message);
         delete this.messageList[0];
@@ -406,8 +420,7 @@ class WarningManager extends EventEmitter {
     }
 
     if (!this.isWSMessageListEmpty()) {
-      debugger;
-      let message = this.wsMessageList[0];
+      message = this.wsMessageList[0];
       if (message) {
         //debugger;
         this.emit(message.cmd, message);

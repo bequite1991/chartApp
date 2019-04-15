@@ -38,7 +38,7 @@ export default class elevatorStatus extends Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.setState({ devId: devId, uuid: uuid_ });
+    this.state = { devId: devId, uuid: uuid_ };
     warningManager.emit('register', { uuid: uuid_, cmd: '9006', filter: devId });
 
     eventProxy.on('msg-9006-' + devId, msg => {
@@ -57,6 +57,30 @@ export default class elevatorStatus extends Component {
       this.setState({
         totalInfo: totalInfo_,
         elevatorDevInfo: elevatorDevInfo_,
+        devId: devId,
+        uuid: uuid,
+      });
+    });
+
+    eventProxy.on('msg-1003-' + devId, msg => {
+      debugger;
+      const { elevatorDevInfo, totalInfo, devId, uuid } = this.state;
+      this.setState({
+        dynamicInfoOption: msg.dynamicInfoOption,
+        totalInfo: totalInfo,
+        elevatorDevInfo: elevatorDevInfo,
+        devId: devId,
+        uuid: uuid,
+      });
+    });
+
+    eventProxy.on('msg-1004-' + devId, msg => {
+      debugger;
+      const { elevatorDevInfo, totalInfo, devId, uuid } = this.state;
+      this.setState({
+        dynamicInfoOption: msg.dynamicInfoOption,
+        totalInfo: totalInfo,
+        elevatorDevInfo: elevatorDevInfo,
         devId: devId,
         uuid: uuid,
       });
@@ -94,6 +118,30 @@ export default class elevatorStatus extends Component {
         uuid: uuid,
       });
     });
+
+    eventProxy.on('msg-1003-' + devId2, msg => {
+      debugger;
+      const { elevatorDevInfo, totalInfo, devId, uuid } = this.state;
+      this.setState({
+        dynamicInfoOption: msg.dynamicInfoOption,
+        totalInfo: totalInfo,
+        elevatorDevInfo: elevatorDevInfo,
+        devId: devId,
+        uuid: uuid,
+      });
+    });
+
+    eventProxy.on('msg-1004-' + devId2, msg => {
+      debugger;
+      const { elevatorDevInfo, totalInfo, devId, uuid } = this.state;
+      this.setState({
+        dynamicInfoOption: msg.dynamicInfoOption,
+        totalInfo: totalInfo,
+        elevatorDevInfo: elevatorDevInfo,
+        devId: devId,
+        uuid: uuid,
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -101,25 +149,25 @@ export default class elevatorStatus extends Component {
     const { uuid, devId } = this.state;
     warningManager.emit('unregister', { uuid: uuid, cmd: '9006' });
     eventProxy.off('msg-9006-' + devId);
+    eventProxy.off('msg-1003-' + devId);
+    eventProxy.off('msg-1004-' + devId);
+
     //warningManager.emit('unregister', { uuid: this.uuid, cmd: '9001' });
     //warningManager.emit('unregister', { uuid: this.uuid, cmd: '9004' });
   }
 
   render() {
     const { warningManager } = this.props;
-
-    const { totalInfo, elevatorDevInfo } = this.state;
-
-    const elevatorStatus = 0; //warningManager.dynamicInfoOption.status;
-    //const totalInfo = null; //warningManager.totalInfo;
-    const dev_info = elevatorDevInfo; //warningManager.elevatorDevInfo;
+    const { totalInfo, elevatorDevInfo, dynamicInfoOption } = this.state;
+    const elevatorStatus = dynamicInfoOption ? dynamicInfoOption.status : '-1';
+    const dev_info = elevatorDevInfo;
     const dev_name = dev_info ? dev_info.name : '';
 
-    const runningState = '1'; //warningManager.elevatorStatus.runningState;
+    const runningState = dynamicInfoOption ? dynamicInfoOption.runningState : '-1'; //warningManager.elevatorStatus.runningState;
 
     const total = totalInfo ? (totalInfo.total ? totalInfo.total : '0') : '0';
     const onLineTotal = totalInfo ? (totalInfo.onLineTotal ? totalInfo.onLineTotal : '0') : '0';
-    let statusText;
+    let statusText = '未知';
     switch (elevatorStatus) {
       case 0:
         statusText = '离线';

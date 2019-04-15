@@ -401,12 +401,12 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('9001', args => {
-      this.warningMessage = { dev_id: '33483334833348333483', id: '28774536', message: '平层困人' };
-      this.warningMessage = {
-        dev_id: '31103307822016010044',
-        id: '28774535',
-        message: '平层困人2',
-      };
+      // this.warningMessage = { dev_id: '33483334833348333483', id: '28774536', message: '平层困人' };
+      // this.warningMessage = {
+      //   dev_id: '31103307822016010044',
+      //   id: '28774535',
+      //   message: '平层困人2',
+      // };
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
@@ -420,13 +420,12 @@ class sharedData extends EventEmitter {
                 let url = item.url;
                 if (url && url.length > 0) {
                   console.log('url:' + url);
-                  let options = {
-                    url: url,
-                  };
+                  let options = { url: url };
                   this.elevatorConnectOption = options;
                 }
               }
             } else if (dev_id_list && dev_id_list.length > 0) {
+              debugger;
               let installRecordInformationArray = [];
               let maintenanceInformationArray = [];
 
@@ -633,10 +632,12 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('1002', args => {
+      //debugger;
       //console.info('subId:' + args.id);
     });
 
     messageManager.on('1003', args => {
+      //debugger;
       let currentFloor = args.currentFloor;
       let energy = args.batteryLevel;
       let dynamicInfo = this.dynamicInfoOption;
@@ -685,7 +686,7 @@ class sharedData extends EventEmitter {
     });
 
     this.on('open_iframe', args => {
-      debugger;
+      //debugger;
       this.elevatorInTimeIFrameOption = {
         url: args.url,
         open: args.open,

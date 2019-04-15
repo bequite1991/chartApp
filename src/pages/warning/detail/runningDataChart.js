@@ -36,7 +36,7 @@ export default class RunningDataChart extends React.Component {
     const { warningManager } = this.props;
     const uuid_ = nodeUUID.v1();
     const devId = warningManager.getCurrFiter() || '';
-    this.setState({ devId: devId, uuid: uuid_ });
+    this.state = { devId: devId, uuid: uuid_ };
 
     warningManager.emit('register', {
       cmd: '9012',
