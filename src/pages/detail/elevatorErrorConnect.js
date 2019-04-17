@@ -25,20 +25,20 @@ export default class ElevatorErrorConnect extends React.Component {
     this.state = {};
 
     this.uuid = uuid.v1();
-    const dev_id = QueryString.parse(window.location.search).dev_id || '';
-    const { messageManager } = this.props;
-    messageManager.emit('register', {
-      uuid: this.uuid,
-      cmd: '9007',
-      filter: dev_id,
-    });
-    this.isShowFrame = false;
+    // const dev_id = QueryString.parse(window.location.search).dev_id || '';
+    // const { messageManager } = this.props;
+    // messageManager.emit('register', {
+    //   uuid: this.uuid,
+    //   cmd: '9007',
+    //   filter: dev_id,
+    // });
+    // this.isShowFrame = false;
   }
 
   componentWillUnmount() {
-    const { messageManager } = this.props;
-    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9007' });
-    this.uuid = '';
+    // const { messageManager } = this.props;
+    // messageManager.emit('unregister', { uuid: this.uuid, cmd: '9007' });
+    // this.uuid = '';
   }
 
   onChartClick(param, echarts) {
@@ -56,10 +56,12 @@ export default class ElevatorErrorConnect extends React.Component {
     //router.push (option.url);
     this.url = option.url;
     if (this.url && this.url.length > 0) {
-      sharedData.emit('open_iframe', {
-        url: this.url,
-        open: true,
-      });
+      const w = window.open('about:blank');
+      w.location.href = this.url;
+      // sharedData.emit('open_iframe', {
+      //   url: this.url,
+      //   open: true,
+      // });
     }
   };
 
@@ -71,10 +73,13 @@ export default class ElevatorErrorConnect extends React.Component {
     //router.push (option.url);
     this.url = option.url;
     if (this.url && this.url.length > 0) {
-      sharedData.emit('open_iframe', {
-        url: this.url,
-        open: true,
-      });
+      const w = window.open('about:blank');
+      w.location.href = this.url;
+
+      // sharedData.emit('open_iframe', {
+      //   url: this.url,
+      //   open: true,
+      // });
       // sharedData.elevatorInTimeIFrameOption = {
       //   url: this.url,
       //   open: true,

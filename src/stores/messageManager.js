@@ -89,6 +89,9 @@ class MessageManager extends EventEmitter {
 
     this.on('unregister', args => {
       // console.info ('取消注册消息:' + args.cmd);
+      if (args.cmd == '9005') {
+        debugger;
+      }
       this.removeCommand(args);
     });
 
@@ -292,9 +295,19 @@ class MessageManager extends EventEmitter {
     // 移除列表数据
     let index = 0;
     let removeUUID = '';
+
+    const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
+    const dev_id = QueryString.parse(window.location.search).dev_id || '';
+    let hasFiter = dev_id_list.length > 0;
+    if (hasFiter == false) {
+      hasFiter = dev_id.length > 0;
+    }
+
     try {
       if (this.removeUUIDList.length > 0) {
         //debugger;
+        let beforeCount = this.commandMap.size;
+        let afterCount = 0;
         this.removeUUIDList.forEach(uuidcommand => {
           let command = this.commandMap.get(uuidcommand);
           if (command) {
@@ -309,6 +322,10 @@ class MessageManager extends EventEmitter {
         this.commandMap.forEach(command => {
           this.commandUUIDList.push(command.uuid + '-' + command.cmd);
         });
+
+        afterCount = this.commandMap.size;
+
+        console.info('删除消息: 之前:' + beforeCount + ' 之后:' + afterCount);
       }
     } catch (ex) {
       // console.info ('uuidcommand:' + removeUUID);
@@ -321,7 +338,10 @@ class MessageManager extends EventEmitter {
         let key = this.commandUUIDList.shift();
         let command = this.commandMap.get(key);
         if (command) {
-          this.sendCommand(command);
+          let canSend = hasFiter == command.filter.length > 0;
+          if (canSend) {
+            this.sendCommand(command);
+          }
         }
         ++this.sendCount;
         if (this.sendCount > count) {
@@ -341,9 +361,15 @@ class MessageManager extends EventEmitter {
     }
 
     if (this.commandImmediatelyMap.size > 0) {
-      debugger;
+      //debugger;
+
       this.commandImmediatelyMap.forEach(command => {
-        this.sendCommand(command);
+        if (command) {
+          let canSend = hasFiter == command.filter.length > 0;
+          if (canSend) {
+            this.sendCommand(command);
+          }
+        }
       });
       this.commandImmediatelyMap.clear();
     }

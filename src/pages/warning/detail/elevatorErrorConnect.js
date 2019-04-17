@@ -95,7 +95,9 @@ export default class ElevatorErrorConnect extends React.Component {
       debugger;
       let url = option.url;
       if (url && url.length > 0) {
-        warningManager.emit('open_iframe', { devId: devId, url: url, open: true });
+        const w = window.open('about:blank');
+        w.location.href = url;
+        //warningManager.emit('open_iframe', { devId: devId, url: url, open: true });
       }
     }
   };

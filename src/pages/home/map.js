@@ -77,7 +77,7 @@ export default class Map extends Component {
       return;
     }
 
-    debugger;
+    //debugger;
 
     this.devIdlist = dev_id_list;
 
@@ -92,9 +92,21 @@ export default class Map extends Component {
 
     this.uuid = uuid.v1();
 
-    messageManager.emit('register', { uuid: this.uuid, cmd: '9006', filter: dev_id_list });
-    messageManager.emit('register', { uuid: this.uuid, cmd: '9001', filter: dev_id_list });
-    messageManager.emit('register', { uuid: this.uuid, cmd: '9004', filter: dev_id_list });
+    messageManager.emit('register', {
+      uuid: this.uuid,
+      cmd: '9006',
+      filter: dev_id_list,
+    });
+    messageManager.emit('register', {
+      uuid: this.uuid,
+      cmd: '9001',
+      filter: dev_id_list,
+    });
+    messageManager.emit('register', {
+      uuid: this.uuid,
+      cmd: '9004',
+      filter: dev_id_list,
+    });
   }
 
   componentDidMount() {
@@ -104,7 +116,7 @@ export default class Map extends Component {
 
     sharedData.on('map_markers', mapData => {
       if (mapData && mapData.length > 0) {
-        debugger;
+        //debugger;
         this.mapUpdate(mapData);
       }
     });
@@ -175,6 +187,7 @@ export default class Map extends Component {
   }
 
   mapUpdate(mapData = []) {
+    //debugger;
     var fineMarkers = new Array();
     var errorMarkers = new Array();
     var offlineMarkers = new Array();
@@ -228,14 +241,22 @@ export default class Map extends Component {
   //聚合点点击
   addClickClusterer(markerClusterer) {
     const t = this;
+    //debugger;
     if (markerClusterer._clusters.length) {
-      markerClusterer._clusters.forEach((ele, key) => {
-        if (!ele._clusterMarker._domElement) {
+      markerClusterer._clusters.forEach((cluster, key) => {
+        if (!cluster._clusterMarker._domElement) {
           return;
         } else {
-          ele._clusterMarker._domElement.addEventListener('click', function(e) {
-            t.goInfo(ele, markerClusterer, e);
-          });
+          cluster._clusterMarker.onclick = function() {
+            //debugger;
+            t.goInfo(cluster, markerClusterer);
+          };
+          // ele._clusterMarker._domElement.addEventListener ('click', function (
+          //   e
+          // ) {
+          //   debugger;
+          //   t.goInfo (ele, markerClusterer, e);
+          // });
         }
       });
     }
@@ -257,37 +278,60 @@ export default class Map extends Component {
     this.map.openInfoWindow(infoWindow, point); //开启信息窗口
   }
 
-  goInfo(ele, markerClusterer, e) {
+  goInfo(cluster, markerClusterer) {
     const { sharedData } = this.props;
-    let marks = new Array();
     let dev_id;
     const t = this;
-    ele._markerClusterer._clusters.forEach((item, key) => {
-      marks = marks.concat(item._markers);
-      if (key == ele._markerClusterer._clusters.length - 1) {
-        const ids = new Array();
-        marks.forEach((mark, index) => {
+    const ids = new Array();
+    cluster._markers.forEach((mark, index) => {
+      if (dev_id) {
+        dev_id = dev_id + ',' + mark.info.dev_id;
+      } else {
+        dev_id = mark.info.dev_id;
+      }
+      ids.push(mark.info.dev_id);
+    });
+
+    if (ids.length > 0) {
+      console.info('点击聚合点');
+      const url = '/home?dev_id_list=' + dev_id;
+      sharedData.devIdList = ids;
+      //window.location.href = url;
+      sharedData.maiUserInfo = [];
+      router.push(url);
+      markerClusterer.clearMarkers();
+    }
+
+    /**
+    curCluster._markerClusterer._clusters.forEach ((item, key) => {
+      marks = marks.concat (item._markers);
+      debugger;
+      if (key == curCluster._markerClusterer._clusters.length - 1) {
+        const ids = new Array ();
+        marks.forEach ((mark, index) => {
           if (dev_id) {
             dev_id = dev_id + ',' + mark.info.dev_id;
           } else {
             dev_id = mark.info.dev_id;
           }
-          ids.push(mark.info.dev_id);
+          ids.push (mark.info.dev_id);
           if (index == marks.length - 1) {
-            console.info('点击聚合点');
+            console.info ('点击聚合点');
             const url = '/home?dev_id_list=' + dev_id;
             sharedData.devIdList = ids;
             //window.location.href = url;
             sharedData.maiUserInfo = [];
-            router.push(url);
+            router.push (url);
+            markerClusterer.clearMarkers ();
           }
         });
       }
     });
+    **/
   }
 
   goDetail(content, e) {
-    debugger;
+    //debugger;
     const url = '/detail?dev_id=' + content.dev_id;
     router.push(url);
   }

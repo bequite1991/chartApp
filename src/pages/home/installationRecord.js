@@ -45,6 +45,7 @@ export default class InstallationRecord extends React.Component {
     const { messageManager } = this.props;
 
     if (this.uuid.length > 0) {
+      debugger;
       messageManager.emit('unregister', { uuid: this.uuid, cmd: '9013' });
       this.uuid = '';
     }
@@ -54,7 +55,10 @@ export default class InstallationRecord extends React.Component {
     messageManager.emit('register', { uuid: this.uuid, cmd: '9013', filter: dev_id_list }); //filter: '2019-02',
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    const { messageManager } = this.props;
+    messageManager.emit('unregister', { uuid: this.uuid, cmd: '9013' });
+  }
 
   onChartClick(param, echarts) {
     console.log(param);

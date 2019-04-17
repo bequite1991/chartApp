@@ -75,7 +75,7 @@ class sharedData extends EventEmitter {
 
   sumDay = '50'; // 运行天数
 
-  updateMapMarkers = true;
+  @observable updateMapMarkersValue = true;
   //runningDataOption = null;
 
   constructor() {
@@ -401,12 +401,14 @@ class sharedData extends EventEmitter {
     });
 
     messageManager.on('9001', args => {
+      //debugger;
       // this.warningMessage = { dev_id: '33483334833348333483', id: '28774536', message: '平层困人' };
       // this.warningMessage = {
       //   dev_id: '31103307822016010044',
       //   id: '28774535',
       //   message: '平层困人2',
       // };
+      //debugger;
       if (args && args.resp == '200') {
         let rows = args.rows;
         if (rows && rows.length > 0) {
@@ -425,7 +427,7 @@ class sharedData extends EventEmitter {
                 }
               }
             } else if (dev_id_list && dev_id_list.length > 0) {
-              debugger;
+              //debugger;
               let installRecordInformationArray = [];
               let maintenanceInformationArray = [];
 
@@ -465,6 +467,10 @@ class sharedData extends EventEmitter {
               if (maintenanceInformationArray && maintenanceInformationArray.length > 0) {
                 this.maintenanceInformation = maintenanceInformationArray;
               }
+
+              //if (this.updateMapMarkers == true) {
+              this.emit('map_markers', rows);
+              //}
             }
           } else {
             if (this.updateMapMarkers == true) {
@@ -936,6 +942,14 @@ class sharedData extends EventEmitter {
 
   set maintenanceInformation(value) {
     this.maintenanceInformationValue = value;
+  }
+
+  @computed get updateMapMarkers() {
+    return toJS(this.updateMapMarkersValue);
+  }
+
+  set updateMapMarkers(value) {
+    this.updateMapMarkersValue = value;
   }
 }
 
