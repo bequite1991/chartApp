@@ -333,7 +333,7 @@ class MessageManager extends EventEmitter {
 
     let count = this.commandMap.size;
     if (count > 0) {
-      //debugger;
+      //   //debugger;
       if (this.sendCount <= count) {
         let key = this.commandUUIDList.shift();
         let command = this.commandMap.get(key);
@@ -352,13 +352,18 @@ class MessageManager extends EventEmitter {
           this.commandMap.forEach(command => {
             this.commandUUIDList.push(command.uuid + '-' + command.cmd);
           });
-
-          // for (let k in this.commandMap) {
-          //   this.commandUUIDList.push(k);
-          // }
         }
       }
     }
+
+    // this.commandMap.forEach(command => {
+    //   if (command) {
+    //     let canSend = hasFiter == command.filter.length > 0;
+    //     if (canSend) {
+    //       this.sendCommand(command);
+    //     }
+    //   }
+    // });
 
     if (this.commandImmediatelyMap.size > 0) {
       //debugger;
