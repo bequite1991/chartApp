@@ -413,6 +413,7 @@ class sharedData extends EventEmitter {
         let rows = args.rows;
         if (rows && rows.length > 0) {
           let filter = args.filter;
+          let map_markers = '';
           const dev_id = QueryString.parse(window.location.search).dev_id || '';
           const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
           if (filter != null && filter.length > 0) {
@@ -469,13 +470,20 @@ class sharedData extends EventEmitter {
               }
 
               //if (this.updateMapMarkers == true) {
+
+              localStorage.setItem('map_markers', JSON.stringify(rows));
+              //map_markers = localStorage.getItem('map_markers');
+              //debugger;
               this.emit('map_markers', rows);
               //}
             }
           } else {
-            if (this.updateMapMarkers == true) {
-              this.emit('map_markers', rows);
-            }
+            //if (this.updateMapMarkers == true) {
+            localStorage.setItem('map_markers', JSON.stringify(rows));
+            //map_markers = localStorage.getItem('map_markers');
+            //debugger;
+            this.emit('map_markers', rows);
+            //}
           }
           //this.mapChinaOptionValue = rows;
         }

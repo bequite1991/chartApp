@@ -142,15 +142,15 @@ class MessageManager extends EventEmitter {
 
     this.messageEmitterTimer = setInterval(() => {
       this.messageEmitter();
-    }, 5000);
+    }, 1000);
 
     this.parserLoopTimer = setInterval(() => {
       this.parserLoop();
-    }, 2000);
+    }, 1000);
 
     this.wsMessageEmitterTimer = setInterval(() => {
       this.wsMessageEmitter();
-    }, 5000);
+    }, 1000);
   }
 
   wsMessageEmitter() {

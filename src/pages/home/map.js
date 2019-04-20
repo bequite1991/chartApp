@@ -35,6 +35,8 @@ export default class Map extends Component {
   uuid = '';
   isQuit = false;
   devIdlist = '-1';
+  markerClusterer = null;
+
   constructor(props) {
     super(props);
 
@@ -77,7 +79,14 @@ export default class Map extends Component {
       return;
     }
 
-    //debugger;
+    // let mapDataString = localStorage.getItem('map_markers');
+    // if (mapDataString.length > 0) {
+    //   debugger;
+    //   let mapData = JSON.parse(mapDataString);
+    //   if (mapData && mapData.length > 0) {
+    //     this.mapUpdate(mapData);
+    //   }
+    // }
 
     this.devIdlist = dev_id_list;
 
@@ -121,14 +130,14 @@ export default class Map extends Component {
       }
     });
 
-    setTimeout(() => {
-      if (this.isQuit == true) {
-        document.getElementsByClassName('anchorBL')[0].innerHTML = '';
-        setTimeout(() => {
-          document.getElementsByClassName('anchorBL')[1].innerHTML = '';
-        }, 1500);
-      }
-    }, 500);
+    // setTimeout(() => {
+    //   if (this.isQuit == true) {
+    //     document.getElementsByClassName('anchorBL')[0].innerHTML = '';
+    //     setTimeout(() => {
+    //       document.getElementsByClassName('anchorBL')[1].innerHTML = '';
+    //     }, 1500);
+    //   }
+    // }, 500);
   }
 
   componentWillUpdate(nextProps) {}
@@ -164,6 +173,7 @@ export default class Map extends Component {
 
   //初始化百度地图
   initMap() {
+    const t = this;
     // var BMap = window.BMap
     // var map = new BMap.Map("allmap"); // 创建Map实例
     // map.centerAndZoom(new BMap.Point(116.404, 39.915), 5); // 初始化地图,设    置中心点坐标和地图级别
@@ -172,7 +182,7 @@ export default class Map extends Component {
     // map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
 
     // 百度地图API功能
-    var map = new BMap.Map('allmap');
+    let map = new BMap.Map('allmap');
     map.centerAndZoom(new BMap.Point(116.404, 39.915), 5);
     map.enableScrollWheelZoom();
     map.setMapStyle({
@@ -181,13 +191,43 @@ export default class Map extends Component {
     // var myIcon2 = new BMap.Icon ('tb1_0.png', new BMap.Size (30, 40));
 
     //添加聚合效果。
-    var markerClusterer = new BMapLib.MarkerClusterer(this.map, { markers: [] });
+    //this.markerClusterer = new BMapLib.MarkerClusterer(this.map, { markers: [] });
+
+    debugger;
+
+    map.addEventListener('moveend', function(e) {
+      console.info('moveend');
+      t.updateMarkerClusterer();
+    });
+
+    map.addEventListener('zoomend', function(e) {
+      console.info('zoomend');
+      t.updateMarkerClusterer();
+    });
 
     this.map = map;
   }
 
+  updateMarkerClusterer() {
+    if (this.markerClusterer) {
+      this.markerClusterer.clearMarkers();
+    }
+
+    let mapDataString = localStorage.getItem('map_markers');
+    if (mapDataString.length > 0) {
+      let mapData = JSON.parse(mapDataString);
+      if (mapData && mapData.length > 0) {
+        this.mapUpdate(mapData);
+      }
+    }
+  }
+
   mapUpdate(mapData = []) {
     //debugger;
+    if (this.markerClusterer) {
+      this.markerClusterer.clearMarkers();
+    }
+
     var fineMarkers = new Array();
     var errorMarkers = new Array();
     var offlineMarkers = new Array();
@@ -221,22 +261,24 @@ export default class Map extends Component {
       markers.push(marker);
     });
 
-    var markerClusterer = new BMapLib.MarkerClusterer(this.map, {
+    this.markerClusterer = new BMapLib.MarkerClusterer(this.map, {
       markers: markers,
     });
+
     // this.addClickClusterer (fineMarkerClusterer);
     // this.addClickClusterer (errorMarkerClusterer);
     // this.addClickClusterer (offlineMarkerClusterer);
-    this.addClickClusterer(markerClusterer);
+    this.addClickClusterer(this.markerClusterer);
     // markerClusterer._clusters[0]._clusterMarker._domElement.addEventListener ('click', function (e) {
     //   debugger
     // });
-    setTimeout(() => {
-      document.getElementsByClassName('anchorBL')[0].innerHTML = '';
-      setTimeout(() => {
-        document.getElementsByClassName('anchorBL')[1].innerHTML = '';
-      }, 1500);
-    }, 500);
+
+    // setTimeout(() => {
+    //   document.getElementsByClassName('anchorBL')[0].innerHTML = '';
+    //   setTimeout(() => {
+    //     document.getElementsByClassName('anchorBL')[1].innerHTML = '';
+    //   }, 1500);
+    // }, 500);
   }
   //聚合点点击
   addClickClusterer(markerClusterer) {
@@ -293,13 +335,20 @@ export default class Map extends Component {
     });
 
     if (ids.length > 0) {
+      markerClusterer.clearMarkers();
       console.info('点击聚合点');
       const url = '/home?dev_id_list=' + dev_id;
       sharedData.devIdList = ids;
       //window.location.href = url;
       sharedData.maiUserInfo = [];
       router.push(url);
-      markerClusterer.clearMarkers();
+      let mapDataString = localStorage.getItem('map_markers');
+      if (mapDataString.length > 0) {
+        let mapData = JSON.parse(mapDataString);
+        if (mapData && mapData.length > 0) {
+          this.mapUpdate(mapData);
+        }
+      }
     }
 
     /**
