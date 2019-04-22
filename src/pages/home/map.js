@@ -438,6 +438,7 @@ export default class Map extends Component {
     return (
       <div className={styles.mapChina}>
         <p className={styles.title}>慧保电梯管理平台</p>
+        <div className={styles.line} />
         <div className={styles.subtitle}>
           <span className={styles.subtitleInfo}>
             电梯在线数量：<span className={styles.detail}>{onLineTotal}</span>

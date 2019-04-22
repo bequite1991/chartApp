@@ -51,7 +51,7 @@ export default class Warning extends React.Component {
           type="primary"
           size="small"
           onClick={() => {
-            //t.cancel(key);
+            t.cancel(key);
             console.info('key:' + key);
             t.notificationClose(key, t);
             const dev_id = QueryString.parse(window.location.search).dev_id || '';
@@ -68,7 +68,7 @@ export default class Warning extends React.Component {
           size="small"
           onClick={() => {
             console.info('cancel key:' + key);
-            //t.cancel(key);
+            t.cancel(key);
             t.notificationClose(key, t);
           }}
         >
