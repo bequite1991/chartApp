@@ -81,7 +81,7 @@ export default class Home extends PureComponent {
     const dev_id_list = QueryString.parse(window.location.search).dev_id_list || '';
     if (dev_id_list && dev_id_list.length > 0) {
       installationRecord = (
-        <div className={styles.Maintenance_Record}>
+        <div className={styles.Installation_Record_Information}>
           <Installation_Record_Information />
         </div>
       );
