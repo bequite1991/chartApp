@@ -40,11 +40,14 @@ export default class MaintenanceRecord extends React.Component {
         );
       });
     }
-
     return (
       <div className={styles.maintenanceRecord}>
         <span className={styles.title}>电梯维保记录</span>
-        <div className={styles.maintenanceRecordContent}>{arr}</div>
+        <div className={styles.maintenanceRecordContent}>
+          <marquee loop="-1" direction="up" scrolldelay="100">
+            {arr}
+          </marquee>
+        </div>
       </div>
     );
   }

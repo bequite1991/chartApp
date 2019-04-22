@@ -130,14 +130,19 @@ export default class Map extends Component {
       }
     });
 
-    // setTimeout(() => {
-    //   if (this.isQuit == true) {
-    //     document.getElementsByClassName('anchorBL')[0].innerHTML = '';
-    //     setTimeout(() => {
-    //       document.getElementsByClassName('anchorBL')[1].innerHTML = '';
-    //     }, 1500);
-    //   }
-    // }, 500);
+    setTimeout(() => {
+      let anchrBL = document.getElementsByClassName('anchorBL')[0];
+      if (anchrBL) {
+        anchrBL.innerHTML = '';
+      }
+      setTimeout(() => {
+        let anchrBL2 = document.getElementsByClassName('anchorBL')[1];
+        if (anchrBL2) {
+          anchrBL2.innerHTML = '';
+        }
+        //document.getElementsByClassName('anchorBL')[1].innerHTML = '';
+      }, 1500);
+    }, 500);
   }
 
   componentWillUpdate(nextProps) {}
@@ -273,12 +278,19 @@ export default class Map extends Component {
     //   debugger
     // });
 
-    // setTimeout(() => {
-    //   document.getElementsByClassName('anchorBL')[0].innerHTML = '';
-    //   setTimeout(() => {
-    //     document.getElementsByClassName('anchorBL')[1].innerHTML = '';
-    //   }, 1500);
-    // }, 500);
+    setTimeout(() => {
+      let anchrBL = document.getElementsByClassName('anchorBL')[0];
+      if (anchrBL) {
+        anchrBL.innerHTML = '';
+      }
+      setTimeout(() => {
+        let anchrBL2 = document.getElementsByClassName('anchorBL')[1];
+        if (anchrBL2) {
+          anchrBL2.innerHTML = '';
+        }
+        //document.getElementsByClassName('anchorBL')[1].innerHTML = '';
+      }, 1500);
+    }, 500);
   }
   //聚合点点击
   addClickClusterer(markerClusterer) {
@@ -409,7 +421,7 @@ export default class Map extends Component {
           );
         });
       }
-      title = '维保记录';
+      title = '剩余维保时间';
     } else {
       list = sharedData.maiUserInfo ? sharedData.maiUserInfo : [];
       list.forEach((val, key) => {
@@ -450,7 +462,11 @@ export default class Map extends Component {
         <div className={styles.allmap} id="allmap" />
         <div className={styles.peopleListContent}>
           <span className={styles.title}>{title}</span>
-          <div className={styles.maintenanceInfomation}>{peopleArr}</div>
+          <div className={styles.maintenanceInfomation}>
+            <marquee loop="-1" direction="up" vspace="0" scrolldelay="100">
+              {peopleArr}
+            </marquee>
+          </div>
         </div>
       </div>
     );

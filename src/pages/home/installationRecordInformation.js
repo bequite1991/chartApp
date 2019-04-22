@@ -50,7 +50,11 @@ export default class InstallationRecordInformation extends React.Component {
     return (
       <div className={styles.installationRecordInformation}>
         <span className={styles.title}>电梯安装记录</span>
-        <div className={styles.installationRecordInformationContent}>{arr}</div>
+        <div className={styles.installationRecordInformationContent}>
+          <marquee loop="-1" direction="up" vspace="0" scrolldelay="100">
+            {arr}
+          </marquee>
+        </div>
       </div>
     );
   }

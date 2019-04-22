@@ -83,7 +83,7 @@ export default class Detail extends PureComponent {
     } else {
       charts = (
         <Row>
-          <Col span={6}>
+          <Col span={8}>
             <div className={styles.RunningDataChart}>
               <RunningDataChart />
             </div>
@@ -91,13 +91,13 @@ export default class Detail extends PureComponent {
               <DynamicInfo />
             </div>
           </Col>
-          <Col span={12}>
+          <Col span={8}>
             <Elevator_Status />
             <div className={styles.Maintenance_Record}>
               <Maintenance_Record />
             </div>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <div className={styles.Elevator_Error_Connect}>
               <Elevator_Error_Connect />
             </div>

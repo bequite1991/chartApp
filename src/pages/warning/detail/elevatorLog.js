@@ -17,7 +17,7 @@ import eventProxy from '../../../lib/eventProxy';
 
 @inject('warningManager')
 @observer
-export default class SystemCountChart extends React.Component {
+export default class ElevatorLog extends React.Component {
   constructor(props) {
     super(props);
     debugger;
@@ -89,7 +89,11 @@ export default class SystemCountChart extends React.Component {
     return (
       <div className={styles.elevatorLog}>
         <span className={styles.title}>电梯上下线日志</span>
-        <div className={styles.elevatorLogDetailContent}>{arr}</div>
+        <div className={styles.elevatorLogDetailContent}>
+          <marquee loop="-1" direction="up" scrolldelay="100">
+            {arr}
+          </marquee>
+        </div>
       </div>
     );
   }
