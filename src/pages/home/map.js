@@ -239,25 +239,24 @@ export default class Map extends Component {
     var markers = new Array();
     mapData.forEach((item, i) => {
       var iconImg;
-      if (item.real_info == '0') {
-        iconImg = new BMap.Icon('Info-Point-yello.png', new BMap.Size(30, 30), {
-          offset: new BMap.Size(10, 30),
-          imageOffset: new BMap.Size(0, 0), // 设置图片偏移
-        });
-        // offlineMarkers.push (marker);
-      } else if (item.real_info == '1') {
-        iconImg = new BMap.Icon('Info-Point-green.png', new BMap.Size(30, 30), {
-          offset: new BMap.Size(10, 30),
-          imageOffset: new BMap.Size(0, 0), // 设置图片偏移
-        });
-        // fineMarkers.push (marker);
-      } else {
-        iconImg = new BMap.Icon('Info-Point-red.png', new BMap.Size(30, 30), {
-          offset: new BMap.Size(10, 30),
-          imageOffset: new BMap.Size(0, 0), // 设置图片偏移
-        });
-        // errorMarkers.push (marker);
-      }
+      var iconPath = 'mapcorp_' + item.real_info + '.png';
+      console.info('iconPath:' + iconPath);
+      //if (item.real_info == '0') {
+      iconImg = new BMap.Icon(iconPath, new BMap.Size(20, 40));
+      //   // offlineMarkers.push (marker);
+      // } else if (item.real_info == '1') {
+      //   iconImg = new BMap.Icon('Info-Point-green.png', new BMap.Size(30, 30), {
+      //     offset: new BMap.Size(10, 30),
+      //     imageOffset: new BMap.Size(0, 0), // 设置图片偏移
+      //   });
+      //   // fineMarkers.push (marker);
+      // } else {
+      //   iconImg = new BMap.Icon('Info-Point-red.png', new BMap.Size(30, 30), {
+      //     offset: new BMap.Size(10, 30),
+      //     imageOffset: new BMap.Size(0, 0), // 设置图片偏移
+      //   });
+      //   // errorMarkers.push (marker);
+      // }
       var point = new BMap.Point(item.longitude, item.latitude);
       var marker = new BMap.Marker(point, { icon: iconImg });
       var content = item.ara_addr_name;

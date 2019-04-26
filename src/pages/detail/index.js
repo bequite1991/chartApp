@@ -83,21 +83,22 @@ export default class Detail extends PureComponent {
     } else {
       charts = (
         <Row>
-          <Col span={6}>
+          <Col span={2} />
+          <Col span={5}>
             <div className={styles.RunningDataChart}>
               <RunningDataChart />
             </div>
-            <div className={styles.elevatorContent2}>
+            <div className={styles.DynamicInfo}>
               <DynamicInfo />
             </div>
           </Col>
-          <Col span={12}>
+          <Col span={10}>
             <Elevator_Status />
             <div className={styles.Maintenance_Record}>
               <Maintenance_Record />
             </div>
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <div className={styles.Elevator_Error_Connect}>
               <Elevator_Error_Connect />
             </div>
@@ -110,6 +111,7 @@ export default class Detail extends PureComponent {
               </Button>
             </div>
           </Col>
+          <Col span={2} />
         </Row>
       );
     }
