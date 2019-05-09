@@ -142,6 +142,11 @@ export default class Map extends Component {
         }, 1500);
       }
     }, 500);
+
+
+
+    
+    
   }
 
   componentWillUpdate (nextProps) {}
@@ -340,6 +345,33 @@ export default class Map extends Component {
     const arr = sharedData.maiUserInfo ? sharedData.maiUserInfo : [];
     const peopleArr = [];
 
+    setTimeout(()=>{
+      const arr1 = document.getElementById("arr1");
+      const arr2 = document.getElementById("arr2");
+      const peopleListContent = document.getElementById("peopleListContent");
+
+      const height = arr1.clientHeight;
+      peopleListContent.style.height = height;
+
+      
+      let hide = 0;
+      setInterval(()=>{
+        if(-hide < height){
+          debugger
+          hide = hide - 4;
+          arr1.style.position = "absolute";
+          arr2.style.position = "absolute";
+          arr1.style.top = hide + "px";
+          arr2.style.top = (height + hide) + "px";
+        }else{
+          hide = 0;
+        }
+      },200)
+    },2000)
+
+
+
+
     arr.forEach ((val, key) => {
       peopleArr.push (
         <span key={key} className={styles.peopleList}>
@@ -361,6 +393,8 @@ export default class Map extends Component {
       );
     });
 
+    
+    
     return (
       <div className={styles.mapChina}>
         <p className={styles.title}>慧保电梯管理平台</p>
@@ -373,10 +407,16 @@ export default class Map extends Component {
           </span>
         </div>
         <div className={styles.allmap} id="allmap" />
-        <div className={styles.peopleListContent}>
-          {peopleArr}
+        <div className={styles.peopleListContent0} id="peopleListContent0">
+        <div className={styles.peopleListContent} id="peopleListContent">
+          <div id="arr1">
+              {peopleArr}
+            </div>
+            <div id="arr2">
+              {peopleArr}
+            </div>
         </div>
-
+        </div>
       </div>
     );
   }
