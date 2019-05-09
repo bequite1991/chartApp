@@ -122,7 +122,7 @@ export default class Detail extends PureComponent {
         sharedDataDetail={sharedDataDetail}
         messageManager={messageManager}
       >
-        <div>
+        <div className={styles.detailContent}>
           {charts}
           <Warning />
           <ElevatorInTimeIFrame />

@@ -551,7 +551,7 @@ class WarningManager extends EventEmitter {
         rows
       );
       // console.info ('topic:' + topic);
-      console.info('packet message:' + message);
+      //console.info('packet message:' + message);
       mqttWorker.emit('session:publish', { topic: topic, message: message });
     }
   }

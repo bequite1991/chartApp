@@ -261,7 +261,7 @@ class sharedData extends EventEmitter {
           };
           this.totalInfo = totalInfo;
 
-          console.info('9006 is get data');
+          //console.info('9006 is get data');
         }
       }
     });

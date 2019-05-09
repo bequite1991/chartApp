@@ -198,8 +198,7 @@ export default class Map extends Component {
     //添加聚合效果。
     //this.markerClusterer = new BMapLib.MarkerClusterer(this.map, { markers: [] });
 
-    debugger;
-
+    //debugger;
     map.addEventListener('moveend', function(e) {
       console.info('moveend');
       t.updateMarkerClusterer();
@@ -240,7 +239,7 @@ export default class Map extends Component {
     mapData.forEach((item, i) => {
       var iconImg;
       var iconPath = 'mapcorp_' + item.real_info + '.png';
-      console.info('iconPath:' + iconPath);
+      //console.info('iconPath:' + iconPath);
       //if (item.real_info == '0') {
       iconImg = new BMap.Icon(iconPath, new BMap.Size(20, 40));
       //   // offlineMarkers.push (marker);
