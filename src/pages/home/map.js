@@ -328,7 +328,7 @@ export default class Map extends Component {
 
     const peopleListContent = this.refs.peopleListContent;
 
-    if (peopleListContent) {
+    if (peopleListContent && arr.length > 0) {
       const arr1 = document.getElementById('arr1');
       const arr2 = document.getElementById('arr2');
       const peopleListContent = document.getElementById('peopleListContent');
@@ -340,11 +340,11 @@ export default class Map extends Component {
       setInterval(() => {
         if (-hide < height) {
           //debugger;
-          hide -= 4;
+          hide = hide - 4;
           arr1.style.position = 'absolute';
           arr2.style.position = 'absolute';
-          // arr1.style.top = hide + 'px';
-          // arr2.style.top = height + hide + 'px';
+          arr1.style.top = hide + 'px';
+          arr2.style.top = height + hide + 'px';
         } else {
           hide = 0;
         }
