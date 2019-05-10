@@ -445,6 +445,12 @@ export default class Map extends Component {
 
       title = '维保人员信息'; //
     }
+
+    /**
+     * <marquee loop="-1" direction="up" vspace="0" scrolldelay="100">
+              {peopleArr}
+            </marquee>
+     */
     return (
       <div className={styles.mapChina}>
         <p className={styles.title}>慧保电梯管理平台</p>
@@ -460,10 +466,11 @@ export default class Map extends Component {
         <div className={styles.allmap} id="allmap" />
         <div className={styles.peopleListContent}>
           <span className={styles.title}>{title}</span>
-          <div className={styles.maintenanceInfomation}>
-            <marquee loop="-1" direction="up" vspace="0" scrolldelay="100">
-              {peopleArr}
-            </marquee>
+          <div className={styles.maintenanceInfomation0} id="maintenanceInfomation0">
+            <div className={styles.maintenanceInfomation} id="maintenanceInfomation">
+              <div id="arr1">{peopleArr}</div>
+              <div id="arr2">{peopleArr}</div>
+            </div>
           </div>
         </div>
       </div>
