@@ -86,7 +86,7 @@ export default class Home extends PureComponent {
         </div>
       );
       maintenance = (
-        <div className={styles.Maintenance_Record}>
+        <div>
           <Maintenance_Record />
         </div>
       );

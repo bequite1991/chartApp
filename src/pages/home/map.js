@@ -449,26 +449,40 @@ export default class Map extends Component {
 
     const maintenanceInfomationRef = this.refs.maintenanceInfomation;
     if (maintenanceInfomationRef && list.length > 0) {
-      const arr1 = document.getElementById('arr1');
-      const arr2 = document.getElementById('arr2');
-      const maintenanceInfomation = document.getElementById('maintenanceInfomation');
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
 
-      const height = arr1.clientHeight;
-      maintenanceInfomation.style.height = height;
+      this.timer = setTimeout(() => {
+        const arr1 = document.getElementById('arr1');
+        const arr2 = document.getElementById('arr2');
+        const maintenanceInfomation = document.getElementById('maintenanceInfomation');
 
-      let hide = 0;
-      setInterval(() => {
-        if (-hide < height) {
-          //debugger;
-          hide = hide - 4;
-          arr1.style.position = 'absolute';
-          arr2.style.position = 'absolute';
-          arr1.style.top = hide + 'px';
-          arr2.style.top = height + hide + 'px';
-        } else {
-          hide = 0;
+        const height = arr1.clientHeight;
+
+        if (height > 0) {
+          maintenanceInfomation.style.height = height;
         }
-      }, 200);
+
+        let hide = 0;
+
+        if (this.intervaler) {
+          clearInterval(this.intervaler);
+        }
+
+        this.intervaler = setInterval(() => {
+          if (-hide < height) {
+            //debugger;
+            hide = hide - 4;
+            arr1.style.position = 'absolute';
+            arr2.style.position = 'absolute';
+            arr1.style.top = hide + 'px';
+            arr2.style.top = height + hide + 'px';
+          } else {
+            hide = 0;
+          }
+        }, 200);
+      }, 2000);
     }
 
     /**

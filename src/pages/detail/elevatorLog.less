@@ -1,11 +1,16 @@
 .elevatorLog {
   padding: 0px 10px 100px 10px;
+  background-image: url('../../../public/bg/11.png');
+  background-size: 100% 80%;
+  background-repeat: no-repeat;
+  padding: 0px 5px 10px 5px;
+  min-height: 55vh;
 
-  span {
-    display: block;
-    color: #41cff0;
-    font-size: 12px;
-  }
+  // span {
+  //   display: block;
+  //   color: #41cff0;
+  //   font-size: 12px;
+  // }
 
   .title {
     display: block;
@@ -20,8 +25,22 @@
   }
 
   .elevatorLogDetailContent {
-    overflow-y: scroll;
+    position: relative;
+    overflow: hidden;
     width: 100%;
     height: 280px;
+  }
+
+  .elevatorLogDetailContent0 {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 280px;
+  }
+
+  .elevatorLogDetail {
+    display: block;
+    color: #41cff0;
+    font-size: 12px;
   }
 }

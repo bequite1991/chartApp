@@ -21,6 +21,8 @@ export default class InstallationRecordInformation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.timer = null;
+    this.intervaler = null;
   }
 
   componentWillUnmount() {}
@@ -47,31 +49,42 @@ export default class InstallationRecordInformation extends React.Component {
 
     const installationRecordInformationContentRef = this.refs.installationRecordInformationContent;
     if (installationRecordInformationContentRef && list.length > 0) {
-      const arr1 = document.getElementById('list1');
-      const arr2 = document.getElementById('list2');
-      const installationRecordInformationContent = document.getElementById(
-        'installationRecordInformationContent'
-      );
-
-      const height = arr1.clientHeight;
-      if (height == 0) {
-        debugger;
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
       }
-      installationRecordInformationContent.style.height = height;
 
-      let hide = 0;
-      setInterval(() => {
-        if (-hide < height) {
-          //debugger;
-          hide = hide - 4;
-          arr1.style.position = 'absolute';
-          arr2.style.position = 'absolute';
-          arr1.style.top = hide + 'px';
-          arr2.style.top = height + hide + 'px';
-        } else {
-          hide = 0;
+      this.timer = setTimeout(() => {
+        const arr1 = document.getElementById('list1');
+        const arr2 = document.getElementById('list2');
+        const installationRecordInformationContent = document.getElementById(
+          'installationRecordInformationContent'
+        );
+
+        const height = arr1.clientHeight;
+        if (height > 0) {
+          installationRecordInformationContent.style.height = height;
         }
-      }, 200);
+
+        let hide = 0;
+        if (this.intervaler) {
+          clearInterval(this.intervaler);
+          this.intervaler = null;
+        }
+
+        this.intervaler = setInterval(() => {
+          if (-hide < height) {
+            //debugger;
+            hide = hide - 4;
+            arr1.style.position = 'absolute';
+            arr2.style.position = 'absolute';
+            arr1.style.top = hide + 'px';
+            arr2.style.top = height + hide + 'px';
+          } else {
+            hide = 0;
+          }
+        }, 200);
+      }, 2000);
     }
 
     /**

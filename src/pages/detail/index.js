@@ -70,7 +70,7 @@ export default class Detail extends PureComponent {
               <Elevator_Error_Connect className={styles.Elevator_Error_Connect} />
             </div>
             <div className={styles.chartContent}>
-              <Elevator_Log className={styles.Elevator_Log} />
+              <Elevator_Log />
             </div>
             <div className={styles.Back_Home2}>
               <Button block onClick={this.goBack}>
@@ -94,7 +94,7 @@ export default class Detail extends PureComponent {
           </Col>
           <Col span={10}>
             <Elevator_Status />
-            <div className={styles.Maintenance_Record}>
+            <div>
               <Maintenance_Record />
             </div>
           </Col>
@@ -102,7 +102,7 @@ export default class Detail extends PureComponent {
             <div className={styles.Elevator_Error_Connect}>
               <Elevator_Error_Connect />
             </div>
-            <div className={styles.Elevator_Log}>
+            <div>
               <Elevator_Log />
             </div>
             <div className={styles.Back_Home}>
