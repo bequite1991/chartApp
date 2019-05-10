@@ -408,6 +408,7 @@ export default class Map extends Component {
     const peopleArr = [];
     let list = [];
     let title = '';
+
     if (dev_id_list && dev_id_list.length > 0) {
       list = sharedData.maintenanceInformation ? sharedData.maintenanceInformation : [];
       if (list) {
@@ -446,6 +447,30 @@ export default class Map extends Component {
       title = '维保人员信息'; //
     }
 
+    const maintenanceInfomationRef = this.refs.maintenanceInfomation;
+    if (maintenanceInfomationRef && list.length > 0) {
+      const arr1 = document.getElementById('arr1');
+      const arr2 = document.getElementById('arr2');
+      const maintenanceInfomation = document.getElementById('maintenanceInfomation');
+
+      const height = arr1.clientHeight;
+      maintenanceInfomation.style.height = height;
+
+      let hide = 0;
+      setInterval(() => {
+        if (-hide < height) {
+          //debugger;
+          hide = hide - 4;
+          arr1.style.position = 'absolute';
+          arr2.style.position = 'absolute';
+          arr1.style.top = hide + 'px';
+          arr2.style.top = height + hide + 'px';
+        } else {
+          hide = 0;
+        }
+      }, 200);
+    }
+
     /**
      * <marquee loop="-1" direction="up" vspace="0" scrolldelay="100">
               {peopleArr}
@@ -467,7 +492,11 @@ export default class Map extends Component {
         <div className={styles.peopleListContent}>
           <span className={styles.title}>{title}</span>
           <div className={styles.maintenanceInfomation0} id="maintenanceInfomation0">
-            <div className={styles.maintenanceInfomation} id="maintenanceInfomation">
+            <div
+              ref="maintenanceInfomation"
+              className={styles.maintenanceInfomation}
+              id="maintenanceInfomation"
+            >
               <div id="arr1">{peopleArr}</div>
               <div id="arr2">{peopleArr}</div>
             </div>
