@@ -30,9 +30,7 @@ export default class InstallationRecordInformation extends React.Component {
   }
 
   render() {
-    let onEvents = {
-      click: this.onChartClick.bind(this),
-    };
+    let onEvents = { click: this.onChartClick.bind(this) };
 
     const { sharedData } = this.props;
     let arr = [];
@@ -47,13 +45,55 @@ export default class InstallationRecordInformation extends React.Component {
       });
     }
 
+    const installationRecordInformationContentRef = this.refs.installationRecordInformationContent;
+    if (installationRecordInformationContentRef && list.length > 0) {
+      const arr1 = document.getElementById('list1');
+      const arr2 = document.getElementById('list2');
+      const installationRecordInformationContent = document.getElementById(
+        'installationRecordInformationContent'
+      );
+
+      const height = arr1.clientHeight;
+      if (height == 0) {
+        debugger;
+      }
+      installationRecordInformationContent.style.height = height;
+
+      let hide = 0;
+      setInterval(() => {
+        if (-hide < height) {
+          //debugger;
+          hide = hide - 4;
+          arr1.style.position = 'absolute';
+          arr2.style.position = 'absolute';
+          arr1.style.top = hide + 'px';
+          arr2.style.top = height + hide + 'px';
+        } else {
+          hide = 0;
+        }
+      }, 200);
+    }
+
+    /**
+     * <marquee loop="-1" direction="up" vspace="0" scrolldelay="100">
+            {arr}
+          </marquee>
+     */
     return (
       <div className={styles.installationRecordInformation}>
         <span className={styles.title}>电梯安装记录</span>
-        <div className={styles.installationRecordInformationContent}>
-          <marquee loop="-1" direction="up" vspace="0" scrolldelay="100">
-            {arr}
-          </marquee>
+        <div
+          className={styles.installationRecordInformationContent0}
+          id="installationRecordInformationContent0"
+        >
+          <div
+            ref="installationRecordInformationContent"
+            className={styles.installationRecordInformationContent}
+            id="installationRecordInformationContent"
+          >
+            <div id="list1">{arr}</div>
+            <div id="list2">{arr}</div>
+          </div>
         </div>
       </div>
     );

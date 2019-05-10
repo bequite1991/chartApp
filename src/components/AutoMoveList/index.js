@@ -116,12 +116,12 @@ export default class AutoListMove extends Component {
   render() {
     const { items } = this.props;
 
-    if (items.length > 0 && this.start == false) {
-      debugger;
-      this.doScrollBottom();
-      //this.setChatListScrollBottom2();
-      //this.start = true;
-    }
+    // if (items.length > 0 && this.start == false) {
+    //   debugger;
+    //   this.doScrollBottom();
+    //   //this.setChatListScrollBottom2();
+    //   //this.start = true;
+    // }
     //debugger;
     return (
       <div ref="chatListDOM" id="indemo" className={styles.indemo}>
